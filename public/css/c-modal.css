@@ -8,3 +8,10 @@
 .modal {
   margin: auto;
 }
+.modal-scroll {
+  max-height: 100vh;
+}
+.modal-body-scroll {
+  overflow: auto;
+  max-height: 100%;
+}

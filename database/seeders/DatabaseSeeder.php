@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             DailyProjectSeeder::class,
             ContractProjectSeeder::class,
             CashSeeder::class,
+            ChargeSeeder::class,
+            PaymentTermSeeder::class,
         ]);
     }
 }

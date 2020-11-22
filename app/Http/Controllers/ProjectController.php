@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Models\Charge;
 use App\Models\Client;
 use App\Models\ContractProject;
 use App\Models\DailyProject;
+use App\Models\PaymentTerm;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 
@@ -120,6 +122,63 @@ class ProjectController extends Controller
         // dd($contract_datas->first());
 
         return view('admin.projects.on-progress', compact('daily_datas', 'contract_datas', 'kind'));
+    }
+    
+    public function addBilling(Request $request, $projectId, $kind = 'borongan') {
+        if ($kind ==='borongan') {
+            Charge::create([
+                'project_id' => $projectId,
+                'kind_project' => 'contract',
+                'date' => $request->date,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ]);
+        }
+        if ($kind ==='harian') {
+            Charge::create([
+                'project_id' => $projectId,
+                'kind_project' => 'daily',
+                'date' => $request->date,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ]);
+        }
+
+        return redirect()->route('admin.projects.onProgress', $kind);
+    }
+    
+    public function addTermin(Request $request, $projectId, $kind = 'borongan') {
+        if ($kind ==='borongan') {
+            PaymentTerm::create([
+                'project_id' => $projectId,
+                'kind_project' => 'contract',
+                'date' => $request->date,
+                'amount' => $request->amount,
+            ]);
+        }
+        if ($kind ==='harian') {
+            PaymentTerm::create([
+                'project_id' => $projectId,
+                'kind_project' => 'daily',
+                'date' => $request->date,
+                'amount' => $request->amount,
+            ]);
+        }
+
+        return redirect()->route('admin.projects.onProgress', $kind);
+    }
+
+    public function finish($id, $kind = 'borongan') {
+        if ($kind ==='borongan') {
+            $data = ContractProject::find($id);
+        }
+        if ($kind ==='harian') {
+            $data = DailyProject::find($id);
+        }
+        $data->status = 'Finished';
+        $data->save();
+
+        return redirect()->route('admin.projects.finished', $kind);
     }
     /**
      * Display a listing of the resource.

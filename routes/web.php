@@ -38,6 +38,9 @@ Route::prefix('/admin')->name('admin.')->group(function() {
         Route::post('/on-process/{id}/deal/{kind?}', [ProjectController::class, 'deal'])->name('deal');
         Route::get('/on-process/{id}/failed/{kind?}', [ProjectController::class, 'failed'])->name('failed');
         Route::get('/on-progress/{kind?}', [ProjectController::class, 'onProgress'])->name('onProgress');
+        Route::post('/on-progress/{id}/add-billing/{kind?} ', [ProjectController::class, 'addBilling'])->name('addBilling');
+        Route::post('/on-progress/{id}/add-payment-fee/{kind?} ', [ProjectController::class, 'addTermin'])->name('addTermin');
+        Route::get('/on-progress/{id}/finish/{kind?}', [ProjectController::class, 'finish'])->name('finish');
         Route::get('/finished/{kind?}', [ProjectController::class, 'finished'])->name('finished');
         Route::delete('/destroy/{id}/{kind?}', [ProjectController::class, 'destroy'])->name('destroy');
     });

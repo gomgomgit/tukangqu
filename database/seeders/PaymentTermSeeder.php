@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Charge;
 use App\Models\ContractProject;
 use App\Models\DailyProject;
+use App\Models\PaymentTerm;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class ChargeSeeder extends Seeder
+class PaymentTermSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,52 +16,46 @@ class ChargeSeeder extends Seeder
      */
     public function run()
     {
-        Charge::truncate();
+        
+        PaymentTerm::truncate();
         
         $contract_project = ContractProject::where('status', 'Onprogress')
                                             ->orWhere('status', 'Finished')
                                             ->where('process', 'deal')
                                             ->get(['id', 'project_value', 'start_date']);
-        
         foreach ($contract_project as $project) {
-            $percent = rand(10, 25) / 100;
-            Charge::create([
+            $percent = rand(25, 45) / 100;
+            PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',
                 'date' => date('Y-m-d', strtotime('+8 days')),
                 'amount' => $project->project_value * $percent,
-                'description' => 'Uang Makan 1'
             ]);
-            $percent = rand(10, 25) / 100;
-            Charge::create([
+            $percent = rand(20, 45) / 100;
+            PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',
                 'date' => date('Y-m-d', strtotime('+15 days')),
                 'amount' => $project->project_value * $percent,
-                'description' => 'Uang Makan 2'
             ]);
-        };
-
+        }
+        
         $daily_project = DailyProject::where('status', 'Onprogress')
-                                            ->orWhere('status', 'Finished')
                                             ->where('process', 'deal')
                                             ->get(['id', 'daily_value', 'start_date']);
-
         foreach ($daily_project as $project) {
-            Charge::create([
+            PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
-                'date' => date('Y-m-d', strtotime('+1 days')),
-                'amount' => $project->daily_value * 20 / 100,
-                'description' => 'Uang Makan 1'
+                'date' => date('Y-m-d', strtotime('+2 days')),
+                'amount' => $project->daily_value * 2,
             ]);
-            Charge::create([
+            PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
-                'date' => date('Y-m-d', strtotime('+3 days')),
-                'amount' => $project->daily_value * 60 / 100,
-                'description' => 'Uang Makan 2'
+                'date' => date('Y-m-d', strtotime('+4 days')),
+                'amount' => $project->daily_value * 6,
             ]);
-        };
+        }
     }
 }
