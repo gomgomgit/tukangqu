@@ -29,20 +29,22 @@
 					</ul>
 					<div class="tab-content" x-data="action()">
 						<div 
-						class="tab-pane fade {{ $kind === 'borongan' ? 'show active' : ''}}" id="borongan" role="tabpanel">
-							<table class="table table-striped">
+						class="pt-4 tab-pane fade {{ $kind === 'borongan' ? 'show active' : ''}}" id="borongan" role="tabpanel">
+							<table class="data-table table table-striped">
 									<thead>
 										<tr>
 											<th scope="col" class="border-0">#</th>
 											<th scope="col" class="border-0">Klien</th>
-											<th scope="col" class="border-0">Alamat</th>
+											{{-- <th scope="col" class="border-0">Alamat</th> --}}
 											<th scope="col" class="border-0">Proyek</th>
-											<th scope="col" class="border-0">Tgl Mulai</th>
+											<th scope="col" class="border-0">Tgl Mulai - Tgl&nbsp;Selesai</th>
 											<th scope="col" class="border-0">Pekerja</th>
 											<th scope="col" class="border-0">Nilai Proyek</th>
-											<th scope="col" class="border-0">Kas Bon</th>
-											<th scope="col" class="border-0">Uang Masuk</th>
-											<th scope="col" class="border-0">Action</th>
+											<th scope="col" class="border-0">Status</th>
+											<th scope="col" class="border-0 datatable-nosort">Kas Bon</th>
+											<th scope="col" class="border-0 datatable-nosort">Uang Masuk</th>
+											<th scope="col" class="border-0 datatable-nosort">Processing</th>
+											<th scope="col" class="border-0 datatable-nosort">Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -53,25 +55,43 @@
 											<tr>
 												<th scope="row">{{ $no++ }}</th>
 												<td>{{ $data->client->name }}</td>
-												<td>{{ $data->address }}</td>
+												{{-- <td>{{ $data->address }}</td> --}}
 												<td>{{ $data->kind_project }}</td>
-												<td>{{ $data->start_date }}</td>
+												<td>
+													<div>
+														{{ $data->start_date ?? '---'}} -
+													</div>
+													<div>
+														{{ $data->finish_date ?? '---'}}
+													</div>
+												</td>
 												<td>{{ $data->worker->name }}</td>
 												<td>{{ $data->project_value }}</td>
+												<td><span class="badge badge-{{ $data->process == 'deal' ? 'info' : 'success'}}">{{ Str::ucfirst($data->process ) }}</span></td>
 												<td><button class="btn btn-warning btn-sm" @click="setCBillingId({{ $data->id }})">KasBon</button></td>
-												<td><button class="btn btn-info btn-sm"  @click="setCTerminId({{ $data->id }})">Termin</button></td>
+												<td><button class="btn btn-secondary btn-sm"  @click="setCTerminId({{ $data->id }})">Termin</button></td>
+												<td>
+													@if ($data->action === 'done')
+														<button class="btn btn-info btn-sm" x-on:click="cDoneId = {{ $data->id }}">Selesai</button>	
+													@endif
+													@if ($data->action === 'sharing')
+														<button class="btn btn-success btn-sm" x-on:click="setCSharingId({{ $data->id }})">Bagi&nbsp;Hasil</button>	
+													@endif
+												</td>
 												<td>
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="#"><i class="dw dw-check"></i> Finish</a>
-															<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-															<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+															@if ($data->process == 'done')
+																<a class="dropdown-item" href="{{ route('admin.projects.finish', [$data->id, 'borongan']) }}"><i class="dw dw-check"></i> Finish</a>
+															@endif
+															<a class="dropdown-item" href="{{ route('admin.projects.onProgressShow', [$data->id, 'borongan']) }}"><i class="dw dw-eye"></i> View</a>
+															<a class="dropdown-item" href="{{ route('admin.projects.edit', [$data->id, 'borongan']) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
 															<x-form-button 
-																	:action="route('admin.cashes.destroy', $data->id)"
+																	:action="route('admin.projects.destroy', $data->id)"
 																	method="DELETE"
 																	class="dropdown-item border-0"
 															>
@@ -84,6 +104,190 @@
 										@endforeach
 									</tbody>
 								</table>
+						</div>
+
+						<div x-show="cDoneId" style="display: none; z-index: 99999">	
+							<div class="modal-background" tabindex="-1">
+								<div @click.away="cDoneId = null" class="modal-dialog modal modal-dialog-centered modal">
+									<div class="modal-content">
+										<form x-bind:action="'/admin/projects/on-progress/'+ cDoneId +'/done/borongan'" method="POST">
+											@csrf
+											<div class="modal-header">
+												<h4 class="modal-title" id="myLargeModalLabel">Selesai</h4>
+												<button @click="cDoneId = !(cDoneId)" type="button" class="close">×</button>
+											</div>
+											<div class="modal-body">
+													<div class="form-group">
+														<label>Tanggal Selesai</label>
+														<input class="form-control" type="date" name="finish_date" value="" required>
+													</div>
+											</div>
+											<div class="modal-footer">
+												<button @click="cDoneId = !(cDoneId)" type="button" class="btn btn-secondary">Close</button>
+												<button class="btn btn-info">Selesai</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						{{-- <div x-show="cSharingId" style="display: none">
+							<div class="modal-background">
+								<div class="modal-dialog modal-lg modal-dialog-centered modal" style="max-width: 700px">
+									<div class="modal-content">
+										<form action="#" method="POST">
+											<div class="modal-header">
+												<h4 class="modal-title" id="myLargeModalLabel">Bagi Hasil</h4>
+												<button @click="cSharingId = null" type="button" class="close">×</button>
+											</div>
+											<div class="modal-body">
+
+												<div class="mb-3">
+													<h5 class="my-2">Nilai Harian : 
+														<span x-text="dProject.daily_value"></span>
+													</h5>
+												</div>
+
+											</div>
+											<div class="modal-footer">
+												<button @click="cSharingId = null" class="btn btn-secondary">Close</button>
+												<button type="submit" class="btn btn-primary">Bagi Hasil</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div> --}}
+
+						<div x-show="cSharingId" style="display: none">
+							<div class="modal-background">
+								<div class="modal-dialog modal-lg modal-dialog-centered modal" style="max-width: 700px">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Bagi Hasil</h4>
+											<button @click="cSharingId = null" type="button" class="close">×</button>
+										</div>
+										<div class="modal-body">
+
+											<div class="mb-3">
+												<h5 class="my-2">Nilai Project : 
+													<span x-text="cProject.project_value"></span>
+												</h5>
+												<h5 class="my-2">Uang Masuk : 
+													<span x-text="cProject.totalpayment"></span>
+												</h5>
+												<h5 class="my-2">Telah DiBagikan : 
+													<span x-text="totalCSharing"></span>
+												</h5>
+												<h5 class="my-2">Sisa : 
+													<span x-text="cProject.unshared"></span>
+												</h5>
+											</div>
+
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th scope="col" class="border-0">#</th>
+														<th scope="col" class="border-0">Tanggal</th>
+														<th scope="col" class="border-0">Kas</th>
+														<th scope="col" class="border-0">Pekerja</th>
+														<th scope="col" class="border-0">Total</th>
+													</tr>
+												</thead>
+
+													<tbody>
+														<template x-for="sharing in cSharings" :key="sharing.id">
+																<tr>
+																	<th scope="row">1</th>
+																	<td x-text="sharing.date"></td>
+																	<td x-text="sharing.amount_cash"></td>
+																	<td x-text="sharing.amount_worker"></td>
+																	<td x-text="sharing.amount_total"></td>
+																</tr>
+														</template>
+													</tbody>
+													<tfoot>
+														<tr>
+															<td></td>
+															<td>Total</td>
+															<td x-text="totalCSharingCash">Rp. 1.000.000</td>
+															<td x-text="totalCSharingWorker">Rp. 3.000.000</td>
+															<td x-text="totalCSharing">Rp. 4.000.000</td>
+														</tr>
+													</tfoot>
+											</table>
+										</div>
+										<div class="modal-footer">
+											<button @click="cSharingId = null" class="btn btn-secondary">Close</button>
+											<button @click="addCSharing = !(addCSharing)" type="button" class="btn btn-primary">Bagi Hasil</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div x-show="addCSharing" style="display: none">
+							<div class="modal-background">
+								<div class="modal-dialog modal modal-dialog-centered modal">
+									<div class="modal-content">
+										<form  x-bind:action="'/admin/projects/on-progress/'+ cSharingId +'/add-profit/borongan'"  method="post">
+											@csrf
+
+											<div class="modal-header">
+												<h4 class="modal-title" id="myLargeModalLabel">Bagi Hasil</h4>
+												<button @click="addCSharing = !(addCSharing)" type="button" class="close">×</button>
+											</div>
+											<div class="modal-body">
+
+												<div class="mb-3">
+													<h5 class="my-2">Nilai Project : 
+														<span x-text="cProject.project_value"></span>
+													</h5>
+													<h5 class="my-2">Uang Masuk : 
+														<span x-text="cProject.totalpayment"></span>
+													</h5>
+													<h5 class="my-2">Sisa : 
+														<span x-text="cProject.unshared"></span>
+													</h5>
+												</div>
+
+
+												<div class="form-group">
+													<label>Tanggal</label>
+													<input class="form-control date-picker" type="text" name="date"  data-date-format="yyyy-m-d" required>
+												</div>
+												<div class="row">
+													<div class="col-6">
+														<div class="form-group">
+															<label>Kas</label>
+															<input class="form-control" type="number" name="amount_cash" :max="maxCSharingCash" @change="setMaxCSharingCash()" x-model="cSharingCash" required>
+														</div>
+													</div>
+													<div class="col-6">
+														<div class="form-group">
+															<label>Pekerja</label>
+															<input class="form-control" type="number" name="amount_worker" :max="maxCSharingWorker" @change="setMaxCSharingWorker()" x-model="cSharingWorker" required>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label>Total</label>
+													<input class="form-control" x-model="cSharingTotal" type="number" readonly />
+												</div>
+
+
+											</div>
+											<div class="modal-footer">
+												<button @click="addCSharing = !(addCSharing)" class="btn btn-secondary">Close</button>
+												<button type="submit" class="btn btn-primary">Bagi Hasil</button>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div x-show="cBillingId" style="display: none">
@@ -106,7 +310,7 @@
 													</tr>
 												</thead>
 
-												<template x-if="cBills">
+												{{-- <template x-if="cBills"> --}}
 													<tbody>
 															<template x-for="(bill, index) in cBills" :key="bill.id">
 																<tr>
@@ -121,11 +325,11 @@
 														<tr>
 															<td></td>
 															<td>Total</td>
-															<td x-text="totalCBill"></td>
+															<td x-text="cProject.totalcharge"></td>
 															<td></td>
 														</tr>
 													</tfoot>
-												</template>
+												{{-- </template> --}}
 											</table>
 										</div>
 										<div class="modal-footer">
@@ -163,7 +367,7 @@
 											</div>
 											<div class="modal-footer">
 												<button @click="addCBilling = !(addCBilling)" type="button" class="btn btn-secondary">Close</button>
-												<button class="btn btn-info">Beri Harga</button>
+												<button class="btn btn-info">Tambah</button>
 											</div>
 										</form>
 									</div>
@@ -183,10 +387,10 @@
 
 											<div class="mb-3">
 												<h5 class="my-2">Nilai Project : 
-													<span x-text="cProjectTermin.project_value"></span>
+													<span x-text="cProject.project_value"></span>
 												</h5>
 												<h5 class="my-2">Uang Masuk : 
-													<span x-text="totalCTermin"></span>
+													<span x-text="cProject.totalpayment"></span>
 												</h5>
 												<h5 class="my-2">Sisa : 
 													<span x-text="remainCTermin"></span>
@@ -202,7 +406,7 @@
 													</tr>
 												</thead>
 
-												<template x-if="cTermins">
+												{{-- <template x-if="cTermins"> --}}
 													<tbody>
 															<template x-for="(termin, index) in cTermins" :key="termin.id">
 																<tr>
@@ -216,10 +420,10 @@
 														<tr>
 															<td></td>
 															<td>Total</td>
-															<td x-text="totalCTermin"></td>
+															<td x-text="cProject.totalpayment"></td>
 														</tr>
 													</tfoot>
-												</template>
+												{{-- </template> --}}
 											</table>
 
 										</div>
@@ -239,7 +443,7 @@
 										<form x-bind:action="'/admin/projects/on-progress/'+ cTerminId +'/add-payment-fee/borongan'" method="POST">
 											@csrf
 											<div class="modal-header">
-												<h4 class="modal-title" id="myLargeModalLabel">Tambah Kasbon</h4>
+												<h4 class="modal-title" id="myLargeModalLabel">Tambah Termin</h4>
 												<button @click="addCTermin = !(addCTermin)" type="button" class="close">×</button>
 											</div>
 											<div class="modal-body">
@@ -257,7 +461,7 @@
 											</div>
 											<div class="modal-footer">
 												<button @click="addCTermin = !(addCTermin)" type="button" class="btn btn-secondary">Close</button>
-												<button class="btn btn-info">Beri Harga</button>
+												<button class="btn btn-info">Tambah</button>
 											</div>
 										</form>
 									</div>
@@ -266,23 +470,24 @@
 						</div>
 
 						<div
-						class="tab-pane fade {{ $kind === 'harian' ? 'show active' : ''}}" id="harian" role="tabpanel">
+						class="pt-4 tab-pane fade {{ $kind === 'harian' ? 'show active' : ''}}" id="harian" role="tabpanel">
 							{{-- <div class="pd-20"> --}}
-								<table class="table table-striped">
+								<table class="data-table table table-striped">
 									<thead>
 										<tr>
 											<th scope="col" class="border-0">No</th>
 											<th scope="col" class="border-0">Klien</th>
-											<th scope="col" class="border-0">Alamat</th>
+											{{-- <th scope="col" class="border-0">Alamat</th> --}}
 											<th scope="col" class="border-0">Proyek</th>
 											<th scope="col" class="border-0">Tgl Mulai</th>
 											<th scope="col" class="border-0">Nilai Harian</th>
 											<th scope="col" class="border-0">Pekerja</th>
 											<th scope="col" class="border-0">Gaji Harian</th>
-											<th scope="col" class="border-0">KasBon</th>
-											<th scope="col" class="border-0">Uang Masuk</th>
-											<th scope="col" class="border-0">Bagi Hasil</th>
-											<th scope="col" class="border-0">Action</th>
+											{{-- <th scope="col" class="border-0">Status</th> --}}
+											<th scope="col" class="border-0 datatable-nosort">KasBon</th>
+											<th scope="col" class="border-0 datatable-nosort">Uang Masuk</th>
+											<th scope="col" class="border-0 datatable-nosort">Bagi Hasil</th>
+											<th scope="col" class="border-0 datatable-nosort">Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -293,12 +498,13 @@
 											<tr>
 												<th scope="row">{{ $no++ }}</th>
 												<td>{{ $data->client->name }}</td>
-												<td>{{ $data->address }}</td>
+												{{-- <td>{{ $data->address }}</td> --}}
 												<td>{{ $data->kind_project }}</td>
 												<td>{{ $data->start_date }}</td>
 												<td>{{ $data->daily_value }}</td>
 												<td>{{ $data->worker->name }}</td>
 												<td>{{ $data->daily_salary }}</td>
+												{{-- <td><span class="badge badge-{{ $data->process == 'deal' ? 'info' : 'success'}}">{{ Str::ucfirst($data->process ) }}</span></td> --}}
 												<td>
 													<button class="btn btn-warning btn-sm" @click="setDBillingId({{ $data->id }})">KasBon</button>
 												</td>
@@ -306,7 +512,7 @@
 													<button class="btn btn-info btn-sm" @click="setDTerminId({{ $data->id }})">Termin</button>
 												</td>
 												<td>
-													<button class="btn btn-success btn-sm" @click="setDSharingId({{ $data->id }})">Bagi Hasil</button>
+													<button class="btn btn-success btn-sm" @click="setDSharingId({{ $data->id }})">Bagi&nbsp;Hasil</button>
 												</td>
 												<td>
 													<div class="dropdown">
@@ -314,12 +520,12 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="#"><i class="dw dw-check"></i> Finish</a>
-															<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-															<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+															<a class="dropdown-item" href="{{ route('admin.projects.finish', [$data->id, 'harian']) }}"><i class="dw dw-check"></i> Finish</a>
+															<a class="dropdown-item" href="{{ route('admin.projects.onProgressShow', [$data->id, 'harian']) }}"><i class="dw dw-eye"></i> View</a>
+															<a class="dropdown-item" href="{{ route('admin.projects.edit', [$data->id, 'harian']) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
 															<x-form-button 
-																	:action="route('admin.cashes.destroy', $data->id)"
+																	:action="route('admin.projects.destroy', $data->id)"
 																	method="DELETE"
 																	class="dropdown-item border-0"
 															>
@@ -355,7 +561,7 @@
 													</tr>
 												</thead>
 
-												<template x-if="dBills">
+												{{-- <template x-if="dBills"> --}}
 													<tbody>
 															<template x-for="(bill, index) in dBills" :key="bill.id">
 																<tr>
@@ -370,11 +576,11 @@
 														<tr>
 															<td></td>
 															<td>Total</td>
-															<td x-text="totalDBill"></td>
+															<td x-text="dProject.totalcharge"></td>
 															<td></td>
 														</tr>
 													</tfoot>
-												</template>
+												{{-- </template> --}}
 											</table>
 										</div>
 										<div class="modal-footer">
@@ -412,7 +618,7 @@
 											</div>
 											<div class="modal-footer">
 												<button @click="addDBilling = !(addDBilling)" type="button" class="btn btn-secondary">Close</button>
-												<button class="btn btn-info">Beri Harga</button>
+												<button class="btn btn-info">Tambah</button>
 											</div>
 										</form>
 									</div>
@@ -433,14 +639,14 @@
 
 											<div class="mb-3">
 												<h5 class="my-2">Nilai Harian : 
-													<span x-text="dProjectTermin.daily_value"></span>
+													<span x-text="dProject.daily_value"></span>
 												</h5>
 												<h5 class="my-2">Uang Masuk : 
-													<span x-text="totalDTermin"></span>
+													<span x-text="dProject.totalpayment"></span>
 												</h5>
-												<h5 class="my-2">Sisa : 
+												{{-- <h5 class="my-2">Sisa : 
 													<span x-text="remainDTermin"></span>
-												</h5>
+												</h5> --}}
 											</div>
 
 											<table class="table table-striped">
@@ -452,7 +658,7 @@
 													</tr>
 												</thead>
 
-												<template x-if="dTermins">
+												{{-- <template x-if="dTermins"> --}}
 													<tbody>
 															<template x-for="(termin, index) in dTermins" :key="termin.id">
 																<tr>
@@ -466,10 +672,10 @@
 														<tr>
 															<td></td>
 															<td>Total</td>
-															<td x-text="totalDTermin"></td>
+															<td x-text="dProject.totalpayment"></td>
 														</tr>
 													</tfoot>
-												</template>
+												{{-- </template> --}}
 											</table>
 
 										</div>
@@ -489,13 +695,13 @@
 										<form x-bind:action="'/admin/projects/on-progress/'+ dTerminId +'/add-payment-fee/harian'" method="POST">
 											@csrf
 											<div class="modal-header">
-												<h4 class="modal-title" id="myLargeModalLabel">Tambah Kasbon</h4>
+												<h4 class="modal-title" id="myLargeModalLabel">Tambah Termin</h4>
 												<button @click="addDTermin = !(addDTermin)" type="button" class="close">×</button>
 											</div>
 											<div class="modal-body">
-													<h5 class="my-2">Sisa : 
+													{{-- <h5 class="my-2">Sisa : 
 														<span x-text="remainDTermin"></span>
-													</h5>
+													</h5> --}}
 													<div class="form-group">
 														<label>Tanggal</label>
 														<input class="form-control" type="date" name="date" value="\Carbon\Carbon::now()->format('Y-m-d')" required>
@@ -507,7 +713,7 @@
 											</div>
 											<div class="modal-footer">
 												<button @click="addDTermin = !(addDTermin)" type="button" class="btn btn-secondary">Close</button>
-												<button class="btn btn-info">Beri Harga</button>
+												<button class="btn btn-info">Tambah</button>
 											</div>
 										</form>
 									</div>
@@ -526,6 +732,21 @@
 										</div>
 										<div class="modal-body">
 
+											<div class="mb-3">
+												<h5 class="my-2">Nilai Harian : 
+													<span x-text="dProject.daily_value"></span>
+												</h5>
+												<h5 class="my-2">Uang Masuk : 
+													<span x-text="dProject.totalpayment"></span>
+												</h5>
+												<h5 class="my-2">Telah DiBagikan : 
+													<span x-text="totalDSharing"></span>
+												</h5>
+												<h5 class="my-2">Sisa : 
+													<span x-text="dProject.unshared"></span>
+												</h5>
+											</div>
+
 											<table class="table table-striped">
 												<thead>
 													<tr>
@@ -538,36 +759,92 @@
 												</thead>
 
 													<tbody>
+														<template x-for="sharing in dSharings" :key="sharing.id">
 																<tr>
 																	<th scope="row">1</th>
-																	<td>23 Maret 2020</td>
-																	<td>Rp. 500.000</td>
-																	<td>Rp. 1.500.000</td>
-																	<td>Rp. 2.000.000</td>
+																	<td x-text="sharing.date"></td>
+																	<td x-text="sharing.amount_cash"></td>
+																	<td x-text="sharing.amount_worker"></td>
+																	<td x-text="sharing.amount_total"></td>
 																</tr>
-																<tr>
-																	<th scope="row">1</th>
-																	<td>30 Maret 2020</td>
-																	<td>Rp. 500.000</td>
-																	<td>Rp. 1.500.000</td>
-																	<td>Rp. 2.000.000</td>
-																</tr>
+														</template>
 													</tbody>
 													<tfoot>
 														<tr>
 															<td></td>
 															<td>Total</td>
-															<td>Rp. 1.000.000</td>
-															<td>Rp. 3.000.000</td>
-															<td>Rp. 4.000.000</td>
+															<td x-text="totalDSharingCash">Rp. 1.000.000</td>
+															<td x-text="totalDSharingWorker">Rp. 3.000.000</td>
+															<td x-text="totalDSharing">Rp. 4.000.000</td>
 														</tr>
 													</tfoot>
 											</table>
 										</div>
 										<div class="modal-footer">
 											<button @click="dSharingId = null" class="btn btn-secondary">Close</button>
-											<button @click="addDSharing = !(addDSharing)" type="button" class="btn btn-primary">Tambah Kasbon</button>
+											<button @click="addDSharing = !(addDSharing)" type="button" class="btn btn-primary">Bagi Hasil</button>
 										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div x-show="addDSharing" style="display: none">
+							<div class="modal-background">
+								<div class="modal-dialog modal modal-dialog-centered modal">
+									<div class="modal-content">
+										<form  x-bind:action="'/admin/projects/on-progress/'+ dSharingId +'/add-profit/harian'"  method="post">
+											@csrf
+
+											<div class="modal-header">
+												<h4 class="modal-title" id="myLargeModalLabel">Bagi Hasil</h4>
+												<button @click="addDSharing = !(addDSharing)" type="button" class="close">×</button>
+											</div>
+											<div class="modal-body">
+
+												<div class="mb-3">
+													<h5 class="my-2">Nilai Harian : 
+														<span x-text="dProject.daily_value"></span>
+													</h5>
+													<h5 class="my-2">Uang Masuk : 
+														<span x-text="dProject.totalpayment"></span>
+													</h5>
+													<h5 class="my-2">Sisa : 
+														<span x-text="dProject.unshared"></span>
+													</h5>
+												</div>
+
+
+												<div class="form-group">
+													<label>Tanggal</label>
+													<input class="form-control date-picker" type="text" name="date"  data-date-format="yyyy-m-d" required>
+												</div>
+												<div class="row">
+													<div class="col-6">
+														<div class="form-group">
+															<label>Kas</label>
+															<input class="form-control" x-model="dSharingCash" @change="setMaxDSharingCash" :max="maxDSharingCash" type="number" name="amount_cash" required>
+														</div>
+													</div>
+													<div class="col-6">
+														<div class="form-group">
+															<label>Pekerja</label>
+															<input class="form-control" x-model="dSharingWorker" @change="setMaxDSharingWorker" :max="maxDSharingWorker" type="number" name="amount_worker" required>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label>Total</label>
+													<input class="form-control" x-model="dSharingTotal" type="number" required readonly>
+												</div>
+
+											</div>
+											<div class="modal-footer">
+												<button @click="addDSharing = !(addDSharing)" class="btn btn-secondary">Close</button>
+												<button type="submit" class="btn btn-primary">Bagi Hasil</button>
+											</div>
+
+										</form>
 									</div>
 								</div>
 							</div>
@@ -587,6 +864,18 @@
 @endsection
 
 @section('script')
+
+	<!-- buttons for Export datatable -->
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.buttons.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.bootstrap4.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.print.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.html5.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.flash.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/pdfmake.min.js') }}"></script>
+	<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js') }}"></script>
+	<!-- Datatable Setting js -->
+	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js') }}"></script>
+	
 	<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script>
@@ -596,49 +885,69 @@
 					cBills : [],
 					addCBilling : false,
 					cPaymentId: null,
-					totalCBill: 0,
 
-					cProjectTermin:[],
+					cProject:[],
 					cTerminId: null,
 					cTermins: [],
 					addCTermin: null,
-					totalCTermin: 0,
 					remainCTermin:0,
+
+					cDoneId: 0,
+
+					cSharingId: 0,
+					cSharings: [],
+					totalCSharingCash : null,
+					totalCSharingWorker : null,
+					totalCSharing : null,
+					addCSharing: false,
+					maxCSharingCash: 0,
+					maxCSharingWorker: 0,
+					cSharingTotal: 0,
+					cSharingCash: 0,
+					cSharingWorker: 0,
 
 					dBillingId : null,
 					dBills : [],
 					addDBilling : false,
 					dPaymentId: null,
-					totalDBill: 0,
 
-					dProjectTermin:[],
+					dProject:[],
 					dTerminId: null,
 					dTermins: [],
 					addDTermin: null,
-					totalDTermin: 0,
 					remainDTermin:0,
 
 					dSharingId: null,
+					dSharings: [],
+					totalDSharingCash : null,
+					totalDSharingWorker : null,
+					totalDSharing : null,
+					addDSharing: false,
+					maxDSharingCash: 0,
+					maxDSharingWorker: 0,
+					dSharingTotal: 0,
+					dSharingCash: 0,
+					dSharingWorker: 0,
+
+					getDataCProject(id) {
+						var self = this;
+						axios.get('{{ url("/api/get-project")}}/' + id + '/borongan')
+						.then(function(response) {
+							self.cProject = response.data.data;
+							self.setRemainCTermin();
+						});
+					},
 
 					setCBillingId(id) {
 						this.cBillingId = id;
+						this.getDataCProject(id);
 						this.getDataCBilling();
-						// console.log(this.cBillingId);
-					},
-					setCTotalBill() {
-						var cBill = this.cBills.reduce(function(total, num) {
-							// console.log(num.amount);
-							return (total + num.amount);
-						}, 0);
-						// console.log(cBill);
-						this.totalCBill = cBill;
 					},
 					getDataCBilling() {
 						var self = this;
 						axios.get('{{ url("/api/get-billing")}}/' + this.cBillingId + '/borongan')
 						.then(function(response) {
 							self.cBills = response.data;
-							self.setCTotalBill();
 						}) 
 					},
 
@@ -646,62 +955,85 @@
 					setCTerminId(id) {
 						this.cTerminId = id;
 						this.getDataCTermin();
-						this.getDataCProject();
-						this.setCTotalTermin();
-					},
-					setCTotalTermin() {
-						var cTermin = this.cTermins.reduce(function(total, num) {
-							// console.log(num.amount);
-							return (total + num.amount);
-						}, 0);
-						console.log(cTermin);
-						this.totalCTermin = cTermin;
+						this.getDataCProject(id);
 					},
 					setRemainCTermin() {
 						var self = this;
-						var remain = self.cProjectTermin.project_value - self.totalCTermin;
+						var remain = self.cProject.project_value - self.cProject.totalpayment;
 						this.remainCTermin = remain;
-						console.log(self.cProjectTermin);
-					},
-					getDataCProject() {
-						var self = this;
-						axios.get('{{ url("/api/get-project-termin")}}/' + this.cTerminId + '/borongan')
-						.then(function(response) {
-							self.cProjectTermin = response.data;
-							self.setRemainCTermin();
-						});
-						// console.log(this.cProjectTermin);
+						console.log(self.cProject);
 					},
 					getDataCTermin() {
 						var self = this;
 						axios.get('{{ url("/api/get-termin")}}/' + this.cTerminId + '/borongan')
 						.then(function(response) {
 							self.cTermins = response.data;
-							self.setCTotalTermin();
 						}) 
 					},
 
+					setCSharingId(id) {
+						this.cSharingId = id;
+						this.getDataCSharing();
+						this.setCTotalSharing();
+						this.getDataCProject(id);
+					},
+					getDataCSharing() {
+						var self = this;
+						axios.get('{{ url("/api/get-sharing")}}/' + this.cSharingId + '/borongan')
+						.then(function(response) {
+							self.cSharings = response.data;
+							// console.log(self.cSharings);
+							self.setCTotalSharing();
+						}) 
+					},
+					setCTotalSharing() {
+						var cCash = this.cSharings.reduce(function(total, num) {
+							return (total + num.amount_cash);
+						}, 0);
+						var cWorker = this.cSharings.reduce(function(total, num) {
+							return (total + num.amount_worker);
+						}, 0);
+						var cSharing = this.cSharings.reduce(function(total, num) {
+							return (total + num.amount_total);
+						}, 0);
+						this.totalCSharingCash = cCash;
+						this.totalCSharingWorker = cWorker;
+						this.totalCSharing = cSharing;
 
+					},
+					setMaxCSharingCash() {
+						let maxCSharing = this.cProject.unshared - this.cSharingWorker;
+						this.maxCSharingCash = maxCSharing;
+						this.cSharingTotal = parseInt(this.cSharingCash) + parseInt(this.cSharingWorker);
+					},
+					setMaxCSharingWorker() {
+						let maxCSharing = this.cProject.unshared - this.cSharingCash;
+						this.maxCSharingWorker = maxCSharing;
+						this.cSharingTotal = parseInt(this.cSharingCash) + parseInt(this.cSharingWorker);
+					},
+
+
+
+					getDataDProject(id) {
+						var self = this;
+						axios.get('{{ url("/api/get-project")}}/' + id + '/harian')
+						.then(function(response) {
+							self.dProject = response.data.data;
+							self.setRemainDTermin();
+						});
+						console.log(this.dProject.unshared);
+					},
 
 					setDBillingId(id) {
 						this.dBillingId = id;
+						this.getDataDProject(id)
 						this.getDataDBilling();
-						// console.log(this.cBillingId);
-					},
-					setDTotalBill() {
-						var dBill = this.dBills.reduce(function(total, num) {
-							// console.log(num.amount);
-							return (total + num.amount);
-						}, 0);
-						// console.log(cBill);
-						this.totalDBill = dBill;
 					},
 					getDataDBilling() {
 						var self = this;
 						axios.get('{{ url("/api/get-billing")}}/' + this.dBillingId + '/harian')
 						.then(function(response) {
 							self.dBills = response.data;
-							self.setDTotalBill();
 							console.log(self.dBills);
 						}) 
 					},
@@ -710,51 +1042,63 @@
 					setDTerminId(id) {
 						this.dTerminId = id;
 						this.getDataDTermin();
-						this.getDataDProject();
-						this.setDTotalTermin();
-					},
-					setDTotalTermin() {
-						var dTermin = this.dTermins.reduce(function(total, num) {
-							// console.log(num.amount);
-							return (total + num.amount);
-						}, 0);
-						console.log(dTermin);
-						this.totalDTermin = dTermin;
+						this.getDataDProject(id);
 					},
 					setRemainDTermin() {
 						var self = this;
-						var remain = self.dProjectTermin.project_value - self.totalDTermin;
+						var remain = self.dProject.project_value - self.dProject.totalpayment;
 						this.remainDTermin = remain;
-						console.log(self.dProjectTermin);
-					},
-					getDataDProject() {
-						var self = this;
-						axios.get('{{ url("/api/get-project-termin")}}/' + this.dTerminId + '/harian')
-						.then(function(response) {
-							self.dProjectTermin = response.data;
-							self.setRemainDTermin();
-						});
-						// console.log(this.cProjectTermin);
+						console.log(self.dProject);
 					},
 					getDataDTermin() {
 						var self = this;
 						axios.get('{{ url("/api/get-termin")}}/' + this.dTerminId + '/harian')
 						.then(function(response) {
 							self.dTermins = response.data;
-							self.setDTotalTermin();
 						}) 
 					},
 
 					setDSharingId(id) {
 						this.dSharingId = id;
-						return true;
+						this.getDataDSharing();
+						this.setDTotalSharing();
+						this.getDataDProject(id);
+					},
+					getDataDSharing() {
+						var self = this;
+						axios.get('{{ url("/api/get-sharing")}}/' + this.dSharingId + '/harian')
+						.then(function(response) {
+							self.dSharings = response.data;
+							console.log(self.dSharings);
+							self.setDTotalSharing();
+						}) 
+					},
+					setDTotalSharing() {
+						var dCash = this.dSharings.reduce(function(total, num) {
+							return (total + num.amount_cash);
+						}, 0);
+						var dWorker = this.dSharings.reduce(function(total, num) {
+							return (total + num.amount_worker);
+						}, 0);
+						var dSharing = this.dSharings.reduce(function(total, num) {
+							return (total + num.amount_total);
+						}, 0);
+						this.totalDSharingCash = dCash;
+						this.totalDSharingWorker = dWorker;
+						this.totalDSharing = dSharing;
+
+					},
+					setMaxDSharingCash() {
+						let maxDSharing = this.dProject.unshared - this.dSharingWorker;
+						this.maxDSharingCash = maxDSharing;
+						this.dSharingTotal = parseInt(this.dSharingCash) + parseInt(this.dSharingWorker);
+					},
+					setMaxDSharingWorker() {
+						let maxDSharing = this.dProject.unshared - this.dSharingCash;
+						this.maxDSharingWorker = maxDSharing;
+						this.dSharingTotal = parseInt(this.dSharingCash) + parseInt(this.dSharingWorker);
 					},
 
-					watch: {
-						// cBillingId : function (val, oldVal) {
-						// 	this.getDataBilling();
-						// }
-					}
 						
 				}
 			}

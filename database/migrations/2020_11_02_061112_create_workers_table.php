@@ -32,6 +32,7 @@ class CreateWorkersTable extends Migration
             $table->string('experience');
             $table->string('self_photo');
             $table->string('id_card_photo');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

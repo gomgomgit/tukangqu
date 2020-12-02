@@ -18,6 +18,8 @@ class CreateDailyProjectsTable extends Migration
             $table->foreignId('client_id');
             $table->date('order_date');
             $table->text('address');
+            $table->foreignId('province_id');
+            $table->foreignId('city_id');
             $table->string('kind_project');
             $table->integer('daily_value')->nullable();
             $table->foreignId('worker_id')->nullable();
@@ -27,8 +29,9 @@ class CreateDailyProjectsTable extends Migration
             $table->integer('project_value')->nullable();
             $table->integer('profit')->nullable();
             $table->text('description')->nullable();
-            $table->enum('process', ['waiting', 'priced', 'deal', 'failed']);
+            $table->enum('process', ['waiting', 'priced', 'deal', 'finish', 'failed']);
             $table->enum('status', ['OnProcess', 'OnProgress', 'Finished']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

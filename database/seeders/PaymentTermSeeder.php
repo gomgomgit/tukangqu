@@ -24,14 +24,14 @@ class PaymentTermSeeder extends Seeder
                                             ->where('process', 'deal')
                                             ->get(['id', 'project_value', 'start_date']);
         foreach ($contract_project as $project) {
-            $percent = rand(25, 45) / 100;
+            $percent = rand(2, 5) * 10 / 100;
             PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',
                 'date' => date('Y-m-d', strtotime('+8 days')),
                 'amount' => $project->project_value * $percent,
             ]);
-            $percent = rand(20, 45) / 100;
+            $percent = rand(2, 5) * 10 / 100;
             PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',
@@ -48,13 +48,13 @@ class PaymentTermSeeder extends Seeder
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
                 'date' => date('Y-m-d', strtotime('+2 days')),
-                'amount' => $project->daily_value * 2,
+                'amount' => $project->daily_value * 14,
             ]);
             PaymentTerm::create([
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
                 'date' => date('Y-m-d', strtotime('+4 days')),
-                'amount' => $project->daily_value * 6,
+                'amount' => $project->daily_value * 7,
             ]);
         }
     }

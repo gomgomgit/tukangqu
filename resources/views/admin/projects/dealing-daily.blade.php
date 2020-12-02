@@ -13,7 +13,7 @@
           @csrf
           <div class="form-group">
             <label>Tanggal Mulai</label>
-            <input class="form-control" type="date" name="start_date" required>
+            <input class="form-control date-picker" type="text" name="start_date" data-date-format="yyyy-m-d" required>
           </div>
           <div class="form-group">
             <label>Gaji Pekerja</label>

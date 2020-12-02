@@ -22,7 +22,6 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/datatables/css/responsive.bootstrap4.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/style.css') }}">
 
-	@yield('link')
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
@@ -35,24 +34,18 @@
 	</script>
 </head>
 <body>
-  
-  {{-- @include('layouts.preload') --}}
-
-	@include('layouts.header')
-	
-	@include('layouts.settings')
-
-	@include('layouts.sidebar')
-  
-	<div class="mobile-menu-overlay"></div>
-
-	<div class="main-container">
-		<div class="pd-ltr-20">
-
-			@yield('main-content')
-
-		</div>
-	</div>
+  <div class="py-5 position-relative h-100 w-100">
+    <div class="pd-20 card-box w-75 m-auto position-absolute"
+      style=" top: 50%; left: 50%;
+              transform:translate(-50%, -50%)
+              ">
+      <div class="text-center py-5">
+        <h4 class="text-blue h1">Berhasil Terdaftar</h4>
+        <p class="">Terimakasih telah mendaftarkan diri anda</p>
+        <a href="{{ route('workerRegister') }}" class="btn btn-primary mt-5 px-5">Kembali</a>
+      </div>
+    </div>
+  </div>
 	<!-- js -->
 	<script src="{{ asset('deskapp/vendors/scripts/core.js') }}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js') }}"></script>
@@ -63,7 +56,6 @@
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.bootstrap4.min.js') }}"></script>
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.responsive.min.js') }}"></script>
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/responsive.bootstrap4.min.js') }}"></script> 
-	@yield('script')
 
 </body>
 </html>

@@ -25,7 +25,7 @@ class ChargeSeeder extends Seeder
                                             ->get(['id', 'project_value', 'start_date']);
         
         foreach ($contract_project as $project) {
-            $percent = rand(10, 25) / 100;
+            $percent = rand(1, 3) * 10 / 100;
             Charge::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',
@@ -33,7 +33,7 @@ class ChargeSeeder extends Seeder
                 'amount' => $project->project_value * $percent,
                 'description' => 'Uang Makan 1'
             ]);
-            $percent = rand(10, 25) / 100;
+            $percent = rand(1, 4) * 10 / 100;
             Charge::create([
                 'project_id' => $project->id,
                 'kind_project' => 'contract',

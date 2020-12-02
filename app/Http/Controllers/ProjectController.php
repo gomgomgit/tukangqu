@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\ContractProject;
 use App\Models\DailyProject;
 use App\Models\PaymentTerm;
+use App\Models\Profit;
 use App\Models\Worker;
 use Illuminate\Http\Request;
 
@@ -78,6 +79,7 @@ class ProjectController extends Controller
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
             $data->status = 'OnProgress';
+            $data->process = 'deal';
             $data->project_value = $request->project_value;
             $data->worker_id = $request->worker_id;
             $data->start_date = $request->start_date;
@@ -86,6 +88,7 @@ class ProjectController extends Controller
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
             $data->status = 'OnProgress';
+            $data->process = 'deal';
             $data->daily_salary = $request->daily_salary;
             $data->worker_id = $request->worker_id;
             $data->start_date = $request->start_date;
@@ -119,7 +122,7 @@ class ProjectController extends Controller
         $contract_datas = ContractProject::where('status', 'OnProgress')
             ->with('client', 'worker')
             ->orderBy('created_at', 'desc')->get();
-        // dd($contract_datas->first());
+        // dd(Profit::where('project_id', 20)->where('kind_project', 'daily')->sum('amount_total'));
 
         return view('admin.projects.on-progress', compact('daily_datas', 'contract_datas', 'kind'));
     }
@@ -167,14 +170,58 @@ class ProjectController extends Controller
 
         return redirect()->route('admin.projects.onProgress', $kind);
     }
+    
+    public function addProfit(Request $request, $projectId, $kind = 'borongan') {
+        if ($kind ==='borongan') {
+            Profit::create([
+                'project_id' => $projectId,
+                'kind_project' => 'contract',
+                'date' => $request->date,
+                'amount_cash' => $cash = $request->amount_cash,
+                'amount_worker' => $worker = $request->amount_worker,
+                'amount_total' => $cash + $worker,
+            ]);
+        }
+        if ($kind ==='harian') {
+            Profit::create([
+                'project_id' => $projectId,
+                'kind_project' => 'daily',
+                'date' => $request->date,
+                'amount_cash' => $cash = $request->amount_cash,
+                'amount_worker' => $worker = $request->amount_worker,
+                'amount_total' => $cash + $worker,
+            ]);
+        }
 
-    public function finish($id, $kind = 'borongan') {
+        return redirect()->route('admin.projects.onProgress', $kind);
+    }
+
+    public function done(Request $request, $id, $kind = 'borongan') {
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
         }
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
         }
+        $data->finish_date = $request->finish_date;
+        $data->process = 'done';
+        // dd($data);
+        $data->save();
+
+        return redirect()->route('admin.projects.onProgress', $kind);
+    }
+
+    public function finish($id, $kind = 'borongan') {
+        if ($kind ==='borongan') {
+            $data = ContractProject::find($id);
+            $data->profit = $data->totalprofit;
+            $data->process = 'finish';
+        }
+        if ($kind ==='harian') {
+            $data = DailyProject::find($id);
+            $data->profit = $data->totalprofit;
+        }
+        // dd($data);
         $data->status = 'Finished';
         $data->save();
 
@@ -185,7 +232,7 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function finished()
+    public function finished($kind = 'borongan')
     {
         $daily_datas = DailyProject::with('client', 'worker')
             ->where('status', 'Finished')->orderBy('created_at', 'desc')->get();
@@ -194,7 +241,7 @@ class ProjectController extends Controller
             ->orderBy('created_at', 'desc')->get();
         // dd($contract_datas->first());
 
-        return view('admin.projects.finished', compact('daily_datas', 'contract_datas'));
+        return view('admin.projects.finished', compact('daily_datas', 'contract_datas', 'kind'));
     }
 
     /**
@@ -250,15 +297,48 @@ class ProjectController extends Controller
         return view('admin.projects.on-process-show', compact('data', 'kind'));
     }
 
+    public function onProgressShow($id, $kind)
+    {
+        if ($kind ==='borongan') {
+            $data = ContractProject::find($id);
+        }
+        if ($kind ==='harian') {
+            $data = DailyProject::find($id);
+        }
+        return view('admin.projects.on-progress-show', compact('data', 'kind'));
+    }
+
+    public function finishedShow($id, $kind)
+    {
+        if ($kind ==='borongan') {
+            $data = ContractProject::find($id);
+        }
+        if ($kind ==='harian') {
+            $data = DailyProject::find($id);
+        }
+        return view('admin.projects.finished-show', compact('data', 'kind'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, $kind)
     {
-        //
+        $workers = Worker::all();
+
+        if ($kind == 'borongan') {
+            $data = ContractProject::find($id);
+
+            return view('admin.projects.edit-contract', compact('data', 'workers'));
+        }
+        if ($kind == 'harian') {
+            $data = DailyProject::find($id);
+
+            return view('admin.projects.edit-daily', compact('data', 'workers'));
+        }
     }
 
     /**
@@ -268,9 +348,41 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $kind)
     {
-        //
+
+        if ($kind == 'borongan') {
+            $data = ContractProject::find($id);
+            $client = Client::find($data->client_id);
+            $data->update($request->all());
+            $client->update($request->only('name', 'phone_number'));
+
+            if ($data->status == 'OnProcess') {
+                return redirect()->route('admin.projects.onProcess', 'borongan');
+            } 
+            if ($data->status == 'OnProgress') {
+                return redirect()->route('admin.projects.onProgress', 'borongan');
+            } 
+            if ($data->status == 'Finished') {
+                return redirect()->route('admin.projects.finished', 'borongan');
+            } 
+        }
+        if ($kind == 'harian') {
+            $data = DailyProject::find($id);
+            $client = Client::find($data->client_id);
+            $data->update($request->all());
+            $client->update($request->only('name', 'phone_number'));
+
+            if ($data->status == 'OnProcess') {
+                return redirect()->route('admin.projects.onProcess', 'harian');
+            } 
+            if ($data->status == 'OnProgress') {
+                return redirect()->route('admin.projects.onProgress', 'harian');
+            } 
+            if ($data->status == 'Finished') {
+                return redirect()->route('admin.projects.finished', 'harian');
+            } 
+        }
     }
 
     /**

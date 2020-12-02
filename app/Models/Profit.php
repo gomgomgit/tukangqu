@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Profit extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'project_id', 'kind_project', 'date', 'amount_cash', 'amount_worker', 'amount_total'
+    ];
 }

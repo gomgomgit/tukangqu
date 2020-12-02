@@ -11,13 +11,13 @@
   <div class="menu-block customscroll">
     <div class="sidebar-menu">
       <ul id="accordion-menu">
-        <li>
+        <li class="{{ request()->routeIs('admin.dashboard') ? 'show' : '' }}">
           <a href="{{ route('admin.dashboard') }}" class="dropdown-toggle no-arrow">
             <span class="micon dw dw-house1"></span><span class="mtext">Dashboard</span>
           </a>
         </li>
-        <li>
-          <a href="#" class="dropdown-toggle no-arrow">
+        <li class="{{ request()->routeIs('admin.report') ? 'show' : '' }}">
+          <a href="{{ route('admin.report') }}" class="dropdown-toggle no-arrow">
             <span class="micon dw dw-analytics-10"></span><span class="mtext">Laporan</span>
           </a>
         </li>

@@ -69,70 +69,59 @@
 						</div>
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">
-								Tanggal Order
+								Tanggal Mulai
 							</div>
 							<div class="col-1">
 								:
 							</div>
 							<div class="col-6">
-								{{ date('l, d-M-Y', strtotime($data->order_date)) }}
+								{{ $data->start_date ? date('l, d-M-Y', strtotime($data->start_date)) : '---' }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Tanggal Selesai
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->finish_date ? date('l, d-M-Y', strtotime($data->finish_date)) : '---' }}
 							</div>
 						</div>
 
 						@if ($kind === 'borongan')
 							<div class="row mb-2">
 								<div class="col-4 font-weight-bold">
-									Tanggal Survei
+									Pekerja
 								</div>
 								<div class="col-1">
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->survey_date ? date('l, d-M-Y', strtotime($data->survey_date)) : '---' }}
+									{{ $data->worker->name ?? '---' }}
 								</div>
 							</div>
 							<div class="row mb-2">
 								<div class="col-4 font-weight-bold">
-									Waktu Survei
+									No Hp Pekerja
 								</div>
 								<div class="col-1">
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->survey_time ?? '---' }}
+									{{ $data->worker->phone_number ?? '---'}}
 								</div>
 							</div>
 							<div class="row mb-2">
 								<div class="col-4 font-weight-bold">
-									Surveyer
+									Nilai Project
 								</div>
 								<div class="col-1">
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->surveyer->name ?? '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									No Hp Surveyer
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->surveyer->phone_number ?? '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									Nilai RAB
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->approximate_value ?? '---' }}
+									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
 								</div>
 							</div>
 						@elseif ($kind === 'harian')
@@ -144,10 +133,66 @@
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->daily_value ?? '---' }}
+									Rp. {{ number_format($data->daily_value, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Gaji Harian
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->daily_salary, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Selisih
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->difference, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Nilai Project
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
 								</div>
 							</div>
 						@endif
+
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Keuntungan
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+									Rp. {{ number_format($data->profit, 0, '.', '.') }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Keterangan
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+									 {{ $data->description ?? '---'}}
+							</div>
+						</div>
 
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">

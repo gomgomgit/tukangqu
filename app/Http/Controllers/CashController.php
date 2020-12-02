@@ -83,7 +83,9 @@ class CashController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Cash::find($id);
+
+        return view('admin.cashs.edit', compact('data'));
     }
 
     /**
@@ -95,7 +97,21 @@ class CashController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'date' => 'required|date',
+            'category' => 'required',
+            'money_in' => 'required|numeric',
+            'money_out' => 'required|numeric',
+            'description' => 'nullable' 
+        ]);
+
+        $data = $request->all();
+        $cash = Cash::find($id);
+        
+        $cash->update($data);
+
+        return redirect()->route('admin.cashes.index');
     }
 
     /**

@@ -21,8 +21,8 @@ class CashSeeder extends Seeder
         
         Cash::truncate();
 
-        $daily = DailyProject::where('status', 'Finished')->where('process', 'deal')->get();
-        $contract = ContractProject::where('status', 'Finished')->where('process', 'deal')->get();
+        $daily = DailyProject::where('status', 'Finished')->where('process', 'finish')->get();
+        $contract = ContractProject::where('status', 'Finished')->where('process', 'finish')->get();
 
         for ($i=0; $i < $daily->count(); $i++) { 
             Cash::create([

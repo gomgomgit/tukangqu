@@ -18,7 +18,9 @@ class CreateProfitsTable extends Migration
             $table->foreignId('project_id');
             $table->enum('kind_project', ['contract', 'daily']);
             $table->date('date');
-            $table->integer('amount');
+            $table->integer('amount_cash');
+            $table->integer('amount_worker');
+            $table->integer('amount_total');
             $table->timestamps();
         });
     }

@@ -25,6 +25,9 @@ Route::get('/get-cities/{provinces_id}', [LocationController::class, 'cities'])-
 Route::get('/get-districts/{cities_id}', [LocationController::class, 'districts'])->name('apiGetDistricts');
 Route::get('/get-villages/{districts_id}', [LocationController::class, 'villages'])->name('apiGetVillages');
 
+Route::get('/get-project/{project_id}/{kind}', [OnProgressController::class, 'project'])->name('apiGetProject');
+
 Route::get('/get-billing/{project_id}/{kind}', [OnProgressController::class, 'billing'])->name('apiGetBilling');
-Route::get('/get-project-termin/{project_id}/{kind}', [OnProgressController::class, 'projectTermin'])->name('apiGetProjectTermin');
 Route::get('/get-termin/{project_id}/{kind}', [OnProgressController::class, 'termin'])->name('apiGetTermin');
+Route::get('/get-sharing/{project_id}/{kind}', [OnProgressController::class, 'sharing'])->name('apiGetSharing');
+    

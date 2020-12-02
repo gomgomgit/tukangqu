@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
+            UserSeeder::class,
             SkillSeeder::class,
             WorkerKindSeeder::class,
             SpecialistSeeder::class,
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
             CashSeeder::class,
             ChargeSeeder::class,
             PaymentTermSeeder::class,
+            ProfitSeeder::class,
         ]);
     }
 }

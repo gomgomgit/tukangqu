@@ -11,7 +11,7 @@
 
 				<div class="clearfix mb-20">
 					<div class="pull-left">
-						<p class="font-weight-bold">Saldo: Rp {{ number_format($total) }}</p>
+						<p class="font-weight-bold">Saldo: Rp {{ number_format($total) }}</p> 
           </div>
           <div class="pull-right">
             <a href="{{ Route('admin.cashes.createOut') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
@@ -30,9 +30,9 @@
 						</li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane fade show active" id="semua" role="tabpanel">
+						<div class="pt-4 tab-pane fade show active" id="semua" role="tabpanel">
 							{{-- <div class="pd-20"> --}}
-								<table class="table table-striped">
+								<table class="data-table table table-striped">
 									<thead>
 										<tr>
 											<th scope="col" class="border-0">#</th>
@@ -64,8 +64,8 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="{{ Route('admin.workers.show', $data->id) }}"><i class="dw dw-eye"></i> View</a>
-															<a class="dropdown-item" href="{{ Route('admin.workers.edit', $data->id) }}"><i class="dw dw-edit2"></i> Edit</a>
+															{{-- <a class="dropdown-item" href="{{ Route('admin.workers.show', $data->id) }}"><i class="dw dw-eye"></i> View</a> --}}
+															<a class="dropdown-item" href="{{ Route('admin.cashes.edit', $data->id) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
 															<x-form-button 
 																	:action="route('admin.cashes.destroy', $data->id)"
@@ -83,8 +83,8 @@
 								</table>
 							{{-- </div> --}}
 						</div>
-						<div class="tab-pane fade" id="masuk" role="tabpanel">
-							<table class="table table-striped">
+						<div class="pt-4 tab-pane fade" id="masuk" role="tabpanel">
+							<table class="data-table table table-striped">
 									<thead>
 										<tr>
 											<th scope="col" class="border-0">#</th>
@@ -132,8 +132,8 @@
 									</tbody>
 								</table>
 						</div>
-						<div class="tab-pane fade" id="keluar" role="tabpanel">
-							<table class="table table-striped">
+						<div class="pt-4 tab-pane fade" id="keluar" role="tabpanel">
+							<table class="data-table table table-striped">
 									<thead>
 										<tr>
 											<th scope="col" class="border-0">#</th>
@@ -192,4 +192,19 @@
 			</div>
 			<!-- Striped table End -->
 	</div>
+@endsection
+
+@section('script')
+		
+		<!-- buttons for Export datatable -->
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.buttons.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.bootstrap4.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.print.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.html5.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.flash.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/pdfmake.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js') }}"></script>
+		<!-- Datatable Setting js -->
+		<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js') }}"></script>
+
 @endsection

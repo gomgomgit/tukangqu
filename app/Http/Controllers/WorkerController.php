@@ -22,7 +22,7 @@ class WorkerController extends Controller
         Paginator::useBootstrap();
         // dd(\Indonesia::findVillage(7604030008));
         // $datas = Worker::with('locations')->get();
-        $datas = Worker::orderBy('created_at', 'desc')->paginate(10);
+        $datas = Worker::orderBy('created_at', 'desc')->get();
         // dd($datas->first());
         return view('admin.workers.index', compact('datas'));
     }
@@ -85,7 +85,7 @@ class WorkerController extends Controller
         $skills = Skill::all();
         $kinds = WorkerKind::all();
         $specialists = Specialist::all();
-
+        
         return view('admin.workers.edit', compact('data', 'selectedSkills', 'skills', 'kinds', 'specialists'));
     }
 

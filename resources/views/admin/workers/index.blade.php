@@ -9,11 +9,11 @@
 					<div class="pull-left">
 						<h4 class="text-black h4">Data Tukang</h4>
           </div>
-          <div class="pull-right">
+          <div class="pull-right pr-3">
             <a href="{{ Route('admin.workers.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Tukang</a>
           </div>
 				</div>
-				<table class="table table-striped">
+				<table class="data-table table table-striped">
 					<thead>
 						<tr>
 							<th scope="col">#</th>
@@ -22,7 +22,7 @@
 							<th scope="col" width="150px">No HP</th>
 							<th scope="col">Jenis</th>
 							<th scope="col">Keahlian</th>
-							<th scope="col">Action</th>
+							<th scope="col" class="datatable-nosort">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -65,12 +65,22 @@
 						@endforeach
 					</tbody>
 				</table>
-				<div class="clearfix">
-					<div class="pull-right">
-						{{ $datas->links() }}
-					</div>
-				</div>
 			</div>
 			<!-- Striped table End -->
 	</div>
+@endsection
+
+@section('script')
+		
+		<!-- buttons for Export datatable -->
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.buttons.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.bootstrap4.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.print.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.html5.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/buttons.flash.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/pdfmake.min.js') }}"></script>
+		<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js') }}"></script>
+		<!-- Datatable Setting js -->
+		<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js') }}"></script>
+
 @endsection

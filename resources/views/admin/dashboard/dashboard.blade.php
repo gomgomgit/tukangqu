@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.app') 
 
 @section('main-content')
-	<div class="card-box pd-20 height-100-p mb-30">
+	{{-- <div class="card-box pd-20 height-100-p mb-30">
 		<div class="row align-items-center">
 			<div class="col-md-4">
 				<img src="http://127.0.0.1:8000/deskapp/vendors/images/banner-img.png" alt="">
@@ -13,43 +13,54 @@
 				<p class="font-18 max-width-600">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde hic non repellendus debitis iure, doloremque assumenda. Autem modi, corrupti, nobis ea iure fugiat, veniam non quaerat mollitia animi error corporis.</p>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 	<div class="row">
 		<div class="col-xl-4 mb-30">
 			<div class="card-box height-100-p widget-style1">
-				<div class="d-flex flex-wrap align-items-center">
-					<div class="progress-data">
+				<div class="row d-flex flex-wrap align-items-center">
+					{{-- <div class="progress-data">
 						<div id="chart"></div>
+					</div> --}}
+					<div class="col-auto progress-data pl-4">
+						<div class="position-relative" style="min-height: 116.7px;">
+							<i class="icon-copy dw dw-building1 d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+						</div>
 					</div>
-					<div class="widget-data">
-						<div class="h4 mb-0">2020</div>
-						<div class="weight-600 font-14">Contact</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-4 mb-30">
-			<div class="card-box height-100-p widget-style1">
-				<div class="d-flex flex-wrap align-items-center">
-					<div class="progress-data">
-						<div id="chart2"></div>
-					</div>
-					<div class="widget-data">
-						<div class="h4 mb-0">400</div>
-						<div class="weight-600 font-14">Deals</div>
+					<div class="col widget-data pl-5">
+						<div class="h4 mb-0">{{ $month_project }}</div>
+						<div class="weight-600 font-14">Proyek Bulan Ini</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
 		<div class="col-xl-4 mb-30">
 			<div class="card-box height-100-p widget-style1">
-				<div class="d-flex flex-wrap align-items-center">
-					<div class="progress-data">
-						<div id="chart3"></div>
+				<div class="row d-flex flex-wrap align-items-center">
+					<div class="col-auto progress-data pl-4">
+						<div class="position-relative" style="min-height: 116.7px;">
+							<i class="icon-copy dw dw-group d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+						</div>
 					</div>
-					<div class="widget-data">
+					<div class="col widget-data pl-5">
+						<div class="h4 mb-0">{{ $workers->count() }}</div>
+						<div class="weight-600 font-14">Total Tukang</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-4 mb-30">
+			<div class="card-box height-100-p widget-style1">
+				<div class="row d-flex flex-wrap align-items-center">
+					<div class="col-auto progress-data pl-4">
+						<div class="position-relative" style="min-height: 116.7px;">
+							<i class="icon-copy dw dw-wallet1 d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+						</div>
+					</div>
+					<div class="col widget-data pl-5">
 						<div class="h4 mb-0">350</div>
-						<div class="weight-600 font-14">Campaign</div>
+						<div class="weight-600 font-14">Income Bulan Ini</div>
 					</div>
 				</div>
 			</div>
@@ -84,7 +95,7 @@
 					</tbody>
 				</table>
 				<div class="text-center">
-					<a href="#" class="btn btn-outline-primary btn-sm">View More</a>
+					<a href="{{ route('admin.workers.index') }}" class="btn btn-outline-primary btn-sm">View More</a>
 				</div>
 			</div>
 			<!-- Striped table End -->
@@ -158,67 +169,32 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<th scope="row">1</th>
-							<td>Gilang</td>
-							<td>081232782676</td>
-							<td>Bangun Ruko</td>
-							<td>Borongan</td>
-							<td>14 Maret 2020</td>
-							<td>
-								<span class="badge badge-primary">Deal</span>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Gilang</td>
-							<td>081232782676</td>
-							<td>Bangun Ruko</td>
-							<td>Borongan</td>
-							<td>14 Maret 2020</td>
-							<td>
-								<span class="badge badge-primary">Deal</span>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Gilang</td>
-							<td>081232782676</td>
-							<td>Bangun Ruko</td>
-							<td>Borongan</td>
-							<td>14 Maret 2020</td>
-							<td>
-								<span class="badge badge-primary">Deal</span>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Gilang</td>
-							<td>081232782676</td>
-							<td>Bangun Ruko</td>
-							<td>Borongan</td>
-							<td>14 Maret 2020</td>
-							<td>
-								<span class="badge badge-primary">Deal</span>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">1</th>
-							<td>Gilang</td>
-							<td>081232782676</td>
-							<td>Bangun Ruko</td>
-							<td>Borongan</td>
-							<td>14 Maret 2020</td>
-							<td>
-								<span class="badge badge-primary">Deal</span>
-							</td>
-						</tr>
+						@php
+								$no = 1;
+						@endphp
+						@foreach ($recent_projects as $project)
+							<tr>
+								<th scope="row">{{ $no++ }}</th>
+								<td>{{ $project->client->name }}</td>
+								<td>{{ $project->client->phone_number }}</td>
+								<td>{{ $project->kind_project }}</td>
+								<td>{{ $project->kind }}</td>
+								<td>{{ $project->order_date }}</td>
+								<td>
+									<span class="badge badge-primary">{{ Str::ucfirst($project->process) }}</span>
+								</td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 				<div class="text-center">
-					<a href="#" class="btn btn-outline-primary btn-sm">View More</a>
+					<a href="{{ route('admin.projects.onProcess') }}" class="btn btn-outline-primary btn-sm">View More</a>
 				</div>
 			</div>
 			<!-- Striped table End -->
 	</div>
+@endsection
+
+@section('script')
+	<script src="{{ asset('deskapp/vendors/scripts/dashboard.js') }}"></script>
 @endsection

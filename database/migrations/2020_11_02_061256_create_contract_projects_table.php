@@ -18,6 +18,8 @@ class CreateContractProjectsTable extends Migration
             $table->foreignId('client_id');
             $table->date('order_date');
             $table->text('address');
+            $table->foreignId('province_id');
+            $table->foreignId('city_id');
             $table->string('kind_project');
             $table->date('survey_date')->nullable();
             $table->time('survey_time')->nullable();
@@ -29,8 +31,9 @@ class CreateContractProjectsTable extends Migration
             $table->date('finish_date')->nullable();
             $table->integer('profit')->nullable();
             $table->text('description')->nullable();
-            $table->enum('process', ['waiting', 'scheduled', 'surveyed', 'deal', 'failed']);
+            $table->enum('process', ['waiting', 'scheduled', 'surveyed', 'deal', 'done', 'finish', 'failed']);
             $table->enum('status', ['OnProcess', 'OnProgress', 'Finished']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

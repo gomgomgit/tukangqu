@@ -23,6 +23,7 @@ class CreateCashesTable extends Migration
             $table->foreignId('project_id')->nullable();
             $table->enum('project_type', ['daily', 'contract'])->nullable();
             $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
