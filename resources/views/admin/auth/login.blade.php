@@ -118,6 +118,11 @@
 									<div class="forgot-password"><a href="forgot-password.html">Forgot Password</a></div>
 								</div> --}}
 							</div>
+							<div>
+								<span>Name: Admin </span>
+								<p>Password: admin </p>
+								<p>Beri izin untuk notifikasi untuk notifikasi survei</p>
+							</div>
 							{{-- <div class="row mb-3">
 								<div class="col-12 text-center">
 									<button @click.prevent="permission()" class="btn btn-sm btn-info">Izinkan Notifikasi</button>
