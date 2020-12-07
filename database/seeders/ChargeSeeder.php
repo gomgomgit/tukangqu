@@ -52,14 +52,14 @@ class ChargeSeeder extends Seeder
             Charge::create([
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
-                'date' => date('Y-m-d', strtotime('+1 days')),
+                'date' => date('Y-m-d', strtotime('-5 days')),
                 'amount' => $project->daily_value * 20 / 100,
                 'description' => 'Uang Makan 1'
             ]);
             Charge::create([
                 'project_id' => $project->id,
                 'kind_project' => 'daily',
-                'date' => date('Y-m-d', strtotime('+3 days')),
+                'date' => date('Y-m-d', strtotime('-2 days')),
                 'amount' => $project->daily_value * 60 / 100,
                 'description' => 'Uang Makan 2'
             ]);

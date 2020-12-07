@@ -47,62 +47,60 @@
         </a>
       </div>
     </div>
-    {{-- <div class="user-notification">
+    <div class="user-notification" x-data="notif()" x-init="init()">
       <div class="dropdown">
         <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
           <i class="icon-copy dw dw-notification"></i>
-          <span class="badge notification-active"></span>
+          <template x-if="notifications.length > 0">
+            <span class="badge notification-active"></span>
+          </template>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           <div class="notification-list mx-h-350 customscroll">
             <ul>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/img.jpg') }}" alt="">
-                  <h3>John Doe</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/photo1.jpg') }}" alt="">
-                  <h3>Lea R. Frith</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/photo2.jpg') }}" alt="">
-                  <h3>Erik L. Richards</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/photo3.jpg') }}" alt="">
-                  <h3>John Doe</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/photo4.jpg') }}" alt="">
-                  <h3>Renee I. Hansen</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <img src="{{ asset('deskapp/vendors/images/img.jpg') }}" alt="">
-                  <h3>Vicki M. Coleman</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                </a>
-              </li>
+              
+              <template x-if="notifications.length < 1">
+                <li>
+                  Tidak Ada Notifikasi
+                </li>
+              </template>
+
+              {{-- <template x-for="(n,i) in notifs" :key="i">
+                <li>
+                  <a href="#">
+                    <img src="{{ asset('deskapp/vendors/images/img.jpg') }}" alt="">
+                    <h3>Vicki M. Coleman</h3>
+                    <p x-text="n"></p>
+                  </a>
+                </li>
+              </template> --}}
+                <template x-for="ns in notifications" :key="ns.id">
+                  <li>
+                    <div class="d-flex pr-3">
+                      <div>
+                        <a href="">
+                          <img src="{{ asset('image/tukangqu-logo.jpg') }}" alt="">
+                          <h3 x-text="ns.title"></h3>
+                          <p x-text="ns.message"></p>
+                        </a>
+                      </div>
+                      <div>
+                        <a href="#" @click.prevent="deleteNotification(ns.id)"><i class="icon-copy fa fa-close font-16" aria-hidden="true"></i></a>
+                      </div>
+                    </div>
+                  </li>
+                </template>
+                <template x-if="notifications.length > 0">
+                  <li class="text-center pt-3">
+                    <h6 @click.prevent="deleteAllNotifications()" class="btn">Hapus semua notifikasi</h6>
+                  </li>
+                </template>
+
             </ul>
           </div>
         </div>
       </div>
-    </div> --}}
+    </div>
     <div class="user-info-dropdown mr-5">
       <div class="dropdown">
         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -128,3 +126,74 @@
     </div>
   </div>
 </div>
+
+<script>
+
+  function notif() {
+    return {
+      notifs: [],
+      notifications: [],
+
+      init() {
+        const self = this
+        window.addEventListener('notif', function (e) {
+          console.log('event success')
+
+          let notificationData = {
+            'title' : e.detail.title,
+            'message' : e.detail.message,
+          }
+
+            self.getNotification();
+
+          // axios.post('{{ url("/api/store-notification") }}', notificationData)
+          // .then(function(){
+          //   self.getNotification();
+          //   console.log('post data success');
+          // });
+
+          // self.notifs.push(e.detail.title)
+          
+          let notification = new Notification('TukangQu', {
+            body: e.detail.title, // content for the alert
+            icon: "{{ asset('image/tukangqu-logo.jpg') }}" // optional image url
+          });
+
+          // link to page on clicking the notification
+          notification.onclick = () => {
+            window.open(window.location.href);
+          };
+        })
+
+        self.getNotification();
+      },
+
+      getNotification() {
+        var self = this
+        axios.get("/api/get-notification")
+        .then(function(response) {
+          self.notifications = response.data;
+        });
+        console.log('get data success');
+      },
+
+      deleteNotification(id) {
+        var self = this
+        axios.get('{{ url("/api/delete-notification") }}/'+id)
+        .then(function(response) {
+          self.getNotification();
+        });
+      },
+
+      deleteAllNotifications() {
+        var self = this
+        axios.get("/api/delete-all-notification")
+        .then(function(response) {
+          self.getNotification();
+        });
+      },
+
+    }
+  }
+
+</script>

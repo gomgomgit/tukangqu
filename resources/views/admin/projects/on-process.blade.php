@@ -56,6 +56,7 @@
 									@foreach ($contract_datas as $data)
 										<tr>
 											<th scope="row">{{ $no++ }}</th>
+											{{-- <th scope="row">{{ $data->id }}</th> --}}
 											<td>{{ $data->client->name }}</td>
 											<td>{{ $data->client->phone_number }}</td>
 											{{-- <td>{{ $data->address }}</td> --}}
@@ -129,7 +130,7 @@
 														</div>
 													</div>
 													<div class="modal-footer">
-														<button @click="cPricingId = null" type="button" class="btn btn-secondary">Close</button>
+														<span @click="cPricingId = null" type="button" class="btn btn-secondary">Close</span>
 														<button class="btn btn-info">Beri Harga</button>
 													</div>
 												</form>
@@ -155,7 +156,7 @@
 														</div>
 														<div class="form-group">
 															<label>Jam</label>
-															<input class="form-control" type="time" name="survey_time" required>
+															<input class="survey_time form-control" type="text" name="survey_time" required>
 														</div>
 														<div class="form-group">
 															<label>Surveyer</label>
@@ -177,7 +178,7 @@
 														</div>
 													</div>
 													<div class="modal-footer">
-														<button @click="cSchedulingId = null" class="btn btn-secondary">Close</button>
+														<span @click="cSchedulingId = null" class="btn btn-secondary">Close</span>
 														<button type="submit" class="btn btn-primary">Buat Schedule</button>
 													</div>
 												</form>
@@ -270,7 +271,7 @@
 															</div>
 													</div>
 													<div class="modal-footer">
-														<button @click="dPricingId = null" type="button" class="btn btn-secondary">Close</button>
+														<span @click="dPricingId = null" type="button" class="btn btn-secondary">Close</span>
 														<button class="btn btn-info">Beri Harga</button>
 													</div>
 												</form>
@@ -309,7 +310,6 @@
 		{{-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> --}}
 
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 		<script>
 			function action() {
 				return {
@@ -324,13 +324,8 @@
 			}
 		</script>
 		<script>
-			// $('#Datbel').dataTable( {
-			// 		paging: false
-			// } );
-			
-			
-			// $('#Datbel').dataTable( {
-			// 		searching: false
-			// } );
+		$( ".survey_time" ).timeDropper({
+			format: 'HH:mm',
+		});
 		</script>
 @endsection

@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class DailyProject extends Model
 {
     use HasFactory;
+
+    use SoftDeletes;
 
     protected $fillable = [
         'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'daily_value', 
@@ -58,6 +62,19 @@ class DailyProject extends Model
         return $totalcharge;
     }
 
+    public function getChargeWeekAttribute() {
+        $id = $this->id;
+
+        $datenow = Carbon::now()->format('yy-m-d');
+        $datefrom = Carbon::now()->subDays(6)->format('yy-m-d');
+
+        $chargeweek = Charge::where('project_id', $id)->where('kind_project', 'daily')
+                        ->whereBetween('date',[$datefrom, $datenow])
+                        ->sum('amount');
+
+        return $chargeweek;
+    }
+
     public function getDifferenceAttribute() {
         $daily = $this->daily_value;
         $worker = $this->daily_salary;
@@ -81,11 +98,11 @@ class DailyProject extends Model
     }
 
     public function client() {
-        return $this->belongsTo(Client::class, 'client_id', 'id');
+        return $this->belongsTo(Client::class, 'client_id', 'id')->withTrashed();
     }
 
     public function worker() {
-        return $this->belongsTo(Worker::class, 'worker_id', 'id');
+        return $this->belongsTo(Worker::class, 'worker_id', 'id')->withTrashed();
     }
 
     public function city() {

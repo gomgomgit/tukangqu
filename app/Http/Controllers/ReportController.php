@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
     public function index() {
+        $now = Carbon::now()->format('yy-m-d');
+        $surveyCount = ContractProject::where('survey_date', $now)->count();
+
         $most_city = City::withCount(['dailyprojects', 'contractprojects', 'province'])->get();
 
         $most_city = $most_city->sortByDesc('countprojects');
@@ -26,10 +29,24 @@ class ReportController extends Controller
         //     $formatmonth = Carbon::now()->subMonths($i)->format('m');
         //     $listmonthProjects[] = (ContractProject::whereMonth('order_date', $formatmonth)->sum()) + (DailyProject::whereMonth('order_date', $formatmonth)->sum());
         // };
+        // dd($now);
 
+        $projects = ContractProject::all()->count() + DailyProject::all()->count();
+        $onprocess = ContractProject::where('status', 'OnProcess')->count() + DailyProject::where('status', 'OnProcess')->count();
+        $onprogress = ContractProject::where('status', 'OnProgress')->count() + DailyProject::where('status', 'OnProgress')->count();
 
         return view('admin.report.index', compact(
-            'most_city'
+            'surveyCount', 'most_city', 'projects', 'onprocess', 'onprogress'
         ));
     }
+
+    public function todaySurvey() {
+        $now = Carbon::now()->format('yy-m-d');
+
+        $todaySurveys = ContractProject::where('survey_date', $now)->get();
+
+        return view('admin.report.today-survey', compact('todaySurveys'));
+    }
+
+
 }

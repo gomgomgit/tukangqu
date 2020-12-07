@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ContractProject extends Model
 {
     use HasFactory;
+
+    use SoftDeletes;
 
     protected $fillable = [
         'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'survey_date', 'survey_time', 
@@ -82,13 +85,17 @@ class ContractProject extends Model
     }
 
     public function client() {
-        return $this->belongsTo(Client::class, 'client_id', 'id');
+        return $this->belongsTo(Client::class, 'client_id', 'id')->withTrashed();
     }
     public function worker() {
-        return $this->belongsTo(Worker::class, 'worker_id', 'id');
+        return $this->belongsTo(Worker::class, 'worker_id', 'id')->withTrashed();
     }
 
     public function surveyer() {
-        return $this->belongsTo(Worker::class, 'surveyer_id', 'id');
+        return $this->belongsTo(Worker::class, 'surveyer_id', 'id')->withTrashed();
+    }
+
+    public function city() {
+        return $this->belongsTo(City::class, 'city_id', 'id');
     }
 }

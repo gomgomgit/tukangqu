@@ -11,6 +11,7 @@
         
         <form action="{{ route('admin.projects.update', [$data->id, 'borongan']) }}" method="POST">
           @csrf
+          {{-- <div class=""><p class="">{{ $data->id }}</p></div> --}}
           <div class="form-group">
             <label>Nama Klien</label>
             <input class="form-control" type="text" name="name" value="{{ old('name', $data->client->name) }}">
@@ -77,13 +78,13 @@
               <div class="col-6">
                 <div class="form-group">
                   <label>Tanggal Survei</label>
-                  <input class="form-control" type="date" name="survey_date" value="{{ $data->survey_date }}">
+                  <input class="date-picker form-control" type="text" data-date-format="yyyy-m-d" name="survey_date" value="{{ $data->survey_date }}">
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
                   <label>Jam Survei</label>
-                  <input class="form-control" type="time" name="survey_time" value="{{ $data->survey_time }}">
+                  <input class="survey_time form-control" type="text" name="survey_time" value="{{ $data->survey_time }}">
                 </div>
               </div>
             </div>
@@ -109,7 +110,7 @@
           @if (in_array($data->process, $check_deal))
             <div class="form-group">
               <label>Tanggal Mulai</label>
-              <input class="form-control" type="date" name="start_date" value="{{ $data->start_date }}">
+              <input class="date-picker form-control" type="text" name="start_date" data-date-format="yyyy-m-d" value="{{ $data->start_date }}">
             </div>
             <div class="form-group">
               <label>Nilai Proyek</label>
@@ -131,9 +132,15 @@
           @if (in_array($data->process, $check_done))
             <div class="form-group">
               <label>Tanggal Selesai</label>
-              <input class="form-control" type="date" name="finish_date" value="{{ $data->finish_date }}">
+              <input class="date-picker form-control" type="text" name="finish_date" data-date-format="yyyy-m-d" value="{{ $data->finish_date }}">
             </div>
           @endif
+
+          <div>
+            <button class="btn btn-primary">
+              Submit
+            </button>
+          </div>
         </form>
 			</div>
 			<!-- Striped table End -->
@@ -212,4 +219,10 @@
         }
       })
     </script> --}}
+
+		<script>
+		$( ".survey_time" ).timeDropper({
+			format: 'HH:mm',
+		});
+		</script>
 @endsection

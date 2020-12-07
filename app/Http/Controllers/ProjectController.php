@@ -10,6 +10,7 @@ use App\Models\DailyProject;
 use App\Models\PaymentTerm;
 use App\Models\Profit;
 use App\Models\Worker;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -24,12 +25,12 @@ class ProjectController extends Controller
         // $daily_datas = DailyProject::with('client')
         // ->where('status', 'OnProcess')->orderBy('created_at', 'desc')->get();
         $daily_datas = DailyProject::with('client')->where('status', 'OnProcess')
-        ->orderByRaw("FIELD(process, \"waiting\", \"priced\", \"deal\", \"failed\")")
-        ->orderBy('created_at', 'desc')->get();
+        ->orderBy('process')
+        ->orderBy('order_date', 'desc')->get();
         $contract_datas = ContractProject::where('status', 'OnProcess')
             ->with('client', 'surveyer')
-            ->orderByRaw("FIELD(process, \"waiting\", \"scheduled\", \"surveyed\", \"deal\", \"failed\")")
-            ->orderBy('created_at', 'desc')->get();
+            ->orderBy('process')
+            ->orderBy('order_date', 'desc')->get();
         $workers = Worker::all();
         // $workers = Worker::groupBy('city_id')->having()->get();
         // dd($workers);
@@ -116,12 +117,17 @@ class ProjectController extends Controller
      */
     public function onProgress($kind = 'borongan')
     {
+        // $now = Carbon::now();
+        // dd($now);
         $daily_datas = DailyProject::with('client', 'worker')
             ->where('status', 'OnProgress')
-            ->orderBy('updated_at', 'desc')->get();
+            ->orderBy('process')
+            ->orderBy('start_date', 'desc')->get();
+            // dd($daily_datas->first()->chargeweek);
         $contract_datas = ContractProject::where('status', 'OnProgress')
             ->with('client', 'worker')
-            ->orderBy('created_at', 'desc')->get();
+            ->orderBy('process')
+            ->orderBy('start_date', 'desc')->get();
         // dd(Profit::where('project_id', 20)->where('kind_project', 'daily')->sum('amount_total'));
 
         return view('admin.projects.on-progress', compact('daily_datas', 'contract_datas', 'kind'));
@@ -220,6 +226,7 @@ class ProjectController extends Controller
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
             $data->profit = $data->totalprofit;
+            $data->process = 'finish';
         }
         // dd($data);
         $data->status = 'Finished';
@@ -235,10 +242,11 @@ class ProjectController extends Controller
     public function finished($kind = 'borongan')
     {
         $daily_datas = DailyProject::with('client', 'worker')
-            ->where('status', 'Finished')->orderBy('created_at', 'desc')->get();
+            ->where('status', 'Finished')
+            ->orderBy('finish_date', 'desc')->get();
         $contract_datas = ContractProject::where('status', 'Finished')
             ->with('client', 'worker')
-            ->orderBy('created_at', 'desc')->get();
+            ->orderBy('finish_date', 'desc')->get();
         // dd($contract_datas->first());
 
         return view('admin.projects.finished', compact('daily_datas', 'contract_datas', 'kind'));
@@ -290,6 +298,7 @@ class ProjectController extends Controller
     {
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
+            // dd($data);
         }
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
@@ -330,7 +339,7 @@ class ProjectController extends Controller
         $workers = Worker::all();
 
         if ($kind == 'borongan') {
-            $data = ContractProject::find($id);
+            $data = ContractProject::find($id); 
 
             return view('admin.projects.edit-contract', compact('data', 'workers'));
         }
@@ -350,9 +359,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id, $kind)
     {
+        // dd($id);
 
         if ($kind == 'borongan') {
             $data = ContractProject::find($id);
+            // dd($data);
             $client = Client::find($data->client_id);
             $data->update($request->all());
             $client->update($request->only('name', 'phone_number'));

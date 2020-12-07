@@ -9,6 +9,7 @@ use App\Models\ContractProject;
 use App\Models\DailyProject;
 use App\Models\PaymentTerm;
 use App\Models\Profit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OnProgressController extends Controller
@@ -22,6 +23,12 @@ class OnProgressController extends Controller
         }
 
         return $charges;
+    }
+
+    public function storeBilling(Request $request) {
+        Charge::create($request->all());
+
+        return true;
     }
 
     public function project($id, $kind) {
@@ -47,6 +54,12 @@ class OnProgressController extends Controller
         return $termin;
     }
 
+    public function storeTermin(Request $request) {
+        PaymentTerm::create($request->all());
+
+        return true;
+    }
+
     public function sharing($project_id, $kind) {
         if ($kind === 'borongan') {
             $profit = Profit::where('project_id', $project_id)->where('kind_project', 'contract')->get();
@@ -56,5 +69,18 @@ class OnProgressController extends Controller
         }
 
         return $profit;
+    }
+
+    public function weeklyBills($project_id, $date) {
+        // $datenow = Carbon::now()->format('yy-m-d');
+        $dateselect = new Carbon($date);
+        // $datenow = $dateselect->format('yy-m-d');
+        $datefrom = $dateselect->subDays(6)->format('yy-m-d');
+
+        $weeklybills = Charge::where('project_id', $project_id)->where('kind_project', 'daily')
+                        ->whereBetween('date',[$datefrom, $date])
+                        ->sum('amount');
+
+        return ($weeklybills);
     }
 }

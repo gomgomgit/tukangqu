@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\WorkerRequest;
+use App\Models\Client;
+use App\Models\ContractProject;
+use App\Models\DailyProject;
 use App\Models\Skill;
 use App\Models\Specialist;
 use App\Models\Worker;
@@ -11,6 +15,35 @@ use Illuminate\Http\Request;
 
 class VisitorController extends Controller
 {
+    public function createProject()
+    {
+        return view('visitor.create-project');
+    }
+
+    public function createProjectProcess(ProjectRequest $request)
+    {
+        $data = $request->all();
+        
+        $client_id = Client::create($data)->id;
+        
+        // array_push( $data, ['client_id' => $client_id]);
+        $data['client_id'] = $client_id;
+        // dd($data);
+        $kind = $data['kind_work'];
+        if ($kind === 'borongan') {
+            ContractProject::create($data);
+        }; 
+        if ($kind === 'harian') {
+            DailyProject::create($data);
+        };
+
+        return redirect()->route('createProjectSucess');
+    }
+    public function createProjectSucess()
+    {
+        return view('visitor.create-project-sucess');
+    }
+
     public function workerRegister() 
     {
         $skills = Skill::all();

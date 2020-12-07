@@ -7,6 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\SurveyNotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,10 +22,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect(route('admin.login'));
+    return redirect()->route('admin.login');
 });
 
-Route::get('/propose-project', [VisitorController::class, 'proposeProject'])->name('proposeProject');
+Route::get('/surveynotify',[SurveyNotificationController::class, 'surveynotify'])->name('surveyNotification');
+Route::view('/survey-notification', 'admin.notification.survey-notification');
+
+Route::get('/create-project', [VisitorController::class, 'createProject'])->name('createProject');
+Route::post('/create-project-process', [VisitorController::class, 'createProjectProcess'])->name('createProjectProcess');
+Route::get('/create-project-sucess', [VisitorController::class, 'createProjectSucess'])->name('createProjectSucess');
 
 Route::get('/worker-register', [VisitorController::class, 'workerRegister'])->name('workerRegister');
 Route::post('/worker-register-process', [VisitorController::class, 'workerRegisterProcess'])->name('workerRegisterProcess');
@@ -44,8 +50,10 @@ Route::prefix('/admin')->name('admin.')->group(function() {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/schedules', [DashboardController::class, 'dashboardSchedules'])->name('dashboardSchedules');
 
         Route::get('/report', [ReportController::class, 'index'])->name('report');
+        Route::get('/report/today-survey', [ReportController::class, 'todaySurvey'])->name('reportTodaySurvey');
 
         Route::resource('workers', WorkerController::class);
         // Route::resource('projects', ProjectController::class);

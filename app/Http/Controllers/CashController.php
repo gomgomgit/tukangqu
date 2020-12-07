@@ -15,9 +15,9 @@ class CashController extends Controller
      */
     public function index()
     {
-        $datas = Cash::orderBy('created_at', 'desc')->get();
-        $datas_in = Cash::where('money_out', 0)->orderBy('created_at', 'desc')->get();
-        $datas_out = Cash::where('money_in', 0)->orderBy('created_at', 'desc')->get();
+        $datas = Cash::orderBy('date', 'desc')->get();
+        $datas_in = Cash::where('money_out', 0)->orderBy('date', 'desc')->get();
+        $datas_out = Cash::where('money_in', 0)->orderBy('date', 'desc')->get();
         // dd($datas_in);
 
         $in = Cash::pluck('money_in')->sum();

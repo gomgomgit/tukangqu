@@ -26,16 +26,24 @@ class DashboardController extends Controller
         $recent_projects = $contract_projects->toBase()->merge($daily_projects)->take(10);
 
         $month = Carbon::now()->month;
-        $month_project = (ContractProject::whereMonth('order_date', $month)->count()) + (DailyProject::whereMonth('order_date', $month)->count());
+        $year = Carbon::now()->year;
+        $month_project = (ContractProject::whereYear('order_date', $year)->whereMonth('order_date', $month)->count()) + (DailyProject::whereYear('order_date', $year)->whereMonth('order_date', $month)->count());
+        $month_income = (ContractProject::whereYear('finish_date', $year)->whereMonth('finish_date', $month)->sum('profit')) + (DailyProject::whereYear('finish_date', $year)->whereMonth('finish_date', $month)->sum('profit'));
         // $month_project = $all_projects->whereMonth('order_date', $month)->count();
 
         // dd($recent_projects->first());
         $recent_workers = Worker::orderBy('created_at', 'desc')->take(5)->get();
         $schedules = ContractProject::where('process', 'scheduled')->take(5)->get();
 
-
         return view('admin.dashboard.dashboard', compact(
-            'schedules', 'workers', 'month_project', 'recent_workers', 'recent_projects'
+            'schedules', 'workers', 'month_income', 'month_project', 'recent_workers', 'recent_projects'
         ));
+    }
+
+    public function dashboardSchedules()
+    {
+        $datas = ContractProject::where('process', 'scheduled')->orderBy('survey_date')->get();
+
+        return view('admin.dashboard.schedules', compact('datas'));
     }
 }

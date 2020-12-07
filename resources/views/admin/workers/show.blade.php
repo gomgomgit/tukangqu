@@ -121,7 +121,7 @@
 								:
 							</div>
 							<div class="col-6">
-								{{ $data->project_done() }}
+								{{ $data->project_done }}
 							</div>
 						</div>
 						<div class="row mb-2">

@@ -27,8 +27,9 @@
 						</div>
 					</div>
 					<div class="col widget-data pl-5">
+						<div class="weight-600 font-16">Total Proyek Bulan Ini</div>
 						<div class="h4 mb-0">{{ $month_project }}</div>
-						<div class="weight-600 font-14">Proyek Bulan Ini</div>
+						<div class="weight-600 font-14"><a href="{{ Route('admin.projects.onProcess') }}">View More ></a></div>
 					</div>
 				</div>
 			</div>
@@ -43,8 +44,9 @@
 						</div>
 					</div>
 					<div class="col widget-data pl-5">
+						<div class="weight-600 font-16">Total Tukang</div>
 						<div class="h4 mb-0">{{ $workers->count() }}</div>
-						<div class="weight-600 font-14">Total Tukang</div>
+						<div class="weight-600 font-14"><a href="{{ Route('admin.workers.index') }}">View More ></a></div>
 					</div>
 				</div>
 			</div>
@@ -59,8 +61,9 @@
 						</div>
 					</div>
 					<div class="col widget-data pl-5">
-						<div class="h4 mb-0">350</div>
-						<div class="weight-600 font-14">Income Bulan Ini</div>
+						<div class="weight-600 font-16">Total Income Bulan Ini</div>
+						<div class="h3 mb-0">Rp. {{ number_format($month_income, 0,'.','.') }}</div>
+						<div class="weight-600 font-14"><a href="{{ Route('admin.cashes.index') }}">View More ></a></div>
 					</div>
 				</div>
 			</div>
@@ -130,7 +133,7 @@
 										{{ date('l, d-M-Y', strtotime($schedule->survey_date)) }}
 									</div>
 									<div>
-										{{ $schedule->survey_time }}
+										{{ \Carbon\Carbon::createFromFormat('H:i:s',$schedule->survey_time)->format('H:i') }}
 									</div>
 								</td>
 								<td>{{ $schedule->surveyer->name }}</td>
@@ -141,7 +144,7 @@
 					</tbody>
 				</table>
 				<div class="text-center">
-					<a href="#" class="btn btn-outline-primary btn-sm">View More</a>
+					<a href="{{ Route('admin.dashboardSchedules') }}" class="btn btn-outline-primary btn-sm">View More</a>
 				</div>
 			</div>
 			<!-- Striped table End -->

@@ -50,7 +50,7 @@ class CashSeeder extends Seeder
             $x = $faker->word;
             Cash::create([
                 'name' => 'Biaya '. $x,
-                'date' => $faker->date,
+                'date' => $faker->dateTimeBetween('-1 year', '0 month'),
                 'category' => 'Belanja Umum',
                 'money_in' => 0,
                 'money_out' => rand(10, 200) * 10000,

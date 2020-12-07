@@ -11,7 +11,7 @@
   <div class="menu-block customscroll">
     <div class="sidebar-menu">
       <ul id="accordion-menu">
-        <li class="{{ request()->routeIs('admin.dashboard') ? 'show' : '' }}">
+        <li class="{{ request()->routeIs('admin.dashboard*') ? 'show' : '' }}">
           <a href="{{ route('admin.dashboard') }}" class="dropdown-toggle no-arrow">
             <span class="micon dw dw-house1"></span><span class="mtext">Dashboard</span>
           </a>

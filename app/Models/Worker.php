@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 class Worker extends Model
 {
     use HasFactory;
+
+    use SoftDeletes;
 
     protected $fillable = [
         'name', 'birth_place', 'birth_date', 'email', 'phone_number', 'address', 'rt', 'rw', 
@@ -37,6 +40,13 @@ class Worker extends Model
         return $birth_info;
     }
 
+    public function contractProjects() {
+        return $this->hasMany(ContractProject::class, 'worker_id');
+    }
+    public function dailyProjects() {
+        return $this->hasMany(DailyProject::class, 'worker_id');
+    }
+
     public function workerKind() {
         return $this->belongsTo(WorkerKind::class, 'worker_kind_id', 'id');
     }
@@ -49,9 +59,9 @@ class Worker extends Model
         return $this->belongsToMany(Skill::class, 'skill_worker', 'worker_id', 'skill_id');
     }
 
-    public function project_done() {
-        $dailydone = DailyProject::where('worker_id', $this->id)->count();
-        $contractdone = ContractProject::where('worker_id', $this->id)->count();
+    public function getProjectDoneAttribute() {
+        $dailydone = DailyProject::withTrashed()->where('worker_id', $this->id)->count();
+        $contractdone = ContractProject::withTrashed()->where('worker_id', $this->id)->count();
         return $dailydone + $contractdone;
     }
     

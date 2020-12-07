@@ -78,7 +78,7 @@
           @if (in_array($data->process, $check_deal))
             <div class="form-group">
               <label>Tanggal Mulai</label>
-              <input class="form-control" type="date" name="start_date" value="{{ $data->start_date }}">
+              <input class="date-picker form-control" type="text" name="start_date" data-date-format="yyyy-m-y" value="{{ $data->start_date }}">
             </div>
             <div class="form-group">
               <label>Gaji Harian</label>
@@ -100,7 +100,7 @@
           @if (in_array($data->process, $check_finish))
             <div class="form-group">
               <label>Tanggal Selesai</label>
-              <input class="form-control" type="date" name="finish_date" value="{{ $data->finish_date }}">
+              <input class="date-picker form-control" type="text" name="finish_date" data-date-format="yyyy-m-y" value="{{ $data->finish_date }}">
             </div>
           @endif
           <div>

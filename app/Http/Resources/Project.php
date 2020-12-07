@@ -32,6 +32,7 @@ class Project extends JsonResource
             'status' => $this->status,
             'totalpayment' => $this->totalpayment,
             'totalcharge' => $this->totalcharge,
+            'chargeweek' => $this->chargeweek,
             'unshared' => $this->unshared,
             
         ];

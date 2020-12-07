@@ -108,10 +108,21 @@
 										<label class="custom-control-label" for="customCheck1">Remember</label>
 									</div>
 								</div>
+								<div class="col-6">
+									<div class="custom-control custom-checkbox"  onclick="permission()">
+										<input type="checkbox" class="custom-control-input" id="permission">
+										<label class="custom-control-label" for="permission">Izinkan Notifikasi</label>
+									</div>
+								</div>
 								{{-- <div class="col-6">
 									<div class="forgot-password"><a href="forgot-password.html">Forgot Password</a></div>
 								</div> --}}
 							</div>
+							{{-- <div class="row mb-3">
+								<div class="col-12 text-center">
+									<button @click.prevent="permission()" class="btn btn-sm btn-info">Izinkan Notifikasi</button>
+								</div>
+							</div> --}}
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="input-group mb-0">
@@ -138,5 +149,10 @@
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js') }}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js') }}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js') }}"></script>
+	<script>
+		function permission() {
+        Notification.requestPermission()
+		}
+	</script>
 </body>
 </html>

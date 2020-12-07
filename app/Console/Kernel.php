@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\SurveyNotificationController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call('App\Http\Controllers\SurveyNotificationController@surveynotify')->everyMinute();
+        $schedule->call('App\Http\Controllers\SurveyNotificationController@surveydaynotify')->dailyAt('06:30');
     }
 
     /**
