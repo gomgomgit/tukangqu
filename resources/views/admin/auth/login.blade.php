@@ -156,7 +156,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js') }}"></script>
 	<script>
 		function permission() {
-        Notification.requestPermission()
+        Notification.requestPermission().then(function(permission) { console.log('permiss', permission)});
 		}
 	</script>
 </body>
