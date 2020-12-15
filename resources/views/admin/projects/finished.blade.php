@@ -11,7 +11,7 @@
 
 				<div class="clearfix mb-20">
           <div class="pull-right">
-            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
+            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Proyek</a>
           </div>
 				</div>
 				<div class="tab">
@@ -96,7 +96,7 @@
 											<th scope="col" class="border-0">Tgl Mulai - Tgl Selesai</th>
 											<th scope="col" class="border-0">Nilai Harian</th>
 											<th scope="col" class="border-0">Pekerja</th>
-											<th scope="col" class="border-0">Gaji Harian</th>
+											<th scope="col" class="border-0">Nilai Proyek</th>
 											<th scope="col" class="border-0">Keuntungan</th>
 											<th scope="col" class="border-0">Status</th>
 											<th scope="col" class="border-0 datatable-nosort">Action</th>
@@ -118,7 +118,7 @@
 												</td>
 												<td>{{ $data->daily_value }}</td>
 												<td>{{ $data->worker->name ?? '---' }}</td>
-												<td>{{ $data->daily_salary }}</td>
+												<td>{{ $data->project_value }}</td>
 												<td>{{ $data->profit }}</td>
 												<td><span class="badge badge-{{ $data->process === 'finish' ? 'success' : 'danger' }}">
 													{{ $data->process === 'finish' ? 'Finish' : 'Failed' }}

@@ -156,7 +156,7 @@
 			<div class="pd-20 card-box">
 				<div class="mb-20">
 					<div>
-						<h4 class="text-black h4">Project Terbaru</h4>
+						<h4 class="text-black h4">Project Terbaru</h4> 
 					</div>
 				</div>
 				<table class="table table-striped">
@@ -184,7 +184,13 @@
 								<td>{{ $project->kind }}</td>
 								<td>{{ $project->order_date }}</td>
 								<td>
-									<span class="badge badge-primary">{{ Str::ucfirst($project->process) }}</span>
+									@if ($project->status == 'OnProcess')
+										<span class="badge badge-info">{{ Str::ucfirst($project->status) }}</span>
+									@elseif ($project->status == 'OnProgress')
+										<span class="badge badge-primary">{{ Str::ucfirst($project->status) }}</span>
+									@elseif ($project->status == 'Finished')
+										<span class="badge badge-success">{{ Str::ucfirst($project->status) }}</span>
+									@endif
 								</td>
 							</tr>
 						@endforeach

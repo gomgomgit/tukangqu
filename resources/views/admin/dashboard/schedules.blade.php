@@ -9,9 +9,6 @@
 					<div class="pull-left">
 						<h4 class="text-black h4">Data Jadwal Survey</h4>
           </div>
-          <div class="pull-right pr-3">
-            <a href="{{ Route('admin.workers.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Tukang</a>
-          </div>
 				</div>
 				<table class="data-table table table-striped">
 					<thead>

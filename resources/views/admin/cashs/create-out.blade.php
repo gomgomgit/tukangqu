@@ -20,17 +20,15 @@
             <input class="form-control" placeholder="Select Date" type="date" name="date">
           </div>
           <div class="form-group">
-            <label>Kategori</label>
-            <select class="form-control" name="category" id="">
-              <option value="Belanja Umum">Belanja Umum</option>
-              <option value="Tagihan Internet">Tagihan Internet</option>
-              <option value="Transportasi">Transportasi</option>
-              <option value="Biaya Website">Biaya Website</option>
-              <option value="Iklan">Iklan</option>
-              <option value="Gaji">Gaji</option>
-              <option value="Alat Penunjang">Alat Penunjang</option>
-              <option value="Lainnya">Lainnya</option>
+            <label>User</label>
+            <select class="form-control" name="user_id">
+              @foreach ($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>  
+              @endforeach
             </select>
+          </div>
+          <div class="form-group">
+            <input class="form-control" value="out" type="hidden" name="category">
           </div>
           <div class="form-group">
             <label>Jumlah</label>

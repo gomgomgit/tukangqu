@@ -6,6 +6,7 @@ use App\Models\Skill;
 use App\Models\Worker;
 use Illuminate\Database\Seeder;
 use Faker\Factory;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
 class WorkerSeeder extends Seeder
@@ -18,6 +19,8 @@ class WorkerSeeder extends Seeder
     public function run()
     {
         Worker::truncate();
+        $file = new Filesystem;
+        $file->cleanDirectory('storage/app/public/assets/images');
 
         $faker = Factory::create('id_ID');
         $provinces = \Indonesia::allProvinces()->pluck('id')->toArray();

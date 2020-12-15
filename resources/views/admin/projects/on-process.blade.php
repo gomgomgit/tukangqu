@@ -16,7 +16,7 @@
 
 				<div class="clearfix mb-20">
           <div class="pull-right">
-            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
+            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Proyek</a>
           </div>
 				</div>
 				<div class="tab">

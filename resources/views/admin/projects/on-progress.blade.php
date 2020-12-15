@@ -15,7 +15,7 @@
 
 				<div class="clearfix mb-20">
           <div class="pull-right">
-            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
+            <a href="{{ Route('admin.projects.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Proyek</a>
           </div>
 				</div>
 				<div class="tab">
@@ -237,7 +237,7 @@
 											</template>
 
 											<template x-if="cProject.project_value <= totalCSharing">
-													<a class="btn btn-primary" href="{{ route('admin.projects.finish', [$data->id, 'borongan']) }}"> Finish</a>
+													<a class="btn btn-primary" x-bind:href="'/admin/projects/on-progress/' + cProject.id + '/finish/borongan'"> Finish</a>
 											</template>
 										</div>
 									</div>
@@ -249,7 +249,8 @@
 							<div class="modal-background">
 								<div class="modal-lg modal-dialog modal modal-dialog-centered modal">
 									<div class="modal-content">
-										<form  x-bind:action="'/admin/projects/on-progress/'+ cSharingId +'/add-profit/borongan'"  method="post">
+										<form x-on:submit.prevent="storeCSharing">
+										{{-- <form  x-bind:action="'/admin/projects/on-progress/'+ cSharingId +'/add-profit/borongan'"  method="post"> --}}
 											@csrf
 
 											<div class="modal-header">
@@ -279,19 +280,19 @@
 
 												<div class="form-group">
 													<label>Tanggal</label>
-													<input class="form-control date-picker" type="text" name="date"  data-date-format="yyyy-m-d" required>
+													<input id="cSharingDate" class="form-control " x-model="dateCSharing" type="text" name="date"  data-date-format="yyyy-m-d" required>
 												</div>
 												<div class="row">
 													<div class="col-6">
 														<div class="form-group">
 															<label>Kas</label>
-															<input class="form-control" type="number" name="amount_cash" :max="maxCSharingCash" @change="setMaxCSharingCash()" x-model="cSharingCash" required>
+															<input class="form-control" type="number" name="amount_cash" :max="maxCSharingCash" x-on:change="setMaxCSharingCash()" x-model="cSharingCash" required>
 														</div>
 													</div>
 													<div class="col-6">
 														<div class="form-group">
 															<label>Pekerja</label>
-															<input class="form-control" type="number" name="amount_worker" :max="maxCSharingWorker" @change="setMaxCSharingWorker()" x-model="cSharingWorker" required>
+															<input class="form-control" type="number" name="amount_worker" :max="maxCSharingWorker" x-on:change="setMaxCSharingWorker()" x-model="cSharingWorker" required>
 														</div>
 													</div>
 												</div>
@@ -877,9 +878,9 @@
 														$no = 1;
 												@endphp
 													<tbody>
-														<template x-for="sharing in dSharings" :key="sharing.id">
+														<template x-for="(sharing, index) in dSharings" :key="sharing.id">
 																<tr>
-																	<th scope="row">{{ $no++ }}</th>
+																	<th x-text="index + 1" scope="row"></th>
 																	<td x-text="sharing.date"></td>
 																	<td x-text="sharing.amount_cash"></td>
 																	<td x-text="sharing.amount_worker"></td>
@@ -902,7 +903,7 @@
 											<span @click="dSharingId = null" class="btn btn-secondary">Close</span>
 
 											<template x-if="dProject.unshared > 0">
-												<button @click="addDSharing = !(addDSharing)" type="button" class="btn btn-primary">Bagi Hasil</button>
+												<button @click="setAddDSharing()" type="button" class="btn btn-primary">Bagi Hasil</button>
 											</template>
 											<template x-if="dProject.unshared <= 0">
 												<span @click="dSharingError()" class="btn btn-primary">Bagi Hasil</span>
@@ -917,7 +918,8 @@
 							<div class="modal-background">
 								<div class="modal-lg modal-dialog modal modal-dialog-centered modal">
 									<div class="modal-content">
-										<form  x-bind:action="'/admin/projects/on-progress/'+ dSharingId +'/add-profit/harian'"  method="post">
+										<form @submit.prevent="storeDSharing">
+										{{-- <form  x-bind:action="'/admin/projects/on-progress/'+ dSharingId +'/add-profit/harian'"  method="post"> --}}
 											@csrf
 
 											<div class="modal-header">
@@ -948,7 +950,7 @@
 													<div class="col-6">
 														<div class="form-group">
 															<label>Jumlah Hari Masuk</label>
-															<input class="form-control" x-model="dDayAmount" @change="setDDayAmount" type="number" name="day_amount" required>
+															<input class="form-control" x-model="dDayAmount" @change="setDDayAmount" type="number" name="day_amount" :max="maxDDayAmount" required>
 														</div>
 													</div>
 												</div>
@@ -1065,6 +1067,8 @@
 					cSharingCash: 0,
 					cSharingWorker: 0,
 
+					dateCSharing: null,
+
 					dBillingId : null,
 					dBills : [],
 					addDBilling : false,
@@ -1095,9 +1099,12 @@
 					dSharingCash: 0,
 					dSharingWorker: 0,
 					dDayAmount: 0,
+					maxDDayAmount: 0,
 
 					dSharingDate: null,
 					dWeeklyBills: 0,
+
+					dateDSharing: null,
 
 					// init() {
 						
@@ -1128,12 +1135,16 @@
 						const self = this
 						window.addEventListener('selectDSharingDate', function (e) {
 							self.getDWeeklyBills(e.detail)
+							self.dateDSharing = e.detail
 						})
 						window.addEventListener('selectCTerminDate', function (e) {
 							self.dateCTermin = e.detail
 						})
 						window.addEventListener('selectCBillingDate', function (e) {
 							self.dateCBilling = e.detail
+						})
+						window.addEventListener('selectCSharingDate', function (e) {
+							self.dateCSharing = e.detail
 						})
 						window.addEventListener('selectDBillingDate', function (e) {
 							self.dateDBilling = e.detail
@@ -1253,14 +1264,38 @@
 
 					},
 					setMaxCSharingCash() {
-						let maxCSharing = this.cProject.unshared - this.cSharingWorker;
-						this.maxCSharingCash = maxCSharing;
+						let maxCash = this.cProject.unshared - this.cSharingWorker;
+						this.maxCSharingCash = maxCash;
+						let maxworker = this.cProject.unshared - this.cSharingCash;
+						this.maxCSharingWorker = maxworker;
 						this.cSharingTotal = parseInt(this.cSharingCash) + parseInt(this.cSharingWorker);
 					},
 					setMaxCSharingWorker() {
-						let maxCSharing = this.cProject.unshared - this.cSharingCash;
-						this.maxCSharingWorker = maxCSharing;
+						let maxWorker = this.cProject.unshared - this.cSharingCash;
+						this.maxCSharingWorker = maxWorker;
+						let maxCash = this.cProject.unshared - this.cSharingWorker;
+						this.maxCSharingCash = maxCash;
 						this.cSharingTotal = parseInt(this.cSharingCash) + parseInt(this.cSharingWorker);
+					},
+
+					storeCSharing() {
+						const self = this;
+						let sharingData = {
+							'project_id' : this.cProject.id,
+							'kind_project' : 'contract',
+							'date' : this.dateCSharing,
+							'amount_cash' : this.cSharingCash,
+							'amount_worker' : this.cSharingWorker,
+							'amount_total' : this.cSharingTotal, 
+						};
+						console.log(sharingData)
+						
+						axios.post('{{ url("/api/store-sharing") }}', sharingData)
+						.then(function(){
+							self.addCSharing = false;
+							console.log('berhasil bagi hasil')
+							self.setCSharingId(self.cProject.id);
+						})
 					},
 
 
@@ -1344,9 +1379,9 @@
 
 					setDSharingId(id) {
 						this.dSharingId = id;
+						this.getDataDProject(id);
 						this.getDataDSharing();
 						this.setDTotalSharing();
-						this.getDataDProject(id);
 						var myDatepicker = $('#dSharing').datepicker().data('datepicker');
 						myDatepicker.clear();
 						this.dWeeklyBills = 0;
@@ -1376,10 +1411,17 @@
 						this.totalDSharing = dSharing;
 
 					},
+					setAddDSharing() {
+						this.addDSharing = !this.addDSharing;
+						this.dDayAmount = 0;
+						this.maxDDayAmount = this.dProject.unshared / this.dProject.daily_value;
+						console.log(this.maxDDayAmount + ' ' + this.dProject.unshared + ' ' + this.dProject.daily_value)
+					},
 					setDDayAmount(){
 						this.dSharingCash = this.dDayAmount * (this.dProject.daily_value - this.dProject.daily_salary);
 						this.dSharingWorker = this.dDayAmount * this.dProject.daily_salary;
 						this.dSharingTotal = parseInt(this.dSharingCash) + parseInt(this.dSharingWorker);
+
 						console.log(this.dProject.id);
 					},
 					setMaxDSharingCash() {
@@ -1391,6 +1433,25 @@
 						let maxDSharing = this.dProject.unshared - this.dSharingCash;
 						this.maxDSharingWorker = maxDSharing;
 						this.dSharingTotal = parseInt(this.dSharingCash) + parseInt(this.dSharingWorker);
+					},
+					storeDSharing() {
+						const self = this;
+						let sharingData = {
+							'project_id' : this.dProject.id,
+							'kind_project' : 'daily',
+							'date' : this.dateDSharing,
+							'amount_cash' : this.dSharingCash,
+							'amount_worker' : this.dSharingWorker,
+							'amount_total' : this.dSharingTotal, 
+							'total_all' : this.totalDSharing,
+						};
+
+						axios.post('{{ url("/api/store-sharing") }}', sharingData)
+						.then(function(){
+							self.addDSharing = !self.addDSharing;
+							console.log('berhasil bagi hasil')
+							self.setDSharingId(self.dProject.id);
+						})
 					},
 
 					getDWeeklyBills(date) {
@@ -1458,6 +1519,15 @@
 					dateFormat: 'yyyy-m-d',
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectCBillingDate', { detail: formattedDate })
+						window.dispatchEvent(ev)
+					},
+			})
+
+			$('#cSharingDate').datepicker({
+					language: 'en',
+					dateFormat: 'yyyy-m-d',
+					onSelect(formattedDate, date, inst) {
+						const ev = new CustomEvent('selectCSharingDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
 					},
 			})

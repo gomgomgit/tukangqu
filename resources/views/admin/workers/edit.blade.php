@@ -14,8 +14,7 @@
     <div class="pd-20 card-box mb-30">
       <div class="clearfix">
         <div class="pull-left">
-          <h4 class="text-blue h4">Form Tambah Tukang</h4>
-          <p class="mb-30">Lengkapilah form berikut dengan data yang sesuai</p>
+          <h4 class="text-blue h3">Edit Tukang</h4>
         </div>
       </div>
       <form action="{{ Route('admin.workers.update', $data->id) }}" method="POST" enctype="multipart/form-data">
@@ -98,8 +97,7 @@
                 <label>Provinsi</label>
                 <select class="ex-custom-select2 form-control" id="province-id" name="province_id" v-model="province_id" style="width: 100%; height: 38px;">
                   <optgroup label="Provinsi">
-                    <option value="{{ $data->province_id }}" selected>{{ Indonesia::findProvince($data->province_id)->name }}</option>
-                    <option v-for="province in provinces" :value="province.id">@{{ province.name }}</option>
+                    <option v-for="province in provinces" :value="province.id" :selected="province.id == province_id ? 'selected' : ''">@{{ province.name }}</option>
                   </optgroup>
                 </select>
               </div>
@@ -109,8 +107,7 @@
                 <label>Kota / Kabupaten</label>
                 <select class="ex-custom-select2 form-control" id="city-id" name="city_id" v-model="city_id" style="width: 100%; height: 38px;">
                   <optgroup label="Kota / Kabupaten">
-                    <option value="{{ $data->city_id }}" selected>{{ Indonesia::findCity($data->city_id)->name }}</option>
-                    <option v-for="city in cities" :value="city.id">@{{ city.name }}</option>
+                    <option v-for="city in cities" :value="city.id" :selected="city.id == city_id ? 'selected' : ''">@{{ city.name }}</option>
                   </optgroup>
                 </select>
               </div>
@@ -122,8 +119,7 @@
                 <label>Kelurahan</label>
                 <select class="ex-custom-select2 form-control" id="district-id" name="district_id" v-model="district_id" style="width: 100%; height: 38px;">
                   <optgroup label="Kelurahan">
-                    <option value="{{ $data->district_id }}" selected>{{ Indonesia::findDistrict($data->district_id)->name }}</option>
-                    <option v-for="district in districts" :value="district.id">@{{ district.name }}</option>
+                    <option v-for="district in districts" :value="district.id" :selected="district.id == district_id ? 'selected' : ''">@{{ district.name }}</option>
                   </optgroup>
                 </select>
               </div>
@@ -133,8 +129,7 @@
                 <label>Kecamatan / Desa</label>
                 <select class="ex-custom-select2 form-control" id="village-id" name="village_id" v-model="village_id" style="width: 100%; height: 38px;">
                   <optgroup label="Kecamatan / Desa">
-                    <option value="{{ $data->village_id }}" selected>{{ Indonesia::findVillage($data->village_id)->name }}</option>
-                    <option v-for="village in villages" :value="village.id">@{{ village.name }}</option>
+                    <option v-for="village in villages" :value="village.id" :selected="village.id == village_id ? 'selected' : ''">@{{ village.name }}</option>
                   </optgroup>
                 </select>
               </div>

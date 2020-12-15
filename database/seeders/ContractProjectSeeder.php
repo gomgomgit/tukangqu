@@ -38,7 +38,7 @@ class ContractProjectSeeder extends Seeder
                 $worker = $faker->randomElement($workers);
                 ContractProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '0 month'),
+                    'order_date' => $faker->dateTimeBetween('-7 month', '-4 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -49,8 +49,8 @@ class ContractProjectSeeder extends Seeder
                     'approximate_value' => $approx = rand(20, 30) * 1000000,
                     'project_value' => $projectValue = $approx + (rand(1, 5) * 1000000),
                     'worker_id' => $faker->randomElement($workers),
-                    'start_date' => $start_date = $faker->dateTimeBetween('+1 week', '+1 month'), 
-                    'finish_date' => $faker->dateTimeBetween($start_date, '+3 month'),
+                    'start_date' => $start_date = $faker->dateTimeBetween('-5 month', '-3 month'), 
+                    'finish_date' => $faker->dateTimeBetween($start_date, '0 month'),
                     'profit' => $projectValue * 5/100, 
                     'description' => $faker->sentence(8, true),
                     'process' => $process,
@@ -58,12 +58,12 @@ class ContractProjectSeeder extends Seeder
                 ]);
             } elseif ($process === 'deal' || $process === 'done') {
                 $worker = $faker->randomElement($workers);
-                $start_date = $faker->dateTimeBetween('+1 week', '+1 month');
+                $start_date = $faker->dateTimeBetween('-2 month', '-1 week');
 
                 $approx = rand(20, 30) * 1000000;
                 $projectValue = $approx + (rand(1, 5) * 1000000);
                 if ($process === 'done') {
-                    $finish_date = $faker->dateTimeBetween($start_date, '+3 month');
+                    $finish_date = $faker->dateTimeBetween($start_date, '0 week');
                     $profit = $projectValue * 5/100;
                 } else {
                     $finish_date = NULL;
@@ -72,7 +72,7 @@ class ContractProjectSeeder extends Seeder
                 
                 ContractProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-5 month', '-1 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -94,7 +94,7 @@ class ContractProjectSeeder extends Seeder
                 $worker = $faker->randomElement($workers);
                 ContractProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-5 week', '-2 week'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -110,12 +110,12 @@ class ContractProjectSeeder extends Seeder
                 $worker = $faker->randomElement($workers);
                 ContractProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-1 month', '-1 week'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
                     'kind_project' => 'Renovasi Rumah',
-                    'survey_date' => $faker->date,
+                    'survey_date' => $faker->dateTimeBetween('0 week', '+1 week'),
                     'survey_time' => $faker->time,
                     'surveyer_id' => $worker,
                     'process' => $process,
@@ -125,7 +125,7 @@ class ContractProjectSeeder extends Seeder
                 $worker = $faker->randomElement($workers);
                 ContractProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-3 week', '0 week'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,

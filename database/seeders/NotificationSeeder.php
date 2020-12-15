@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Notification;
 use Illuminate\Database\Seeder;
 
 class NotificationSeeder extends Seeder
@@ -13,6 +14,6 @@ class NotificationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Notification::truncate();
     }
 }

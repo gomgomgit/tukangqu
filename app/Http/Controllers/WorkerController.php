@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WorkerRequest;
+use App\Models\ContractProject;
+use App\Models\DailyProject;
 use App\Models\Skill;
 use App\Models\Specialist;
 use App\Models\Worker;
@@ -70,6 +72,19 @@ class WorkerController extends Controller
         $data = Worker::with('skills')->find($id);
 
         return view('admin.workers.show', compact('data'));
+    }
+
+    public function viewProjects($id)
+    {
+        $contract = ContractProject::where('worker_id', $id)->orderBy('order_date', 'desc')
+                    ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $daily = DailyProject::where('worker_id', $id)->orderBy('order_date', 'desc')
+                    ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $datas = $contract->toBase()->merge($daily)->take(10);
+
+        // dd($datas->first());
+
+        return view('admin.workers.view-projects', compact('datas'));
     }
 
     /**

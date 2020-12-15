@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cash;
 use App\Models\City;
 use App\Models\ContractProject;
 use App\Models\DailyProject;
@@ -18,25 +19,22 @@ class ReportController extends Controller
 
         $most_city = $most_city->sortByDesc('countprojects');
 
-        // $contract_projects = ContractProject::get(['client_id', 'kind_project', 'order_date', 'process']);
-        // $daily_projects = DailyProject::get(['client_id', 'kind_project', 'order_date', 'process']);
-        // $all_projects = $contract_projects->toBase()->merge($daily_projects);
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+        $month_income = (Cash::whereYear('date', $year)->whereMonth('date', $month)->sum('money_in'));
+        $month_outcome = (Cash::whereYear('date', $year)->whereMonth('date', $month)->sum('money_out'));
 
+        $in = Cash::where('category', 'in')->sum('money_in');
+        $out = Cash::where('category', 'out')->sum('money_out');
 
-		
-        // for ($i=0; $i <= 4; $i++) { 
-        //     $listmonth[] = Carbon::now()->subMonths($i)->format('F'); 
-        //     $formatmonth = Carbon::now()->subMonths($i)->format('m');
-        //     $listmonthProjects[] = (ContractProject::whereMonth('order_date', $formatmonth)->sum()) + (DailyProject::whereMonth('order_date', $formatmonth)->sum());
-        // };
-        // dd($now);
+        $total_cash = $in - $out;
 
         $projects = ContractProject::all()->count() + DailyProject::all()->count();
         $onprocess = ContractProject::where('status', 'OnProcess')->count() + DailyProject::where('status', 'OnProcess')->count();
         $onprogress = ContractProject::where('status', 'OnProgress')->count() + DailyProject::where('status', 'OnProgress')->count();
 
         return view('admin.report.index', compact(
-            'surveyCount', 'most_city', 'projects', 'onprocess', 'onprogress'
+            'surveyCount', 'most_city', 'projects', 'onprocess', 'onprogress', 'month_income', 'month_outcome', 'total_cash'
         ));
     }
 

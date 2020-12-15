@@ -18,10 +18,11 @@
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Nama</th>
-							<th scope="col" width="380px">Alamat</th>
+							<th scope="col" width="300px">Alamat</th>
 							<th scope="col" width="150px">No HP</th>
 							<th scope="col">Jenis</th>
 							<th scope="col">Keahlian</th>
+							<th scope="col">Proyek</th>
 							<th scope="col" class="datatable-nosort">Action</th>
 						</tr>
 					</thead>
@@ -42,6 +43,7 @@
 										{{ $skill->name }},		
 									@endforeach
 								</td>
+								<td>{{ $data->project_done }} <a href={{ Route('admin.workers.viewProjects', $data->id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a></td>
 								<td>
 									<div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">

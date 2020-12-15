@@ -17,6 +17,9 @@ class CreateClientsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone_number', 22);
+            $table->text('address');
+            $table->foreignId('province_id');
+            $table->foreignId('city_id');
             $table->softDeletes();
             $table->timestamps();
         });

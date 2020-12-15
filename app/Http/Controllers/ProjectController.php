@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
+use App\Models\Cash;
 use App\Models\Charge;
 use App\Models\Client;
 use App\Models\ContractProject;
@@ -195,7 +196,7 @@ class ProjectController extends Controller
                 'date' => $request->date,
                 'amount_cash' => $cash = $request->amount_cash,
                 'amount_worker' => $worker = $request->amount_worker,
-                'amount_total' => $cash + $worker,
+                'amount_total' => $cash + $worker, 
             ]);
         }
 
@@ -226,10 +227,19 @@ class ProjectController extends Controller
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
             $data->profit = $data->totalprofit;
+            $data->finish_date = Carbon::now()->format('y-m-d');
             $data->process = 'finish';
         }
         // dd($data);
         $data->status = 'Finished';
+        Cash::create([
+            'project_id' => $id,
+            'name' => $data->client->name,
+            'date' => Carbon::now()->format('yy-m-d'),
+            'category' => 'in',
+            'money_in' => $data->totalprofit,
+            'description' => $kind,
+        ]);
         $data->save();
 
         return redirect()->route('admin.projects.finished', $kind);
@@ -259,7 +269,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('admin.projects.create');
+        $clients = Client::all();
+        return view('admin.projects.create', compact('clients'));
     }
 
     /**
@@ -271,9 +282,21 @@ class ProjectController extends Controller
     public function store(ProjectRequest $request)
     {
         $data = $request->all();
-        
-        $client_id = Client::create($data)->id;
-        
+
+        // dd($request->name_old_client);
+        if ($request->client == 1) {
+            $client_id = Client::create([
+                'name' => $request->name_new_client,
+                'phone_number' => $request->phone_number,
+                'address' => $request->client_address,
+                'province_id' => $request->client_province_id,
+                'city_id' => $request->client_city_id,
+            ])->id;
+        } else {
+            $client_id = $request->name_old_client;
+        }
+            
+            // dd($request);
         // array_push( $data, ['client_id' => $client_id]);
         $data['client_id'] = $client_id;
         // dd($data);
@@ -366,7 +389,13 @@ class ProjectController extends Controller
             // dd($data);
             $client = Client::find($data->client_id);
             $data->update($request->all());
-            $client->update($request->only('name', 'phone_number'));
+            $client->update([
+                'name' => $request->name,
+                'phone_number' => $request->phone_number,
+                'address' => $request->client_address,
+                'province_id' => $request->client_province_id,
+                'city_id' => $request->client_city_id,
+            ]);
 
             if ($data->status == 'OnProcess') {
                 return redirect()->route('admin.projects.onProcess', 'borongan');

@@ -12,6 +12,11 @@
 				</div>
 				<div class="row mx-2">
 					<div class="col-md-12">
+						<div class="row mb-3">
+							<div class="col border-bottom">
+								<h4>Data Klien</h4>
+							</div>
+						</div>
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">
 								Nama Klien
@@ -25,7 +30,56 @@
 						</div>
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">
+								No HP
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->client->phone_number }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
 								Alamat
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->client->address }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								
+							</div>
+							<div class="col-1">
+								
+							</div>
+							<div class="col-6">
+								{{ $data->client->city }}
+							</div>
+						</div>
+						<div class="row mb-3">
+							<div class="col border-bottom">
+								<h4>Data Proyek</h4>
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Tanggal Order
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ date('l, d-M-Y', strtotime($data->order_date)) }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Alamat Proyek
 							</div>
 							<div class="col-1">
 								:
@@ -47,17 +101,6 @@
 						</div>
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">
-								No HP
-							</div>
-							<div class="col-1">
-								:
-							</div>
-							<div class="col-6">
-								{{ $data->client->phone_number }}
-							</div>
-						</div>
-						<div class="row mb-2">
-							<div class="col-4 font-weight-bold">
 								Jenis Proyek
 							</div>
 							<div class="col-1">
@@ -65,17 +108,6 @@
 							</div>
 							<div class="col-6">
 								{{ $data->kind_project }}
-							</div>
-						</div>
-						<div class="row mb-2">
-							<div class="col-4 font-weight-bold">
-								Tanggal Order
-							</div>
-							<div class="col-1">
-								:
-							</div>
-							<div class="col-6">
-								{{ date('l, d-M-Y', strtotime($data->order_date)) }}
 							</div>
 						</div>
 

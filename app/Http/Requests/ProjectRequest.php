@@ -23,13 +23,28 @@ class ProjectRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'order_date' => 'required',
-            'phone_number' => 'required',
-            'address' => 'required',
-            'kind_work' => 'required',
-            'kind_project' => 'required',
-        ];
+        if ($this->attributes->get('client') == 1) {
+            return [
+                'name_new_client' => 'required',
+                'order_date' => 'required',
+                'phone_number' => 'required',
+                'client_address' => 'required',
+                'address' => 'required',
+                'kind_work' => 'required',
+                'kind_project' => 'required',
+                'province_id' => 'required',
+                'city_id' => 'required'
+            ];
+        } else {
+            return [
+                'name_old_client' => 'required',
+                'order_date' => 'required',
+                'address' => 'required',
+                'kind_work' => 'required',
+                'kind_project' => 'required',
+                'province_id' => 'required',
+                'city_id' => 'required'
+            ];
+        }
     }
 }

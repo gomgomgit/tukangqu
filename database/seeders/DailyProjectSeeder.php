@@ -40,7 +40,7 @@ class DailyProjectSeeder extends Seeder
             if ($process === 'finish') {
                 DailyProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '0 month'),
+                    'order_date' => $faker->dateTimeBetween('-5 month', '-3 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -48,8 +48,8 @@ class DailyProjectSeeder extends Seeder
                     'daily_value' => $daily,
                     'worker_id' => $faker->randomElement($workers),
                     'daily_salary' => $dailySalary = $daily - (rand(2, 5) * 10000),
-                    'start_date' => $start_date = $faker->dateTimeBetween('+1 week', '+1 month'),
-                    'finish_date' => $faker->dateTimeBetween($start_date, '+3 month'),
+                    'start_date' => $start_date = $faker->dateTimeBetween('-1 month', '-1 week'),
+                    'finish_date' => $faker->dateTimeBetween($start_date, '0 month'),
                     'project_value' => $daily * rand(3, 21),
                     'profit' => ($daily - $dailySalary) * rand(7, 34), 
                     'description' => $faker->sentence(8, true),
@@ -59,7 +59,7 @@ class DailyProjectSeeder extends Seeder
             } elseif ($process === 'deal') {
                 DailyProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-3 month', '-1 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -67,7 +67,7 @@ class DailyProjectSeeder extends Seeder
                     'daily_value' => $daily,
                     'worker_id' => $faker->randomElement($workers),
                     'daily_salary' => $dailySalary = $daily - (rand(2, 5) * 10000),
-                    'start_date' => $start_date = $faker->dateTimeBetween('+1 week', '+1 month'),
+                    'start_date' => $start_date = $faker->dateTimeBetween('-3 week', '-1 week'),
                     'description' => $faker->sentence(8, true),
                     'process' => $process,
                     'status' => 'OnProgress',
@@ -75,7 +75,7 @@ class DailyProjectSeeder extends Seeder
             } elseif ($process === 'priced') {
                 DailyProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-2 month', '0 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,
@@ -98,7 +98,7 @@ class DailyProjectSeeder extends Seeder
             } elseif ($process === 'waiting') {
                 DailyProject::create([
                     'client_id' => $faker->randomElement($clients),
-                    'order_date' => $faker->dateTimeBetween('-1 year', '-1 month'),
+                    'order_date' => $faker->dateTimeBetween('-1 month', '0 month'),
                     'address' => $faker->streetAddress,
                     'province_id' => $province,
                     'city_id' => $city,

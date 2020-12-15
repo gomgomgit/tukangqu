@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\DailyProject;
 use Illuminate\Database\Seeder;
+use Illuminate\Notifications\Events\NotificationSent;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ChargeSeeder::class,
             PaymentTermSeeder::class,
             ProfitSeeder::class,
+            NotificationSeeder::class,
         ]);
     }
 }

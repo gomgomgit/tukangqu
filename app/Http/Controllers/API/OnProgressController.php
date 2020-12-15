@@ -71,6 +71,17 @@ class OnProgressController extends Controller
         return $profit;
     }
 
+    public function storeSharing(Request $request) { 
+        Profit::create($request->all());
+        if($request->kind_project == 'daily') {
+            $data = DailyProject::find($request->project_id);
+            $data->project_value = $request->total_all + $request->amount_total;
+            $data->save();
+        }
+
+        return true;
+    }
+
     public function weeklyBills($project_id, $date) {
         // $datenow = Carbon::now()->format('yy-m-d');
         $dateselect = new Carbon($date);

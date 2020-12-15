@@ -17,12 +17,13 @@ class CreateCashesTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('date');
-            $table->string('category');
+            $table->enum('category', ['in', 'out']);
             $table->integer('money_in')->default(0);
             $table->integer('money_out')->default(0);
             $table->foreignId('project_id')->nullable();
             $table->enum('project_type', ['daily', 'contract'])->nullable();
             $table->text('description')->nullable();
+            $table->foreignId('user_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

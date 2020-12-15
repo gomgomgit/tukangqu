@@ -56,8 +56,8 @@ class SurveyNotificationController extends Controller
                 ->where('survey_date', $now->format('yy-m-d'))
                 ->get();
 
-        // foreach ($schedules as $schedule) {
-            
+
+        if ($schedules > 0) {
             $options = array(
                             'cluster' => env('PUSHER_APP_CLUSTER'),
                             'encrypted' => true
@@ -78,8 +78,7 @@ class SurveyNotificationController extends Controller
             ]);
 
             $pusher->trigger('survey-notify-channel', 'App\\Events\\SurveyNotify', $data);
-
-        // }
+        }
 
     }
 }

@@ -38,6 +38,7 @@ Route::get('/get-termin/{project_id}/{kind}', [OnProgressController::class, 'ter
 
 Route::post('/store-billing', [OnProgressController::class, 'storeBilling'])->name('apiStoreBilling');
 Route::post('/store-termin', [OnProgressController::class, 'storeTermin'])->name('apiStoreTermin');
+Route::post('/store-sharing', [OnProgressController::class, 'storeSharing'])->name('apiStoreSharing');
 
 Route::get('/get-sharing/{project_id}/{kind}', [OnProgressController::class, 'sharing'])->name('apiGetSharing');
 Route::get('/get-weekly-bills/{project_id}/{date}', [OnProgressController::class, 'weeklyBills'])->name('apiGetWeeklyBills');

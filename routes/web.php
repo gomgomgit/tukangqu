@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CashController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\SurveyNotificationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,7 +58,13 @@ Route::prefix('/admin')->name('admin.')->group(function() {
         Route::get('/report/today-survey', [ReportController::class, 'todaySurvey'])->name('reportTodaySurvey');
 
         Route::resource('workers', WorkerController::class);
+        Route::get('/workers/view-projects/{id}', [WorkerController::class, 'viewProjects'])->name('workers.viewProjects');
         // Route::resource('projects', ProjectController::class);
+
+        Route::resource('clients', ClientController::class);
+        Route::get('/clients/view-projects/{id}', [ClientController::class, 'viewProjects'])->name('clients.viewProjects');
+
+        Route::resource('users', UserController::class);
 
         Route::prefix('/projects')->name('projects.')->group( function() {
             Route::get('/create', [ProjectController::class, 'create'])->name('create');
@@ -91,9 +99,17 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             Route::get('/create-out', [CashController::class, 'createOut'])->name('createOut');
             Route::post('/store-out', [CashController::class, 'storeOut'])->name('storeOut');
             Route::post('/store-in', [CashController::class, 'storeIn'])->name('storeIn');
-            Route::get('/edit/{id}', [CashController::class, 'edit'])->name('edit');
-            Route::put('/update/{id}', [CashController::class, 'update'])->name('update');
+            Route::get('/editout/{id}', [CashController::class, 'editout'])->name('editout');
+            Route::get('/editin/{id}', [CashController::class, 'editin'])->name('editin');
+            Route::put('/updatein/{id}', [CashController::class, 'updatein'])->name('updatein');
+            Route::put('/updateout/{id}', [CashController::class, 'updateout'])->name('updateout');
             Route::delete('/destroy/{id}', [CashController::class, 'destroy'])->name('destroy');
+
+            Route::get('/export/out/{month}', [CashController::class, 'exportOut'])->name('exportOut');
+            Route::get('/export/in/{month}', [CashController::class, 'exportIn'])->name('exportIn');
+            
+            Route::get('/export-view/out/{month?}', [CashController::class, 'exportViewOut'])->name('exportViewOut');
+            Route::get('/export-view/in/{month?}', [CashController::class, 'exportViewIn'])->name('exportViewIn');
         });
 
     });

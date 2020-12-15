@@ -5,18 +5,20 @@
 @endsection
 
 @php
+	$month = Carbon\Carbon::now()->format('M yy');
 
-	for ($i=0; $i <= 4; $i++) { 
+	for ($i=6; $i >= 0; $i--) { 
 			$listmonth[] = Carbon\Carbon::now()->subMonths($i)->format('F'); 
 			$formatmonth = Carbon\Carbon::now()->subMonths($i)->format('m');
 			$formatyear = Carbon\Carbon::now()->subMonths($i)->format('Y');
 			$listmonthProjects[] = (App\Models\ContractProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count()) + (App\Models\DailyProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count());
+			$listmonthIncome[] = (App\Models\Cash::where('category', 'in')->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_in'));
 	};
 
 @endphp
 
 @section('main-content')
-	<div class="row">
+	{{-- <div class="row">
 		<div class="col-12 mb-30">
 			<div class="card-box pd-20">
 				@if ($surveyCount > 0)
@@ -24,6 +26,60 @@
 				@else			
 					<h5 class="text-center">Tidak Ada Jadwal Survei Hari Ini!</h5>
 				@endif
+			</div>
+		</div>
+	</div> --}}
+	<div class="row">
+		<div class="col-4 mb-30">
+			<div>
+				<div class="card-box height-100-p widget-style1 mb-4">
+					<div class="row d-flex flex-wrap align-items-center">
+						<div class="col-auto progress-data pl-4">
+							<div class="position-relative" style="min-height: 116.7px;">
+								<i class="icon-copy dw dw-inbox1 d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+							</div>
+						</div>
+						<div class="col widget-data pl-5">
+							<div class="weight-600 font-16">Income Bulan Ini</div>
+							<div class="h3 mb-2">Rp {{ number_format($month_income, 0,'.','.')}}</div>
+							<div class="weight-600 font-14"><a href="/admin/cashes/export/in/{{ $month }}" class="btn btn-sm btn-primary py-1 px-3">Cetak</a></div>
+						</div>
+					</div>
+				</div>
+				<div class="card-box height-100-p widget-style1 mb-4">
+					<div class="row d-flex flex-wrap align-items-center">
+						<div class="col-auto progress-data pl-4">
+							<div class="position-relative" style="min-height: 116.7px;">
+								<i class="icon-copy dw dw-outbox1 d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+							</div>
+						</div>
+						<div class="col widget-data pl-5">
+							<div class="weight-600 font-16">Pengeluaran Bulan Ini</div>
+							<div class="h3 mb-2">Rp {{ number_format($month_outcome, 0,'.','.') }}</div>
+							<div class="weight-600 font-14"><a href="/admin/cashes/export/out/{{ $month }}" class="btn btn-sm btn-primary py-1 px-3">Cetak</a></div>
+						</div>
+					</div>
+				</div>
+				<div class="card-box height-100-p widget-style1">
+					<div class="row d-flex flex-wrap align-items-center">
+						<div class="col-auto progress-data pl-4">
+							<div class="position-relative" style="min-height: 116.7px;">
+								<i class="icon-copy dw dw-money-2 d-block my-auto position-absolute text-info" style="font-size: 70px; top:50%; transform :translateY(-50%)"></i>
+							</div>
+						</div>
+						<div class="col widget-data pl-5">
+							<div class="weight-600 font-16">Kas</div>
+							<div class="h3 mb-2">Rp {{ number_format($total_cash,0,'.','.') }}</div>
+							<div class="weight-600 font-14"><a href="{{ Route('admin.cashes.index') }}" class="btn btn-sm btn-primary py-1 px-3">View More</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-8 mb-30">
+			<div class="card-box height-100-p pd-20">
+				<h2 class="h4 mb-20">Chart Project per Bulan</h2>
+				<div id="incomeChart" style="height: 370px"></div>
 			</div>
 		</div>
 	</div>
@@ -153,6 +209,12 @@
 					{ name: 'Project', values: @json($listmonthProjects)},
 				],
 			}
+			const dataincome = {
+				chart: { labels: @json($listmonth) },
+				datasets: [
+					{ name: 'Income', values: @json($listmonthIncome) },
+				],
+			}
 
 			const chart = new Chartisan({
 				el: '#projectsChart',
@@ -162,8 +224,20 @@
 					.responsive()
 					.beginAtZero()
 					.legend({ position: 'bottom' })
-					.title('Projects 5 bulan terakhir')
+					.title('Projects 6 bulan terakhir')
 					.datasets(['bar']),
+			})
+			const chart2 = new Chartisan({
+				el: '#incomeChart',
+				data: dataincome,
+				hooks: new ChartisanHooks()
+					.colors(['#1B00FF	', '#ffffff'])
+					.responsive()
+					.beginAtZero()
+					.legend({ position: 'bottom' })
+    			.borderColors()
+					.title('Income 6 bulan terakhir')
+					.datasets([{ type: 'line', fill: false }]),
 			})
 		</script>
 
