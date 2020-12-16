@@ -146,7 +146,7 @@
           <div class="col-md-6">
             <div class="form-group">
                 <label>Jenis Tukang</label>
-                <select class="selectpicker form-control" name="worker_kind_id" style="width: 100%; height: 38px;">
+                <select class="form-control" name="worker_kind_id" style="width: 100%; height: 38px;">
                   @foreach ($kinds as $kind)
                     {{-- <optgroup label=""> --}}
                       <option value="{{ $kind->id }}" {{ old('worker_kind_id', $data->worker_kind_id) == $kind->id ? 'selected' : '' }}>{{ $kind->name }}</option>
@@ -158,7 +158,7 @@
           <div class="col-md-6">
             <div class="form-group">
                 <label>Tenaga Ahli</label>
-                <select class="selectpicker form-control" name="specialist_id" style="width: 100%; height: 38px;">
+                <select class="form-control" name="specialist_id" style="width: 100%; height: 38px;">
                   @foreach ($specialists as $specialist)
                       <option value="{{ $specialist->id }}" {{ old('specialist_id', $data->specialist_id) == $specialist->id ? 'selected' : '' }}>{{ $specialist->name }}</option>
                   @endforeach

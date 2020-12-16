@@ -170,7 +170,7 @@
 																	</template> --}}
 																	@foreach ($workers as $worker)
 																		<option value="{{ $worker->id }}">
-																			{{ $worker->name }} | {{ Indonesia::findCity($worker->city_id)->name }}
+																			{{ $worker->name }} | {{ $worker->domicile }}
 																		</option>	
 																	@endforeach
 																</optgroup>

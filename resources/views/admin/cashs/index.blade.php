@@ -39,7 +39,7 @@
 										<div class="modal-body">
 											<div class="form-group">
 												<label>Pilih Bulan</label>
-												<input v-model="month" id="month-picker" class="form-control" placeholder="Select Month" type="text">
+												<input v-model="month" id="month-picker-in" class="form-control" placeholder="Select Month" type="text">
 											</div>
 										</div>
 	
@@ -61,7 +61,7 @@
 										<div class="modal-body">
 											<div class="form-group">
 												<label>Pilih Bulan</label>
-												<input v-model="month" id="month-picker" class="form-control" placeholder="Select Month" type="text">
+												<input v-model="month" id="month-picker-out" class="form-control" placeholder="Select Month" type="text">
 											</div>
 										</div>
 	
@@ -229,7 +229,7 @@
 					},
 				}
 			}
-			var monthPicker = $('#month-picker').datepicker({
+			var monthPickerIn = $('#month-picker-in').datepicker({
 					language: 'en',
 					minView: 'months',
 					view: 'months',
@@ -240,8 +240,21 @@
 						window.dispatchEvent(ev)
 					},
 			})
-			var monthPicker = $('#month-picker').datepicker().data('datepicker');
-			monthPicker.clear();
+			var monthPickerOut = $('#month-picker-out').datepicker({
+					language: 'en',
+					minView: 'months',
+					view: 'months',
+					autoClose: true,
+					dateFormat: 'MM yyyy',
+					onSelect(formattedDate, date, inst) {
+						const ev = new CustomEvent('selectmonth', { detail: formattedDate })
+						window.dispatchEvent(ev)
+					},
+			})
+			var monthPickerIn = $('#month-picker-in').datepicker().data('datepicker');
+			monthPickerIn.clear();
+			var monthPickerOut = $('#month-picker-out').datepicker().data('datepicker');
+			monthPickerOut.clear();
 		</script>
 
 @endsection
