@@ -13,6 +13,7 @@
 			$formatyear = Carbon\Carbon::now()->subMonths($i)->format('Y');
 			$listmonthProjects[] = (App\Models\ContractProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count()) + (App\Models\DailyProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count());
 			$listmonthIncome[] = (App\Models\Cash::where('category', 'in')->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_in'));
+			$listmonthOutcome[] = (App\Models\Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_out'));
 	};
 
 @endphp
@@ -78,7 +79,7 @@
 		</div>
 		<div class="col-xl-8 mb-30">
 			<div class="card-box height-100-p pd-20">
-				<h2 class="h4 mb-20">Chart Project per Bulan</h2>
+				<h2 class="h4 mb-20">Chart Pemasukan & Pengeluaran per Bulan</h2>
 				<div id="incomeChart" style="height: 370px"></div>
 			</div>
 		</div>
@@ -212,7 +213,8 @@
 			const dataincome = {
 				chart: { labels: @json($listmonth) },
 				datasets: [
-					{ name: 'Income', values: @json($listmonthIncome) },
+					{ name: 'Pemasukan', values: @json($listmonthIncome) },
+					{ name: 'Pengeluaran', values: @json($listmonthOutcome) },
 				],
 			}
 

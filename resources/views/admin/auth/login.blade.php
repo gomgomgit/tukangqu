@@ -119,8 +119,8 @@
 								</div> --}}
 							</div>
 							<div>
-								<span>Name: Admin </span>
-								<p>Password: admin </p>
+								<span>Name: Admin1 / Admin2 </span>
+								<p>Password: masukaja </p>
 								<p>Beri izin untuk notifikasi untuk notifikasi survei</p>
 							</div>
 							{{-- <div class="row mb-3">

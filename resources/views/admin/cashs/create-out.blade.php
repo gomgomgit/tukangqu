@@ -28,11 +28,15 @@
             </select>
           </div>
           <div class="form-group">
-            <input class="form-control" value="out" type="hidden" name="category">
-          </div>
-          <div class="form-group">
             <label>Jumlah</label>
             <input class="form-control" type="number" name="money_out">
+          </div>
+          <div class="form-group">
+            <label>Pengeluaran</label>
+            <select class="form-control" name="category">
+              <option value="out" selected>Kas</option>
+              <option value="owe">Pinjam</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Keterangan</label>

@@ -11,29 +11,128 @@
 
 				<div class="clearfix mb-5">
 					<div class="pull-left">
-						<p class="font-weight-bold">Saldo: Rp {{ number_format($total) }}</p> 
-          </div>
-          <div class="pull-right">
-            <a href="{{ Route('admin.cashes.createOut') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
-          </div>
+						<p class="font-weight-bold">Saldo: Rp {{ number_format($total) }}</p>
+					</div>
 				</div>
 				<div class="row mb-20">
 					<div class="col-12">
-						<div class="flex">
-							<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-in">
-								Cetak Laporan Pemasukan
-							</a>
-							<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-out">
-								Cetak Laporan Pengeluaran
-							</a>
+						<div class="clearfix mb-5">
+							<div class="flex w-50 pull-left">
+								<a class="btn btn-outline-primary btn-sm" href="#" role="button" data-toggle="modal" data-target="#modal-export">
+									Export
+								</a>
+								<a class="btn btn-outline-primary btn-sm" href="#" role="button" data-toggle="modal" data-target="#modal-import">
+									Import
+								</a>
+								{{-- <a class="btn btn-outline-primary" href="{{ route('admin.cashes.import') }}">
+									Import
+								</a> --}}
+							</div>
+							<div class="pull-right">
+								<a href="{{ Route('admin.cashes.createOut') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
+							</div>
 						</div>
 
 						<div  x-data="modal()" x-init="init()">
+							<div class="modal fade" id="modal-export" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Export</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body">
+											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-in">
+												Pemasukan
+											</a>
+											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-out">
+												Pengeluaran
+											</a>
+										</div>
+	
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="modal-import" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Import</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body">
+											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-import-in">
+												Pemasukan
+											</a>
+											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-import-out">
+												Pengeluaran
+											</a>
+										</div>
+	
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="modal-import-in" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Import Pemasukan</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body">
+											<form id="import-in" action="{{ route('admin.cashes.importIn') }}" method="POST" enctype="multipart/form-data">
+											@csrf
+												<div class="form-group">
+													<label>Pilih File</label>
+													<input class="form-control p-0 h-auto" type="file" name="import-in">
+												</div>
+											</form>
+										</div>
+	
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button form="import-in" type="submit" class="btn btn-primary">Cetak</button>
+											{{-- <button type="button" class="btn btn-primary" @click="cetak()">Cetak</button> --}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="modal-import-out" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Import Pengeluaran</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body">
+												<form id="import-out" action="{{ route('admin.cashes.importOut') }}" method="POST" enctype="multipart/form-data">
+												@csrf
+													<div class="form-group">
+														<label>Pilih File</label>
+														<input class="form-control p-0 h-auto" type="file" name="import-out">
+													</div>
+												</form>
+											</div>
+											
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												<button form="import-out" type="submit" class="btn btn-primary">Cetak</button>
+												{{-- <button type="button" class="btn btn-primary" @click="cetak()">Cetak</button> --}}
+											</div>
+									</div>
+								</div>
+							</div>
 							<div class="modal fade" id="modal-print-in" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog modal-sm modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+											<h4 class="modal-title" id="myLargeModalLabel">Export Pemasukan</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										<div class="modal-body">
@@ -55,7 +154,7 @@
 								<div class="modal-dialog modal-sm modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+											<h4 class="modal-title" id="myLargeModalLabel">Export Pengeluaran</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										<div class="modal-body">
@@ -145,7 +244,7 @@
 											<th scope="col" class="border-0">Tanggal</th>
 											<th scope="col" class="border-0">User</th>
 											<th scope="col" class="border-0">Keluar</th>
-											<th scope="col" class="border-0">Deskripsi</th>
+											<th scope="col" class="border-0">Pengeluaran</th>
 											<th scope="col" class="border-0">Action</th>
 										</tr>
 									</thead>
@@ -162,7 +261,10 @@
 													{{ $data->user->name ?? '---' }}
 												</td>
 												<td>Rp {{ $data->money_out }}</td>
-												<td>{{ $data->description }}</td>
+												<td>
+													{{ $data->category == 'out' ? 'Kas' : '' }}
+													{{ $data->category == 'owe' ? 'Pribadi' : '' }}
+												</td>
 												<td>
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">

@@ -42,8 +42,8 @@ class CashExportOut implements FromView, ShouldAutoSize
         $month = Carbon::create($this->month)->format('m');
         $year = Carbon::create($this->month)->format('yy');
         $users = User::all();
-        $cashs = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->get();
-        return view('admin.cashs.export-view-out', compact('users', 'cashs'));
+        $cashs = Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
+        return view('admin.cashs.export-view-out', compact('cashs', 'users'));
     }
 
 }

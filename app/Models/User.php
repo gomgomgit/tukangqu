@@ -40,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getDebtAttribute() 
+    {
+        $owe = Cash::where('user_id', $this->id)->where('category', 'owe')->sum('money_out');
+        $pay = Cash::where('user_id', $this->id)->where('category', 'pay')->sum('money_out');
+
+        return $owe - $pay;
+    }
 }

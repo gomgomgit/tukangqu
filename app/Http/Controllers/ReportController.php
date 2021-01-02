@@ -25,7 +25,7 @@ class ReportController extends Controller
         $month_outcome = (Cash::whereYear('date', $year)->whereMonth('date', $month)->sum('money_out'));
 
         $in = Cash::where('category', 'in')->sum('money_in');
-        $out = Cash::where('category', 'out')->sum('money_out');
+        $out = Cash::whereIn('category', ['out', 'pay'])->sum('money_out');
 
         $total_cash = $in - $out;
 

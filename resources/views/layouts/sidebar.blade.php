@@ -51,6 +51,7 @@
           </a>
           <ul class="submenu" style="display: {{ request()->routeIs('admin.cashes*') ? 'block' : 'none' }}">
             <li><a class="{{ request()->routeIs('admin.cashes.index') ? 'active' :'' }}" href="{{ Route('admin.cashes.index') }}">Data Kas</a></li>
+            <li><a class="{{ request()->routeIs('admin.cashes.debt*') ? 'active' :'' }}" href="{{ Route('admin.cashes.debt') }}">Data Hutang</a></li>
             <li><a class="{{ request()->routeIs('admin.cashes.createOut') ? 'active' :'' }}" href="{{ Route('admin.cashes.createOut') }}">Tambah Pengeluaran</a></li>
           </ul>
         </li>

@@ -50,7 +50,7 @@ class CashSeeder extends Seeder
 
         $users = User::pluck('id');
 
-        for ($i=0; $i < 10; $i++) { 
+        for ($i=0; $i < 15; $i++) { 
             $x = $faker->word;
             Cash::create([
                 'name' => 'Biaya '. $x,

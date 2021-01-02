@@ -17,7 +17,7 @@ class CreateCashesTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('date');
-            $table->enum('category', ['in', 'out']);
+            $table->enum('category', ['in', 'out', 'owe', 'pay']);
             $table->integer('money_in')->default(0);
             $table->integer('money_out')->default(0);
             $table->foreignId('project_id')->nullable();

@@ -96,6 +96,11 @@ Route::prefix('/admin')->name('admin.')->group(function() {
 
         Route::prefix('/cashes')->name('cashes.')->group(function() {
             Route::get('/', [CashController::class, 'index'])->name('index');
+
+            Route::get('/debt', [CashController::class, 'debt'])->name('debt');
+            Route::get('/debt/detail/{id}', [CashController::class, 'debtDetail'])->name('debtDetail');
+            Route::post('/debt/pay', [CashController::class, 'debtPay'])->name('debtPay');
+
             Route::get('/create-out', [CashController::class, 'createOut'])->name('createOut');
             Route::post('/store-out', [CashController::class, 'storeOut'])->name('storeOut');
             Route::post('/store-in', [CashController::class, 'storeIn'])->name('storeIn');
@@ -110,6 +115,10 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             
             Route::get('/export-view/out/{month?}', [CashController::class, 'exportViewOut'])->name('exportViewOut');
             Route::get('/export-view/in/{month?}', [CashController::class, 'exportViewIn'])->name('exportViewIn');
+
+            Route::get('/import', [CashController::class, 'import'])->name('import');
+            Route::post('/import/in', [CashController::class, 'importIn'])->name('importIn');
+            Route::post('/import/out', [CashController::class, 'importOut'])->name('importOut');
         });
 
     });
