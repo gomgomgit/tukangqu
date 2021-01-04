@@ -23,6 +23,7 @@ class ProjectController extends Controller
      */
     public function onProcess($kind = 'borongan')
     {
+        // dd(date('D, d-m-y H-i'));
         // $daily_datas = DailyProject::with('client')
         // ->where('status', 'OnProcess')->orderBy('created_at', 'desc')->get();
         $daily_datas = DailyProject::with('client')->where('status', 'OnProcess')
@@ -235,7 +236,7 @@ class ProjectController extends Controller
         Cash::create([
             'project_id' => $id,
             'name' => $data->client->name,
-            'date' => Carbon::now()->format('yy-m-d'),
+            'date' => Carbon::now()->format('Y-m-d'),
             'category' => 'in',
             'money_in' => $data->totalprofit,
             'description' => $kind,

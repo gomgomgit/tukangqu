@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
     public function index() {
-        $now = Carbon::now()->format('yy-m-d');
+        $now = Carbon::now()->format('Y-m-d');
         $surveyCount = ContractProject::where('survey_date', $now)->count();
 
         $most_city = City::withCount(['dailyprojects', 'contractprojects', 'province'])->get();
@@ -39,7 +39,7 @@ class ReportController extends Controller
     }
 
     public function todaySurvey() {
-        $now = Carbon::now()->format('yy-m-d');
+        $now = Carbon::now()->format('Y-m-d');
 
         $todaySurveys = ContractProject::where('survey_date', $now)->get();
 

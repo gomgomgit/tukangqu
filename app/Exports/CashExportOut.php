@@ -21,16 +21,6 @@ class CashExportOut implements FromView, ShouldAutoSize
         $this->month = $month;
     }
 
-    public function headings(): array
-    {
-        return [
-            'No',
-            'Nama',
-            'Tanggal',
-            'Jumlah'
-        ];
-    }
-
      public function styles(Worksheet $sheet)
     {
         return [

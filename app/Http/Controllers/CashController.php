@@ -222,6 +222,7 @@ class CashController extends Controller
         if (!$m) {
             $m = Carbon::now()->format('M-YY');
         };
+
         $month = Carbon::create($m)->format('m');
         $lastmonth = Carbon::create($m)->subMonth()->format('m');
         $year = Carbon::create($m)->format('yy');
@@ -233,8 +234,14 @@ class CashController extends Controller
         $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
         $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
 
+        // $total_all = Cash::where('category', 'in')->sum('money_in') - Cash::where('category', 'out')->sum('money_out');
+        // $total_month = $total_in - $total_out;
+
         $nowmonth = Carbon::create('01 ' . $m);
         $lasttotal = Cash::where('category', 'in')->whereDate('date', '<', $nowmonth)->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $nowmonth)->sum('money_out');
+        // $lasttotal = $total_all - $total_month;
+        // $test = Cash::where('category', 'in')->whereDate('date', '<', $nowmonth)->pluck('date');
+        // dd($test);
 
         return view('admin.cashs.export-view-in', compact('users', 'cashs', 'lasttotal', 'total_out'));
     }

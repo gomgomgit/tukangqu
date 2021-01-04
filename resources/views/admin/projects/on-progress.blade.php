@@ -588,9 +588,9 @@
 												{{-- <td>{{ $data->address }}</td> --}}
 												<td>{{ $data->kind_project }}</td>
 												<td>{{ $data->start_date }}</td>
-												<td>{{ $data->daily_value }}</td>
+												<td>Rp {{ number_format($data->daily_value, 0, '.', '.') }}</td>
 												<td>{{ $data->worker->name }}</td>
-												<td>{{ $data->daily_salary }}</td>
+												<td>Rp {{ number_format($data->daily_salary, 0, '.', '.') }}</td>
 												{{-- <td><span class="badge badge-{{ $data->process == 'deal' ? 'info' : 'success'}}">{{ Str::ucfirst($data->process ) }}</span></td> --}}
 												<td>
 													<button class="btn btn-warning btn-sm" @click="setDBillingId({{ $data->id }})">KasBon</button>
@@ -642,19 +642,19 @@
 											<div class="row mb-3">
 												<div class="col-6">
 													<h5 class="my-2">Nilai Harian : 
-														<span x-text="dProject.daily_value"></span>
+														Rp <span x-text="dProject.daily_value"></span>
 													</h5>
 												</div>
 												<div class="col-6">
 													<h5 class="my-2">Total Kasbon : 
-														<span x-text="dProject.totalcharge"></span>
+														Rp <span x-text="dProject.totalcharge"></span>
 													</h5>
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
 													<h5 class="my-2">Total Kasbon Minggu Ini : 
-														<span x-text="dProject.chargeweek"></span>
+														Rp <span x-text="dProject.chargeweek"></span>
 													</h5>
 												</div>
 											</div>
@@ -748,10 +748,10 @@
 
 											<div class="mb-3">
 												<h5 class="my-2">Uang Masuk : 
-													<span x-text="dProject.totalpayment"></span>
+													Rp <span x-text="dProject.totalpayment"></span>
 												</h5>
 												<h5 class="my-2">Nilai Harian : 
-													<span x-text="dProject.daily_value"></span>
+													Rp <span x-text="dProject.daily_value"></span>
 												</h5>
 												{{-- <h5 class="my-2">Sisa : 
 													<span x-text="remainDTermin"></span>
@@ -1458,6 +1458,7 @@
 						var self = this;
 						axios.get('{{ url("/api/get-weekly-bills")}}/' + this.dProject.id + '/' + date)
 						.then(function(response) {
+							console.log(response.data)
 							self.dWeeklyBills = response.data;
 						});
 						// console.log(self.dProject.id);

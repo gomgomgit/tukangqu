@@ -7,12 +7,12 @@
 <table border="1" style="border-collapse: collapse">
   <thead>
     <tr>
-      <th>No</th>
-      <th>Nama</th>
-      <th>Nilai Proyek</th>
-      <th>Keuntungan</th>
-      <th>Pemasukan - Pengeluaran</th>
-      <th>Saldo Bulan Lalu</th>
+      <th><b>No</b></th>
+      <th><b>Nama</b></th>
+      <th><b>Nilai Proyek</b></th>
+      <th><b>Keuntungan</b></th>
+      <th><b>Pemasukan - Pengeluaran</b></th>
+      <th><b>Saldo Bulan Lalu</b></th>
     </tr>
   </thead>
   <tbody>
@@ -38,12 +38,12 @@
   <tfoot>
     <tr>
       <th></th>
-      <th>Total</th>
-      <th>Rp {{ $total_project_value }}</th>
-      <th>Rp {{ $total_profit }}</th>
-      <th>Rp {{ $total_now = $total_profit - $total_out }}</th>
+      <th><b>Total</b></th>
+      <th><b>Rp {{ $total_project_value }}</b></th>
+      <th><b>Rp {{ $total_profit }}</b></th>
+      <th><b>Rp {{ $total_now = $total_profit - $total_out }}</b></th>
       {{-- Bulan lalu --}}
-      <th>Rp {{ $lasttotal + $total_now }}</th>
+      <th><b>Rp {{ $lasttotal + $total_now }}</b></th>
     </tr>
   </tfoot>
 </table>

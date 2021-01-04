@@ -28,6 +28,7 @@ Route::get('/', function () {
 });
 
 Route::get('/surveynotify',[SurveyNotificationController::class, 'surveynotify'])->name('surveyNotification');
+Route::get('/surveydaynotify',[SurveyNotificationController::class, 'surveydaynotify'])->name('surveyDayNotification');
 Route::view('/survey-notification', 'admin.notification.survey-notification');
 
 Route::get('/create-project', [VisitorController::class, 'createProject'])->name('createProject');
@@ -128,3 +129,6 @@ Route::prefix('/admin')->name('admin.')->group(function() {
 Route::get('/laravel', function () {
     return view('laravel');
 });
+
+
+Route::get('/test-pusher', [SurveyNotificationController::class, 'test']);

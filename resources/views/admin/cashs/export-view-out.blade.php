@@ -12,16 +12,16 @@
   <table border="1" style="border-collapse: collapse">
     <thead>
       <tr>
-        <th class="bold" rowspan="2">No</th>
-        <th rowspan="2">Tanggal</th>
-        <th rowspan="2">Nama</th>
-        <th rowspan="2">User</th>
-        <th rowspan="2">Pengeluaran Kas</th>
-        <th style="text-align: center" colspan="{{ $users->count() }}">Pengeluaran Pribadi</th>
+        <th rowspan="2"><b>No </b></th>
+        <th rowspan="2"><b>Tanggal </b></th>
+        <th rowspan="2"><b>Nama </b></th>
+        <th rowspan="2"><b>User </b></th>
+        <th rowspan="2"><b>Pengeluaran Kas </b></th>
+        <th style="text-align: center" colspan="{{ $users->count() }}"><b>Pengeluaran Pribadi </b></th>
       </tr>
       <tr>
         @foreach ($users as $user)
-            <th>Pengeluaran {{ $user->name }}</th>
+            <th><b>{{ $user->name }}</b></th>
         @endforeach
       </tr>
     </thead>
@@ -64,20 +64,22 @@
     <tfoot>
       <tr>
         <th></th>
-        <th rowspan="2" colspan="3" style="font-size: 14; font-weight:bold; text-align:center; vertical-align:middle">
+        <th rowspan="2" colspan="3" style="font-size: 14; text-align:center; vertical-align:middle">
           <b>Total</b>
         </th>
-        <th rowspan="2">Rp {{number_format($total_kas, 0, '.', '.') }}</th>
+        <th rowspan="2"><b>Rp {{number_format($total_kas, 0, '.', '.') }}</b></th>
         @foreach ($users as $i => $user)
-            <th>Rp {{number_format($total_user[$i], 0, '.', '.')}}</th>
+            <th><b>Rp {{number_format($total_user[$i], 0, '.', '.')}}</b></th>
         @endforeach
       </tr>
       <tr>
         <th></th>
         <th colspan="2">
+          <b>
           @php
             echo 'Rp '. number_format(array_sum($total_user), 0, '.', '.')
           @endphp
+          </b>
         </th>
       </tr>
     </tfoot>

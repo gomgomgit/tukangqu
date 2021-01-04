@@ -65,8 +65,8 @@ class DailyProject extends Model
     public function getChargeWeekAttribute() {
         $id = $this->id;
 
-        $datenow = Carbon::now()->format('yy-m-d');
-        $datefrom = Carbon::now()->subDays(6)->format('yy-m-d');
+        $datenow = Carbon::now()->format('Y-m-d');
+        $datefrom = Carbon::now()->subDays(6)->format('Y-m-d');
 
         $chargeweek = Charge::where('project_id', $id)->where('kind_project', 'daily')
                         ->whereBetween('date',[$datefrom, $datenow])

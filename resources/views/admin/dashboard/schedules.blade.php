@@ -31,7 +31,7 @@
 								<th scope="row">{{ $no++ }}</th>
 								<td>{{ $data->surveyer->name }}</td>
 								<td>{{ $data->surveyer->phone_number }}</td>
-								<td>{{ $data->survey_date }}</td>
+								<td>{{ date('l, d-M-Y', strtotime($data->survey_date)) }}</td>
 								<td>{{ \Carbon\Carbon::createFromFormat('H:i:s',$data->survey_time)->format('H:i') }}</td>
 								<td>{{ $data->address .' '. $data->city }}</td>
 								{{-- <td>

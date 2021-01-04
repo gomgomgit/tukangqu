@@ -17,12 +17,11 @@ class SurveyNotificationController extends Controller
         $now = Carbon::now();
 
         $schedules = ContractProject::where('process', 'scheduled')
-                ->where('survey_date', $now->format('yy-m-d'))
-                ->whereTime('survey_time', '=',  $now->addHour()->format('H:i').':00')
+                ->where('survey_date', $now->format('Y-m-d'))
+                ->whereTime('survey_time',  $now->addHour()->format('H:i').':00')
                 ->get();
 
         foreach ($schedules as $schedule) {
-            
             $options = array(
                             'cluster' => env('PUSHER_APP_CLUSTER'),
                             'encrypted' => true
@@ -53,11 +52,11 @@ class SurveyNotificationController extends Controller
         $now = Carbon::now();
 
         $schedules = ContractProject::where('process', 'scheduled')
-                ->where('survey_date', $now->format('yy-m-d'))
+                ->where('survey_date', $now->format('Y-m-d'))
                 ->get();
 
+        if ($schedules->count() > 0) {
 
-        if ($schedules > 0) {
             $options = array(
                             'cluster' => env('PUSHER_APP_CLUSTER'),
                             'encrypted' => true
@@ -80,5 +79,24 @@ class SurveyNotificationController extends Controller
             $pusher->trigger('survey-notify-channel', 'App\\Events\\SurveyNotify', $data);
         }
 
+    }
+
+    public function test() {
+        $options = array(
+            'cluster' => env('PUSHER_APP_CLUSTER'),
+            'encrypted' => true
+        );
+        
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+        $data['title'] = 'test oink';
+        $data['message'] = 'test test';
+
+        $pusher->trigger('survey-notify-channel', 'App\\Events\\SurveyNotify', $data);
     }
 }
