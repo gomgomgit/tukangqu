@@ -11,7 +11,7 @@
 		<div class="pd-20 card-box">
 			<div class="clearfix mb-20">
 				<div class="pull-left">
-					<h4 class="h3">Data Hutang {{$datas->first()->user->name}}</h4>
+					<h4 class="h3">Data Hutang {{$user->name}}</h4>
 				</div>
 				<div class="pull-right pr-3">
 					{{-- <a href="{{ Route('admin.cashes.createOut') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a> --}}
@@ -22,7 +22,7 @@
 					<h4 class="font-weight-bold h6">Total Hutang Rp {{number_format($total, 0, '.', '.')}}</h4>
 				</div>
 				<div class="pull-right pr-3">
-					<a href="#" @click.prevent="showModal({{$datas->first()->user->id}})" class="btn btn-sm btn-success"><i class="icon-copy fa fa-money" aria-hidden="true"></i>&nbsp;Cicil</a>
+					<a href="#" @click.prevent="showModal({{$user->id}})" class="btn btn-sm btn-success"><i class="icon-copy fa fa-money" aria-hidden="true"></i>&nbsp;Cicil</a>
 					<a href="{{ Route('admin.cashes.createOut') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Pengeluaran</a>
 				</div>
 

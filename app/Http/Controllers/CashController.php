@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CashExportDebt;
 use App\Exports\CashExportIn;
 use App\Exports\CashExportOut;
 use App\Models\Cash;
@@ -47,10 +48,11 @@ class CashController extends Controller
     }
     public function debtDetail($id)
     {
+        $user = User::where('id', $id)->first();
         $datas = Cash::where('user_id', $id)->whereIn('category', ['owe', 'pay'])->orderBy('date', 'desc')->get();
         $total = Cash::where('user_id', $id)->where('category', 'owe')->sum('money_out') - Cash::where('user_id', $id)->where('category', 'pay')->sum('money_out');
 
-        return view('admin.cashs.debt-detail', compact('datas', 'total'));
+        return view('admin.cashs.debt-detail', compact('datas', 'total', 'user'));
     }
     public function debtPay(Request $request)
     {
@@ -205,16 +207,54 @@ class CashController extends Controller
         return Excel::download(new CashExportOut($month), 'pengeluaran-'. $carbon .'.xlsx');
     }
 
+    public function exportDebt($month) 
+    {
+        $carbon = Carbon::create($month)->format('m-yy');
+        return Excel::download(new CashExportDebt($month), 'hutang-'. $carbon .'.xlsx');
+    }
+
     public function exportViewOut ($m = null)
     {
         if (!$m) {
             $m = Carbon::now()->format('M-YY');
         };
         $month = Carbon::create($m)->format('m');
-        $year = Carbon::create($m)->format('yy');
+        $year = Carbon::create($m)->format('Y');
+        $now = Carbon::create($m)->format('Y-m');
+
         $users = User::all();
         $cashs = Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
-        return view('admin.cashs.export-view-out', compact('cashs', 'users'));
+
+        $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
+        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+
+        return view('admin.cashs.export-view-out', compact('cashs', 'users', 'total_last', 'total_in', 'total_out'));
+    }
+
+    public function exportViewDebt ($m = null)
+    {
+        if (!$m) {
+            $m = Carbon::now()->format('M-YY');
+        };
+
+        $month = Carbon::create($m)->format('m');
+        $year = Carbon::create($m)->format('Y');
+        $now = Carbon::create($m)->format('Y-m');
+
+        $last_cashs = Cash::whereIn('category', ['pay', 'owe'])->whereDate('date', '<', $now . '-01 00:00:00')->get();
+
+        $users = User::all();
+        $cashs = Cash::whereIn('category', ['pay', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
+
+        $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
+        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+        return view('admin.cashs.export-view-debt', compact('cashs','last_cashs','users', 'total_last', 'total_in', 'total_out'));
     }
 
     public function exportViewIn($m = null)
@@ -224,26 +264,19 @@ class CashController extends Controller
         };
 
         $month = Carbon::create($m)->format('m');
-        $lastmonth = Carbon::create($m)->subMonth()->format('m');
-        $year = Carbon::create($m)->format('yy');
-        $lastyear = Carbon::create($m)->subMonth()->format('yy');
+        $year = Carbon::create($m)->format('Y');
+        $now = Carbon::create($m)->format('Y-m');
         $users = User::all();
 
         $cashs = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->get();
 
         $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
         $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
 
-        // $total_all = Cash::where('category', 'in')->sum('money_in') - Cash::where('category', 'out')->sum('money_out');
-        // $total_month = $total_in - $total_out;
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
 
-        $nowmonth = Carbon::create('01 ' . $m);
-        $lasttotal = Cash::where('category', 'in')->whereDate('date', '<', $nowmonth)->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $nowmonth)->sum('money_out');
-        // $lasttotal = $total_all - $total_month;
-        // $test = Cash::where('category', 'in')->whereDate('date', '<', $nowmonth)->pluck('date');
-        // dd($test);
-
-        return view('admin.cashs.export-view-in', compact('users', 'cashs', 'lasttotal', 'total_out'));
+        return view('admin.cashs.export-view-in', compact('users', 'cashs', 'total_last', 'total_in', 'total_out'));
     }
 
     public function importIn (Request $request)

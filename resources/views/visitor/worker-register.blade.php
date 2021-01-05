@@ -35,8 +35,8 @@
 	</script>
 </head>
 <body>
-  <div class="py-5">
-    <div class="pd-20 card-box mb-30 w-75 m-auto mb-5 p-5">
+  <div class="container">
+    <div class="pd-20 card-box mb-30 m-auto mb-5 p-5">
       <div class="clearfix">
         <div class="text-center">
           <h4 class="text-blue h1">Form Pendaftaran Tukang</h4>

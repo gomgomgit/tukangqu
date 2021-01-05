@@ -17,22 +17,35 @@ class VisitorController extends Controller
 {
     public function createProject()
     {
-        return view('visitor.create-project');
+        $clients = Client::all();
+        return view('visitor.create-project', compact('clients'));
     }
 
     public function createProjectProcess(ProjectRequest $request)
     {
         $data = $request->all();
-        
-        $client_id = Client::create($data)->id;
-        
+
+        // dd($request->name_old_client);
+        if ($request->client == 1) {
+            $client_id = Client::create([
+                'name' => $request->name_new_client,
+                'phone_number' => $request->phone_number,
+                'address' => $request->client_address,
+                'province_id' => $request->client_province_id,
+                'city_id' => $request->client_city_id,
+            ])->id;
+        } else {
+            $client_id = $request->name_old_client;
+        }
+
+        // dd($request);
         // array_push( $data, ['client_id' => $client_id]);
         $data['client_id'] = $client_id;
         // dd($data);
         $kind = $data['kind_work'];
         if ($kind === 'borongan') {
             ContractProject::create($data);
-        }; 
+        };
         if ($kind === 'harian') {
             DailyProject::create($data);
         };

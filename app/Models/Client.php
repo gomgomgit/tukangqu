@@ -30,6 +30,13 @@ class Client extends Model
         return $contract + $daily;
     }
 
+    public function getDomicileAttribute() {
+        $data = \Indonesia::findCity($this->city_id, 'province');
+        $city = Str::ucfirst(Str::lower($data->name));
+        $province = Str::ucfirst(Str::lower($data->province->name));
+        return $city . ', ' . $province;
+    }
+
     public function contractProjects() {
         $this->hasMany(ContractProject::class, 'client_id');
     }

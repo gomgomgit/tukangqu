@@ -113,9 +113,11 @@ Route::prefix('/admin')->name('admin.')->group(function() {
 
             Route::get('/export/out/{month}', [CashController::class, 'exportOut'])->name('exportOut');
             Route::get('/export/in/{month}', [CashController::class, 'exportIn'])->name('exportIn');
+            Route::get('/export/debt/{month}', [CashController::class, 'exportDebt'])->name('exportDebt');
             
             Route::get('/export-view/out/{month?}', [CashController::class, 'exportViewOut'])->name('exportViewOut');
             Route::get('/export-view/in/{month?}', [CashController::class, 'exportViewIn'])->name('exportViewIn');
+            Route::get('/export-view/debt/{month?}', [CashController::class, 'exportViewDebt'])->name('exportViewDebt');
 
             Route::get('/import', [CashController::class, 'import'])->name('import');
             Route::post('/import/in', [CashController::class, 'importIn'])->name('importIn');

@@ -12,6 +12,25 @@
   <table border="1" style="border-collapse: collapse">
     <thead>
       <tr>
+        <th></th>
+        <th colspan="1"><b>Saldo Bulan Lalu</b></th>
+        <th colspan="5"><b>Rp {{ number_format($total_last, 0, '.', '.') }}</b></th>  
+      </tr>
+      <tr>
+        <th></th>
+        <th colspan="1"><b>Pemasukan - Pengeluaran - Cicil</b></th>
+        <th colspan="5"><b>Rp {{ number_format($total_now = $total_in - $total_out, 0, '.', '.') }}</b></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th colspan="1"><b>Kas</b></th>
+        <th colspan="5"><b>Rp {{ number_format($total_last + $total_now, 0, '.', '.') }}</b></th>
+      </tr>
+      <tr><td colspan="7"><br></td></tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="7"><b>Data Pengeluaran</b></td></tr>
+      <tr>
         <th rowspan="2"><b>No </b></th>
         <th rowspan="2"><b>Tanggal </b></th>
         <th rowspan="2"><b>Nama </b></th>
@@ -24,8 +43,6 @@
             <th><b>{{ $user->name }}</b></th>
         @endforeach
       </tr>
-    </thead>
-    <tbody>
       @foreach ($cashs as $cash)
       @php
           $total_all += $cash->money_out;
@@ -41,10 +58,10 @@
           @endphp 
           <td>Rp {{ number_format($cash->money_out, 0, '.', '.') }}</td>
           @foreach ($users as $user)
-            <td></td>
+            <td> - </td>
           @endforeach
         @elseif($cash->category == 'owe')
-          <td></td>
+          <td> - </td>
           @foreach ($users as $i => $user)
             @if ($cash->user_id == $user->id)
               @php
@@ -54,7 +71,7 @@
                 Rp {{ number_format($cash->money_out, 0, '.', '.') }}
               </td>
             @else
-              <td></td>
+              <td>-</td>
             @endif
           @endforeach
         @endif

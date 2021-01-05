@@ -86,7 +86,8 @@ class OnProgressController extends Controller
         // $datenow = Carbon::now()->format('Y-m-d');
         $dateselect = new Carbon($date);
         // $datenow = $dateselect->format('Y-m-d');
-        $datefrom = $dateselect->subDays(6)->format('Y-m-d');
+        // $datefrom = $dateselect->subDays(6)->format('Y-m-d');
+        $datefrom = $dateselect->startOfWeek(Carbon::SUNDAY)->format('Y-m-d');
 
         $weeklybills = Charge::where('project_id', $project_id)->where('kind_project', 'daily')
                         ->whereBetween('date',[$datefrom, $date])

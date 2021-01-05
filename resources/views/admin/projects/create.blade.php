@@ -34,7 +34,7 @@
             <label>Nama Klien</label>
             <select name="name_old_client" id="select-client" class="form-control " style="width: 100%; height: 38px;">
               @foreach ($clients as $client)
-                  <option value="{{ $client->id }}">{{ $client->name }}</option>
+                  <option value="{{ $client->id }}">{{ $client->name }} -- {{$client->domicile}}</option>
               @endforeach
             </select>
           </div>

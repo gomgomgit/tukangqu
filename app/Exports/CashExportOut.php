@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class CashExportOut implements FromView, ShouldAutoSize
 {
@@ -21,19 +20,22 @@ class CashExportOut implements FromView, ShouldAutoSize
         $this->month = $month;
     }
 
-     public function styles(Worksheet $sheet)
-    {
-        return [
-            1    => ['font' => ['bold' => true]],
-        ];
-    }
     public function view(): View
     {
         $month = Carbon::create($this->month)->format('m');
-        $year = Carbon::create($this->month)->format('yy');
+        $year = Carbon::create($this->month)->format('Y');
+        $now = Carbon::create($this->month)->format('Y-m');
+
         $users = User::all();
         $cashs = Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
-        return view('admin.cashs.export-view-out', compact('cashs', 'users'));
+
+        $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
+        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+
+        return view('admin.cashs.export-view-out', compact('cashs', 'users', 'total_last', 'total_in', 'total_out'));
     }
 
 }

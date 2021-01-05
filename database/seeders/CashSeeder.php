@@ -62,5 +62,21 @@ class CashSeeder extends Seeder
                 'user_id' => $faker->randomElement($users),
             ]);
         };
+
+        foreach ($users as $user)
+        {
+            for ($i=0; $i < 3; $i++) {
+                $x = $faker->word;
+                Cash::create ([
+                    'name' => 'Biaya ' . $x,
+                    'date' => $faker->dateTimeBetween('-1 month', '0 month'),
+                    'category' => 'owe',
+                    'money_in' => 0,
+                    'money_out' => rand(1, 20) * 10000,
+                    'description' => 'Belanja ' . $x,
+                    'user_id' => $user,
+                ]);
+            }
+        }
     }
 }

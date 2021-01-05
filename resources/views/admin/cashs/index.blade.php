@@ -36,18 +36,23 @@
 						<div  x-data="modal()" x-init="init()">
 							<div class="modal fade" id="modal-export" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 								<div class="modal-dialog modal-sm modal-dialog-centered">
-									<div class="modal-content">
+									<div class="modal-content w-auto">
 										<div class="modal-header">
 											<h4 class="modal-title" id="myLargeModalLabel">Export</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										<div class="modal-body">
-											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-in">
-												Pemasukan
-											</a>
-											<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-out">
-												Pengeluaran
-											</a>
+											<div class="d-flex justify-content-between">
+												<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-in">
+													Pemasukan
+												</a>
+												<a class="btn btn-outline-primary mx-2" href="#" role="button" data-toggle="modal" data-target="#modal-print-out">
+													Pengeluaran
+												</a>
+												<a class="btn btn-outline-primary" href="#" role="button" data-toggle="modal" data-target="#modal-print-debt">
+													Hutang
+												</a>
+											</div>
 										</div>
 	
 										<div class="modal-footer">
@@ -129,6 +134,7 @@
 								</div>
 							</div>
 							<div class="modal fade" id="modal-print-in" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<form :action="'/admin/cashes/export/in/' + month">
 								<div class="modal-dialog modal-sm modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -138,19 +144,21 @@
 										<div class="modal-body">
 											<div class="form-group">
 												<label>Pilih Bulan</label>
-												<input v-model="month" id="month-picker-in" class="form-control" placeholder="Select Month" type="text">
+												<input v-model="month" id="month-picker-in" class="form-control" placeholder="Select Month" type="text" required>
 											</div>
 										</div>
 	
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-											<a :href="'/admin/cashes/export/in/' + month" type="button" class="btn btn-primary">Cetak</a>
+											<button class="btn btn-primary">Cetak</button>
 											{{-- <button type="button" class="btn btn-primary" @click="cetak()">Cetak</button> --}}
 										</div>
 									</div>
 								</div>
+								</form>
 							</div>
 							<div class="modal fade" id="modal-print-out" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<form :action="'/admin/cashes/export/out/' + month">
 								<div class="modal-dialog modal-sm modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -160,17 +168,42 @@
 										<div class="modal-body">
 											<div class="form-group">
 												<label>Pilih Bulan</label>
-												<input v-model="month" id="month-picker-out" class="form-control" placeholder="Select Month" type="text">
+												<input v-model="month" id="month-picker-out" class="form-control" placeholder="Select Month" type="text" required>
 											</div>
 										</div>
 	
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-											<a :href="'/admin/cashes/export/out/' + month" type="button" class="btn btn-primary">Cetak</a>
+											<button class="btn btn-primary">Cetak</button>
 											{{-- <button type="button" class="btn btn-primary" @click="cetak()">Cetak</button> --}}
 										</div>
 									</div>
 								</div>
+								</form>
+							</div>
+							<div class="modal fade" id="modal-print-debt" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+								<form :action="'/admin/cashes/export/debt/' + month">
+								<div class="modal-dialog modal-sm modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="myLargeModalLabel">Export Hutang</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										</div>
+										<div class="modal-body">
+											<div class="form-group">
+												<label>Pilih Bulan</label>
+												<input v-model="month" id="month-picker-debt" class="form-control" placeholder="Select Month" type="text" required>
+											</div>
+										</div>
+	
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button class="btn btn-primary">Cetak</button>
+											{{-- <button type="button" class="btn btn-primary" @click="cetak()">Cetak</button> --}}
+										</div>
+									</div>
+								</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -353,10 +386,23 @@
 						window.dispatchEvent(ev)
 					},
 			})
+			var monthPickerDebt = $('#month-picker-debt').datepicker({
+					language: 'en',
+					minView: 'months',
+					view: 'months',
+					autoClose: true,
+					dateFormat: 'MM yyyy',
+					onSelect(formattedDate, date, inst) {
+						const ev = new CustomEvent('selectmonth', { detail: formattedDate })
+						window.dispatchEvent(ev)
+					},
+			})
 			var monthPickerIn = $('#month-picker-in').datepicker().data('datepicker');
 			monthPickerIn.clear();
 			var monthPickerOut = $('#month-picker-out').datepicker().data('datepicker');
 			monthPickerOut.clear();
+			var monthPickerDebt = $('#month-picker-debt').datepicker().data('datepicker');
+			monthPickerDebt.clear();
 		</script>
 
 @endsection

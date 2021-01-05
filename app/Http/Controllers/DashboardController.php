@@ -7,6 +7,7 @@ use App\Models\ContractProject;
 use App\Models\DailyProject;
 use App\Models\Worker;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -18,6 +19,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        // dd(Carbon::now()->startOfWeek(Carbon::SUNDAY)->format('Y-m-d'));
+
         $workers = Worker::all();
         // $contract_projects_month = ContractProject::where('created_at', '3')->get();
         // $daily_projects_month = DailyProject::where('created_at', '3')->get();
