@@ -35,7 +35,7 @@
 </head>
 <body>
   <div class="py-5 position-relative h-100 w-100">
-    <div class="pd-20 card-box w-75 m-auto position-absolute"
+    <div class="pd-20 card-box container m-auto position-absolute"
       style=" top: 50%; left: 50%;
               transform:translate(-50%, -50%)
               ">

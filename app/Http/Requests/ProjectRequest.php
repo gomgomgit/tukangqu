@@ -23,7 +23,7 @@ class ProjectRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->attributes->get('client') == 1) {
+        if ($this->get('client') == 1) {
             return [
                 'name_new_client' => 'required',
                 'order_date' => 'required',
@@ -32,6 +32,8 @@ class ProjectRequest extends FormRequest
                 'address' => 'required',
                 'kind_work' => 'required',
                 'kind_project' => 'required',
+                'client_province_id' => 'required',
+                'client_city_id' => 'required',
                 'province_id' => 'required',
                 'city_id' => 'required'
             ];

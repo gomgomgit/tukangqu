@@ -46,8 +46,17 @@
           <p class="mb-30">Lengkapilah form dibawah ini</p>
         </div>
         
-        
-        <form action="{{ route('admin.projects.store') }}" method="POST">
+        @if ($errors->any())
+          <div class="alert alert-danger">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+
+        <form action="{{ route('createProjectProcess') }}" method="POST">
           @csrf
           <div class="row">
             <div class="col-12">

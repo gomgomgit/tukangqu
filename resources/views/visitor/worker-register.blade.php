@@ -43,17 +43,17 @@
           <p class="mb-30">Lengkapilah form berikut dengan data yang sesuai</p>
         </div>
       </div>
+      @if ($errors->any())
+        <div class="alert alert-danger">
+          <ul>
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
       <form action="{{ Route('workerRegisterProcess') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @if ($errors->any())
-          <div class="mb-3">
-            <ul class="p-3 bg-danger">
-              @foreach ($errors->all() as $error)
-                <li class="">{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>  
-        @endif
         <div class="text-center">
           <h2 class="h3 d-inline-block mb-4">Data Diri</h2>
         </div>

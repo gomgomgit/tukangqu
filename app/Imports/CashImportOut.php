@@ -11,12 +11,19 @@ class CashImportOut implements ToModel, WithStartRow
 {
     public function model(array $row)
     {
+        if ($row[3] == 'kas') {
+            $category = 'out';
+        } elseif ($row[3] == 'pribadi') {
+            $category = 'owe';
+        }
+
         return new Cash([
             'name' => $row[0],
             'date' => Carbon::create($row[1])->format('Y-m-d'),
-            'category' => 'out',
-            'money_out' => $row[2],
-            'description' => $row[3]
+            'user_id' => $row[2],
+            'category' => $category,
+            'money_out' => $row[4],
+            'description' => $row[5]
         ]);
     }
 
