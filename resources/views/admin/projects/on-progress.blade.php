@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('link')
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"/>
 		<link rel="stylesheet" href="{{ asset('css/c-modal.css') }}">
 @endsection
 
@@ -65,7 +66,11 @@
 														{{ $data->finish_date ?? '---'}}
 													</div>
 												</td>
-												<td>{{ $data->worker->name }}</td>
+												<td>
+													@if ($data->worker)
+														{{ $data->worker->name }} <a href={{ Route('admin.projects.workerShow', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@endif
+												</td>
 												<td>{{ $data->project_value }}</td>
 												<td><span class="badge badge-{{ $data->process == 'deal' ? 'info' : 'success'}}">{{ Str::ucfirst($data->process ) }}</span></td>
 												<td><button class="btn btn-warning btn-sm" @click="setCBillingId({{ $data->id }})">KasBon</button></td>
@@ -458,6 +463,7 @@
 														<th scope="col" class="border-0">#</th>
 														<th scope="col" class="border-0">Tanggal</th>
 														<th scope="col" class="border-0">Jumlah</th>
+														<th scope="col" class="border-0">Bukti Transfer</th>
 													</tr>
 												</thead>
 
@@ -468,6 +474,11 @@
 																	<th scope="row" x-text="index + 1">1</th>
 																	<td x-text="termin.date"></td>
 																	<td x-text="termin.amount"></td>
+																	<td>
+																		<a href="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" data-fancybox="gallery" data-caption="Caption for single image">
+																			<img width="80" height="80" src="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" alt="" />
+																		</a>
+																	</td>
 																</tr>
 															</template>
 													</tbody>
@@ -476,6 +487,7 @@
 															<td></td>
 															<td>Total</td>
 															<td x-text="cProject.totalpayment"></td>
+															<td></td>
 														</tr>
 													</tfoot>
 												{{-- </template> --}}
@@ -589,7 +601,11 @@
 												<td>{{ $data->kind_project }}</td>
 												<td>{{ $data->start_date }}</td>
 												<td>Rp {{ number_format($data->daily_value, 0, '.', '.') }}</td>
-												<td>{{ $data->worker->name }}</td>
+												<td>
+													@if ($data->worker)
+														{{ $data->worker->name }} <a href={{ Route('admin.projects.workerShow', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@endif
+												</td>
 												<td>Rp {{ number_format($data->daily_salary, 0, '.', '.') }}</td>
 												{{-- <td><span class="badge badge-{{ $data->process == 'deal' ? 'info' : 'success'}}">{{ Str::ucfirst($data->process ) }}</span></td> --}}
 												<td>
@@ -1031,6 +1047,9 @@
 	<!-- add sweet alert js & css in footer -->
 	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js') }}"></script>
 	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+
+	{{-- fancybox --}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
 		<script>
 			function action() {

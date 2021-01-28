@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Exports\CashExportDebt;
 use App\Exports\CashExportIn;
 use App\Exports\CashExportOut;
+use App\Exports\CashExportTemplateIn;
+use App\Exports\CashExportTemplateOut;
 use App\Models\Cash;
 use Illuminate\Http\Request;
 use App\Http\Requests\CashRequest;
 use App\Imports\CashImportIn;
 use App\Imports\CashImportOut;
+use App\Models\ContractProject;
+use App\Models\DailyProject;
 use App\Models\User;
 use Carbon\Carbon;
 // use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Activitylog\Models\Activity;
 
 class CashController extends Controller
 {
@@ -25,7 +30,7 @@ class CashController extends Controller
     public function index()
     {
         $datas_in = Cash::where('category', 'in')->orderBy('date', 'desc')->get();
-        $datas_out = Cash::whereIn('category', ['out', 'owe'])->orderBy('date', 'desc')->get();
+        $datas_out = Cash::whereIn('category', ['out', 'owe', 'pay', 'refund'])->orderBy('date', 'desc')->get();
         // dd($datas_in);
 
         $in = Cash::pluck('money_in')->sum();
@@ -195,6 +200,20 @@ class CashController extends Controller
         return redirect()->back();
     }
 
+    public function projectShow($id, $kind)
+    {
+        if ($kind === 'borongan') {
+            $data = ContractProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            // dd($activities);
+        }
+        if ($kind === 'harian') {
+            $data = DailyProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+        }
+        return view('admin.cashs.project-show', compact('data', 'kind', 'activities'));
+    }
+
     public function exportIn($month) 
     {
         $carbon = Carbon::create($month)->format('m-yy');
@@ -223,13 +242,13 @@ class CashController extends Controller
         $now = Carbon::create($m)->format('Y-m');
 
         $users = User::all();
-        $cashs = Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
+        $cashs = Cash::whereIn('category', ['out', 'owe', 'refund'])->whereMonth('date', $month)->whereYear('date', $year)->get();
 
         $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
-        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_out = Cash::whereIn('category', ['out', 'refund'])->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
         $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
 
-        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::whereIn('category', ['out', 'refund'])->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
 
         return view('admin.cashs.export-view-out', compact('cashs', 'users', 'total_last', 'total_in', 'total_out'));
     }
@@ -250,10 +269,10 @@ class CashController extends Controller
         $cashs = Cash::whereIn('category', ['pay', 'owe'])->whereMonth('date', $month)->whereYear('date', $year)->get();
 
         $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
-        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_out = Cash::whereIn('category', ['out', 'refund'])->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
         $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
 
-        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::whereIn('category', ['out', 'refund'])->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
         return view('admin.cashs.export-view-debt', compact('cashs','last_cashs','users', 'total_last', 'total_in', 'total_out'));
     }
 
@@ -271,12 +290,29 @@ class CashController extends Controller
         $cashs = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->get();
 
         $total_in = Cash::where('category', 'in')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_in');
-        $total_out = Cash::where('category', 'out')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
+        $total_out = Cash::whereIn('category', ['out', 'refund'])->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
         $total_pay = Cash::where('category', 'pay')->whereMonth('date', $month)->whereYear('date', $year)->sum('money_out');
 
-        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::where('category', 'out')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
+        $total_last = Cash::where('category', 'in')->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_in') - Cash::whereIn('category', ['out', 'refund'])->whereDate('date', '<', $now . '-01 00:00:00')->sum('money_out');
 
         return view('admin.cashs.export-view-in', compact('users', 'cashs', 'total_last', 'total_in', 'total_out'));
+    }
+
+    public function exportTemplateOut()
+    {
+        return Excel::download(new CashExportTemplateOut(), 'template-import-pengeluaran.xlsx');
+    }
+    public function exportTemplateIn()
+    {
+        return Excel::download(new CashExportTemplateIn, 'template-import-pemasukan.xlsx');
+    }
+
+    public function exportTemplateViewOut() {
+        $users = User::all();
+        return view('admin.cashs.export-template-view-out', compact('users'));
+    }
+    public function exportTemplateViewIn() {
+        return view('admin.cashs.export-template-view-in');
     }
 
     public function importIn (Request $request)

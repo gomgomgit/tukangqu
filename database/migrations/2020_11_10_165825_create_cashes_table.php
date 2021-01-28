@@ -17,11 +17,11 @@ class CreateCashesTable extends Migration
             $table->id();
             $table->string('name');
             $table->date('date');
-            $table->enum('category', ['in', 'out', 'owe', 'pay']);
+            $table->enum('category', ['in', 'out', 'owe', 'pay', 'refund']);
             $table->integer('money_in')->default(0);
             $table->integer('money_out')->default(0);
             $table->foreignId('project_id')->nullable();
-            $table->enum('project_type', ['daily', 'contract'])->nullable();
+            $table->enum('project_type', ['harian', 'borongan'])->nullable();
             $table->text('description')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->softDeletes();

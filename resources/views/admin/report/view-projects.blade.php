@@ -7,7 +7,10 @@
 			<div class="pd-20 card-box">
 				<div class="clearfix mb-20">
 					<div class="pull-left">
-						<h4 class="text-black h4">Data Proyek Tukang</h4>
+						<h4 class="text-black h4">Data Proyek {{ Str::ucfirst( Str::lower($city->name)) }}</h4>
+          </div>
+          <div class="pull-right pr-3">
+            <a href="{{ Route('admin.workers.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah Tukang</a>
           </div>
 				</div>
 				<table class="data-table table table-striped">
@@ -38,9 +41,9 @@
 									<span class="">{{ $data->city }}</span>
 								</td>
 								<td class="text-center">{{ $data->project_value ?? '---' }}</td>
-								<td class="text-center">{{ $data->profit ?? '---' }}</td>
+								<td class="text-center">{{ $data->profit || 0 ? $data->profit : '---' }}</td>
 								<td>
-									<a class="btn btn-primary py-1 px-3" href="{{ Route('admin.workers.projectShow', [$data->id, Str::lower($data->kind)]) }}">View</a>
+											<a class="btn btn-primary py-1 px-3" href="{{ Route('admin.projects.finishedShow', [$data->id, Str::lower($data->kind)]) }}">View</a>
 									{{-- <div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 											<i class="dw dw-more"></i>
@@ -63,9 +66,6 @@
 						@endforeach
 					</tbody>
 				</table>
-				<div class="mt-4">
-					<button onclick="goBack()" class="btn btn-primary "><i class="icon-copy dw dw-left-arrow1"></i> Back</button>
-				</div>
 			</div>
 			<!-- Striped table End -->
 	</div>
@@ -84,9 +84,4 @@
 		<!-- Datatable Setting js -->
 		<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js') }}"></script>
 
-		<script>
-			function goBack() {
-				window.history.back()
-			}
-		</script>
 @endsection

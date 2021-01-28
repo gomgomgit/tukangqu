@@ -6,16 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ContractProject extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, LogsActivity;
 
-    use SoftDeletes;
+    protected static $logAttributes =
+    [
+        'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'survey_date', 'survey_time',
+        'surveyer_id', 'approximate_value', 'project_value', 'worker_id', 'start_date', 'finish_date', 'profit', 'refund', 'description'
+    ];
+
+    protected static $logOnlyDirty = true;
 
     protected $fillable = [
         'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'survey_date', 'survey_time', 
-        'surveyer_id', 'approximate_value', 'project_value', 'worker_id', 'start_date', 'finish_date', 'description'
+        'surveyer_id', 'approximate_value', 'project_value', 'worker_id', 'start_date', 'finish_date', 'profit', 'refund', 'description'
     ];
 
     public function getKindAttribute() {

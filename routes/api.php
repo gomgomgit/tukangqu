@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CalendarController;
 use App\Http\Controllers\API\DebtController;
 use App\Http\Controllers\API\LocationController;
 use App\Http\Controllers\API\NotificationController;
@@ -43,5 +44,7 @@ Route::post('/store-sharing', [OnProgressController::class, 'storeSharing'])->na
 
 Route::get('/get-sharing/{project_id}/{kind}', [OnProgressController::class, 'sharing'])->name('apiGetSharing');
 Route::get('/get-weekly-bills/{project_id}/{date}', [OnProgressController::class, 'weeklyBills'])->name('apiGetWeeklyBills');
+
+Route::get('/get-event-calendar', [CalendarController::class, 'eventCalendar'])->name('apiGetEventCalendar');
 
     

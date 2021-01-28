@@ -13,6 +13,7 @@ use App\Models\Profit;
 use App\Models\Worker;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class ProjectController extends Controller
 {
@@ -235,7 +236,8 @@ class ProjectController extends Controller
         $data->status = 'Finished';
         Cash::create([
             'project_id' => $id,
-            'name' => $data->client->name,
+            'project_type' => $kind,
+            'name' => 'Refund ' . $data->client->name,
             'date' => Carbon::now()->format('Y-m-d'),
             'category' => 'in',
             'money_in' => $data->totalprofit,
@@ -261,6 +263,30 @@ class ProjectController extends Controller
         // dd($contract_datas->first());
 
         return view('admin.projects.finished', compact('daily_datas', 'contract_datas', 'kind'));
+    }
+    public function finishedRefund(Request $request, $id, $kind)
+    {
+        if ($kind === 'borongan') {
+            $data = ContractProject::find($id);
+            $data->refund = $request->refund;
+        }
+        if ($kind === 'harian') {
+            $data = DailyProject::find($id);
+            $data->refund = $request->refund;
+        }
+        
+        Cash::create([
+            'project_id' => $id,
+            'project_type' => $kind,
+            'name' => $data->client->name,
+            'date' => Carbon::now()->format('Y-m-d'),
+            'category' => 'refund',
+            'money_out' => $request->refund,
+            'description' => $request->description,
+        ]);
+        $data->save();
+
+        return redirect()->route('admin.projects.finished', $kind);
     }
 
     /**
@@ -312,44 +338,63 @@ class ProjectController extends Controller
         return redirect()->route('admin.projects.onProcess', $kind);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function workerShow($id) {
+        $data = Worker::with('skills')->find($id);
+
+        return view('admin.projects.worker-show', compact('data'));
+    }
+
+    public function workerShowProjects($id)
+    {
+        $contract = ContractProject::where('worker_id', $id)->orderBy('order_date', 'desc')
+        ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $daily = DailyProject::where('worker_id', $id)->orderBy('order_date', 'desc')
+        ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $datas = $contract->toBase()->merge($daily)->take(10);
+
+        return view('admin.projects.worker-show-projects', compact('datas'));
+    }
+
     public function onProcessShow($id, $kind)
     {
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
-            // dd($data);
+            $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            // dd($activities);
         }
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
         }
-        return view('admin.projects.on-process-show', compact('data', 'kind'));
+        return view('admin.projects.on-process-show', compact('data', 'kind', 'activities'));
     }
 
     public function onProgressShow($id, $kind)
     {
-        if ($kind ==='borongan') {
+        if ($kind === 'borongan') {
             $data = ContractProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            // dd($activities);
         }
-        if ($kind ==='harian') {
+        if ($kind === 'harian') {
             $data = DailyProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
         }
-        return view('admin.projects.on-progress-show', compact('data', 'kind'));
+        return view('admin.projects.on-progress-show', compact('data', 'kind', 'activities'));
     }
 
     public function finishedShow($id, $kind)
     {
-        if ($kind ==='borongan') {
+        if ($kind === 'borongan') {
             $data = ContractProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            // dd($activities);
         }
-        if ($kind ==='harian') {
+        if ($kind === 'harian') {
             $data = DailyProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
         }
-        return view('admin.projects.finished-show', compact('data', 'kind'));
+        return view('admin.projects.finished-show', compact('data', 'kind', 'activities'));
     }
 
     /**

@@ -28,6 +28,7 @@ class CreateDailyProjectsTable extends Migration
             $table->date('finish_date')->nullable();
             $table->integer('project_value')->nullable();
             $table->integer('profit')->nullable();
+            $table->integer('refund')->nullable();
             $table->text('description')->nullable();
             $table->enum('process', ['waiting', 'priced', 'deal', 'finish', 'failed']);
             $table->enum('status', ['OnProcess', 'OnProgress', 'Finished']);

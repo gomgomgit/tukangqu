@@ -123,7 +123,7 @@
 							<div class="col-6">
 								{{ $data->project_done }}
 								@if ($data->project_done)
-									<a href={{ Route('admin.workers.viewProjects', $data->id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a></td>	
+									<a href={{ Route('admin.projects.workerShowProjects', $data->id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a></td>	
 								@endif
 							</div>
 						</div>
@@ -141,7 +141,7 @@
 				</div>
 				<div class="row mb-2 mt-4 ml-2">
 					<div class="col my-3">
-						<a href="{{ route('admin.workers.index') }}" class="btn btn-primary "><i class="icon-copy dw dw-left-arrow1"></i> Back</a>
+						<button onclick="goBack()" class="btn btn-primary"><i class="icon-copy dw dw-left-arrow1"></i> Back</button>
 						<a class="btn btn-info px-4" href="{{ Route('admin.workers.edit', $data->id) }}">Edit</a>
 					</div>
 				</div>
@@ -149,3 +149,12 @@
 			<!-- Striped table End -->
 	</div>
 @endsection
+
+@section('script')
+<script>
+	function goBack() {
+		window.history.back()
+	}
+</script>
+@endsection
+

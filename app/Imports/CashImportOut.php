@@ -11,10 +11,14 @@ class CashImportOut implements ToModel, WithStartRow
 {
     public function model(array $row)
     {
-        if ($row[3] == 'kas') {
+        if ($row[3] == 'pengeluaran') {
             $category = 'out';
-        } elseif ($row[3] == 'pribadi') {
+        } elseif ($row[3] == 'hutang') {
             $category = 'owe';
+        } elseif ($row[3] == 'cicil') {
+            $category = 'pay';
+        } elseif ($row[3] == 'refund') {
+            $category = 'refund';
         }
 
         return new Cash([

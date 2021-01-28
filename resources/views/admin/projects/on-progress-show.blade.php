@@ -7,7 +7,7 @@
 			<div class="pd-20 card-box">
 				<div class="clearfix mb-20">
 					<div class="pull-left">
-						<h4 class="text-black h4">Detail Project</h4>
+						<h4 class="text-black h3 text-primary">Detail Proyek</h4>
 					</div>
 				</div>
 				<div class="row mx-2">
@@ -144,7 +144,7 @@
 								</div>
 								<div class="col-6">
 									@if ($data->worker)
-										{{ $data->worker->name }} <a href={{ Route('admin.workers.show', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+										{{ $data->worker->name }} <a href={{ Route('admin.projects.workerShow', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
 									@endif
 								</div>
 							</div>
@@ -263,12 +263,84 @@
 								{{ Str::ucfirst($data->process) }}
 							</div>
 						</div>
+
+						<div class="mt-5 border-bottom">
+							<div class="border-bottom mb-3 d-flex justify-content-between">
+								<h4>Aktifitas</h4>
+								<p>
+									<button id="buttonActivities" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+										Tampilkan Aktifitas
+									</button>
+								</p>
+							</div>
+
+							<div class="timeline mb-30 collapse" id="collapseExample">
+								<ul>
+									@foreach ($activities as $activity)
+										<li class="pd-10">
+											<div class="timeline-date">
+												{{Carbon\Carbon::parse($activity->created_at)->format('d-M-Y')}}
+											</div>
+											<div class="timeline-desc">
+												@if ($activity->description == 'created')
+													@if ($activity->causer)
+														<h4 class="mb-10 h5">Proyek dibuat oleh {{$activity->causer->name}}</h4>
+													@else
+														<h4 class="mb-10 h5">Proyek dibuat oleh Klien</h4>
+													@endif
+												@elseif($activity->description == 'updated')
+													<h4 class="mb-10 h5">{{$activity->causer->name}} {{'telah mengupdate data :'}}</h4>
+
+													<div class="ml-4">
+														@foreach ($activity->properties->first() as $keyold => $dataold)
+															@if ($dataold)
+																<p>
+																	<span>{{$keyold . ' dari ' . $dataold . " menjadi "}}</span>
+																	@foreach ($activity->properties->last() as $key => $data)
+																		@if ($keyold == $key)
+																				<span>{{$data}}</span>
+																		@endif
+																	@endforeach
+																</p>		
+															@else
+																<p>
+																	<span>{{$keyold . ' diisi dengan ' }}</span>
+																	@foreach ($activity->properties->last() as $key => $data)
+																		@if ($keyold == $key)
+																				<span>{{$data}}</span>
+																		@endif
+																	@endforeach
+																</p>
+															@endif
+														@endforeach
+													</div>
+												@endif
+											</div>
+										</li>
+									@endforeach
+								</ul>
+							</div>
+						</div>
+
 						<div class="mt-4">
-							<a href="{{ route('admin.projects.onProgress', $kind) }}" class="btn btn-primary">Back</a>
+							<a href="{{ route('admin.projects.onProgress', $kind) }}" class="btn btn-primary"><i class="icon-copy dw dw-left-arrow1"></i> Back</a>
 						</div>
 				</div>
 				
 			</div>
 			<!-- Striped table End -->
 	</div>
+@endsection
+
+@section('script')
+	<script>
+		var buttonActivities = false
+		$('#buttonActivities').click(function(){$('buttonActivities')
+				$(this).text(function(i,old){
+						let result = buttonActivities ?  'Tampilkan Aktifitas' : 'Sembunyikan Aktifitas'
+						buttonActivities = !buttonActivities
+						return result
+				});
+		});
+	</script>
 @endsection

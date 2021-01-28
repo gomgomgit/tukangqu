@@ -11,6 +11,7 @@ use App\Models\Worker;
 use App\Models\WorkerKind;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Spatie\Activitylog\Models\Activity;
 
 class WorkerController extends Controller
 {
@@ -85,6 +86,19 @@ class WorkerController extends Controller
         // dd($datas->first());
 
         return view('admin.workers.view-projects', compact('datas'));
+    }
+    
+    public function projectShow($id, $kind) {
+        if ($kind === 'borongan') {
+            $data = ContractProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            // dd($activities);
+        }
+        if ($kind === 'harian') {
+            $data = DailyProject::find($id);
+            $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+        }
+        return view('admin.workers.project-show', compact('data', 'kind', 'activities'));
     }
 
     /**

@@ -28,6 +28,7 @@ class CashSeeder extends Seeder
         foreach ($daily as $daily) {
             Cash::create([
                 'project_id' => $daily->id,
+                'project_type' => 'harian',
                 'name' => 'profit '. $daily->client->name,
                 'date' => $daily->finish_date,
                 'category' => 'in',
@@ -39,7 +40,8 @@ class CashSeeder extends Seeder
         foreach ($contract as $contract) {
             Cash::create([
                 'project_id' => $contract->id,
-                'name' => 'profit '. $contract->client->name,
+                'project_type' => 'borongan',
+                'name' => 'profit ' . $contract->client->name,
                 'date' => $contract->finish_date,
                 'category' => 'in',
                 'money_in' => $contract->profit,

@@ -3,6 +3,23 @@
 @section('link')
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/4.0.0/css/jasny-bootstrap.min.css">
     {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+
+    <style>
+      .placeholder-id-photo {
+        background-image: url('https://lngrisk.co.id/wp-content/themes/lng2020/assets/img/home/ktpdanaku.jpg') !important;
+        background-size: cover;
+        background-position: center;
+        width: 100%;
+        height: 200px;
+      }
+      .placeholder-self-photo {
+        background-image: url('https://i2.wp.com/help.tokotalk.com/wp-content/uploads/2020/08/identity_card_example.b686f703.jpg?resize=643%2C417&ssl=1') !important;
+        background-size: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat
+      }
+    </style>
 @endsection
 
 @section('main-content')
@@ -199,15 +216,16 @@
               <label>Upload Foto Diri</label>
               <p class="small">Berfoto dengan menampilkan diri anda sambil memperlihatkan KTP</p>
               <div>
-                <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail" style="width: 200px; height: 150px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto Anda">
+                <div class="fileinput fileinput-new w-100" data-provides="fileinput">
+                  <div class="fileinput-new img-thumbnail placeholder-id-photo" style="width: 50%; height: 400px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto KTP" class="font-weight-bold">
                   </div>
-                  <div class="fileinput-preview fileinput-exists img-thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                  <div class="fileinput-preview fileinput-exists img-thumbnail"
+                    style=" max-width: 200px; max-height: 150px;"></div>
                   <div>
                     <span class="btn btn-outline-secondary btn-file">
-                      <span class="fileinput-new">Select image</span>
-                      <span class="fileinput-exists">Change</span>
+                      <span class="fileinput-new">Pilih Foto</span>
+                      <span class="fileinput-exists">Ganti Foto</span>
                       <input type="file" name="self_photo" accept="image/*"></span>
                     <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
                   </div>
@@ -218,17 +236,17 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Upload Foto KTP</label>
-              <p class="small">Berfoto dengan menampilkan KTP keseluruhan</p>
+              <p class="small">Foto yang menampilkan KTP keseluruhan</p>
               <div>
-                <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail" style="width: 200px; height: 150px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto Anda">
+                <div class="fileinput fileinput-new w-100" data-provides="fileinput">
+                  <div class="fileinput-new img-thumbnail placeholder-self-photo" style="width: 100%; height: 300px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto Anda" class="text-white font-weight-bold">
                   </div>
                   <div class="fileinput-preview fileinput-exists img-thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                   <div>
                     <span class="btn btn-outline-secondary btn-file">
-                      <span class="fileinput-new">Select image</span>
-                      <span class="fileinput-exists">Change</span>
+                      <span class="fileinput-new">Pilih Foto</span>
+                      <span class="fileinput-exists">Ganti Foto</span>
                       <input type="file" name="id_card_photo" accept="image/*"></span>
                     <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
                   </div>

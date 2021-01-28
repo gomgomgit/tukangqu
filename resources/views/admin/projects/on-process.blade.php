@@ -28,7 +28,7 @@
 							<a class="nav-link {{ $kind === 'harian' ? 'active' : ''}}"" data-toggle="tab" href="#harian" role="tab" aria-selected="{{ $kind == 'harian' ? 'true' : 'false'}}">Harian</a>
 						</li>
 					</ul>
-					<div class="tab-content"  x-data="action()" x-init="initSelect()">
+					<div class="tab-content" x-data="action()" x-init="initSelect()">
 						<div 
 						class="pt-4 tab-pane fade {{ $kind === 'borongan' ? 'show active' : ''}}" id="borongan" role="tabpanel">
 							<table class="data-table table table-striped">

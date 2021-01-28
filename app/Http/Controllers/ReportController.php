@@ -25,7 +25,7 @@ class ReportController extends Controller
         $month_outcome = (Cash::whereYear('date', $year)->whereMonth('date', $month)->sum('money_out'));
 
         $in = Cash::where('category', 'in')->sum('money_in');
-        $out = Cash::whereIn('category', ['out', 'pay'])->sum('money_out');
+        $out = Cash::whereIn('category', ['out', 'pay', 'refund'])->sum('money_out');
 
         $total_cash = $in - $out;
 
@@ -44,6 +44,19 @@ class ReportController extends Controller
         $todaySurveys = ContractProject::where('survey_date', $now)->get();
 
         return view('admin.report.today-survey', compact('todaySurveys'));
+    }
+
+    public function viewProjects($id) 
+    {
+        $contract = ContractProject::where('city_id', $id)->orderBy('order_date', 'desc')
+            ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $daily = DailyProject::where('city_id', $id)->orderBy('order_date', 'desc')
+            ->get(['id', 'address', 'city_id', 'order_date', 'kind_project', 'project_value', 'profit', 'status', 'description']);
+        $datas = $contract->toBase()->merge($daily)->take(10);
+
+        $city = City::where('id', $id)->first();
+
+        return view('admin.report.view-projects', compact('datas', 'city'));
     }
 
 

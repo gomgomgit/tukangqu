@@ -2,7 +2,6 @@
 
 @section('main-content')
 	<div class="card-box mb-30">
-
 			<!-- Striped table start -->
 			<div class="pd-20 card-box">
 				<div class="clearfix mb-20">
@@ -110,61 +109,65 @@
 								{{ $data->kind_project }}
 							</div>
 						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Tanggal Mulai
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->start_date ? date('l, d-M-Y', strtotime($data->start_date)) : '---' }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Tanggal Selesai
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->finish_date ? date('l, d-M-Y', strtotime($data->finish_date)) : '---' }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Pekerja
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								@if ($data->worker)
+									{{ $data->worker->name }}</a>
+								@else
+									<span>---</span>
+								@endif
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								No Hp Pekerja
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+								{{ $data->worker->phone_number ?? '---'}}
+							</div>
+						</div>
 
 						@if ($kind === 'borongan')
 							<div class="row mb-2">
 								<div class="col-4 font-weight-bold">
-									Tanggal Survei
+									Nilai Project
 								</div>
 								<div class="col-1">
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->survey_date ? date('l, d-M-Y', strtotime($data->survey_date)) : '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									Waktu Survei
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->survey_time ?? '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									Surveyer
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->surveyer->name ?? '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									No Hp Surveyer
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->surveyer->phone_number ?? '---' }}
-								</div>
-							</div>
-							<div class="row mb-2">
-								<div class="col-4 font-weight-bold">
-									Nilai RAB
-								</div>
-								<div class="col-1">
-									:
-								</div>
-								<div class="col-6">
-									{{ $data->approximate_value ?? '---' }}
+									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
 								</div>
 							</div>
 						@elseif ($kind === 'harian')
@@ -176,10 +179,66 @@
 									:
 								</div>
 								<div class="col-6">
-									{{ $data->daily_value ?? '---' }}
+									Rp. {{ number_format($data->daily_value, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Gaji Harian
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->daily_salary, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Selisih
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->difference, 0, '.', '.') }}
+								</div>
+							</div>
+							<div class="row mb-2">
+								<div class="col-4 font-weight-bold">
+									Nilai Project
+								</div>
+								<div class="col-1">
+									:
+								</div>
+								<div class="col-6">
+									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
 								</div>
 							</div>
 						@endif
+
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Keuntungan
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+									Rp. {{ number_format($data->profit, 0, '.', '.') }}
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-4 font-weight-bold">
+								Keterangan
+							</div>
+							<div class="col-1">
+								:
+							</div>
+							<div class="col-6">
+									 {{ $data->description ?? '---'}}
+							</div>
+						</div>
 
 						<div class="row mb-2">
 							<div class="col-4 font-weight-bold">
@@ -194,7 +253,7 @@
 						</div>
 
 						<div class="mt-5 border-bottom">
-							<div class="border-bottom mb-3 d-flex justify-content-between">
+							<div class="col border-bottom mb-3 d-flex justify-content-between">
 								<h4>Aktifitas</h4>
 								<p>
 									<button id="buttonActivities" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -250,9 +309,8 @@
 								</ul>
 							</div>
 						</div>
-
-						<div class="mt-5">
-							<a href="{{ route('admin.projects.onProcess', $kind) }}" class="btn btn-primary"><i class="icon-copy dw dw-left-arrow1"></i> Back</a>
+						<div class="mt-4">
+							<button onclick="goBack()" class="btn btn-primary "><i class="icon-copy dw dw-left-arrow1"></i> Back</button>
 						</div>
 				</div>
 				
@@ -263,6 +321,9 @@
 
 @section('script')
 	<script>
+		function goBack() {
+			window.history.back()
+		}
 		var buttonActivities = false
 		$('#buttonActivities').click(function(){$('buttonActivities')
 				$(this).text(function(i,old){

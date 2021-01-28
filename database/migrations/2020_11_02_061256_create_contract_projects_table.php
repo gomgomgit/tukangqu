@@ -30,6 +30,7 @@ class CreateContractProjectsTable extends Migration
             $table->date('start_date')->nullable();
             $table->date('finish_date')->nullable();
             $table->integer('profit')->nullable();
+            $table->integer('refund')->nullable();
             $table->text('description')->nullable();
             $table->enum('process', ['waiting', 'scheduled', 'surveyed', 'deal', 'done', 'finish', 'failed']);
             $table->enum('status', ['OnProcess', 'OnProgress', 'Finished']);

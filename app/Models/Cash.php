@@ -12,8 +12,8 @@ class Cash extends Model
 
     use SoftDeletes;
     
-    protected $fillable = [ 
-        'project_id', 'name', 'date', 'category', 'money_in', 'money_out', 'description', 'user_id'
+    protected $fillable = [
+        'project_id', 'project_type', 'name', 'date', 'category', 'money_in', 'money_out', 'description', 'user_id'
     ];
 
     public function user() {

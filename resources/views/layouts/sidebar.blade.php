@@ -16,15 +16,20 @@
             <span class="micon dw dw-house1"></span><span class="mtext">Dashboard</span>
           </a>
         </li>
+        <li class="{{ request()->routeIs('admin.calendar*') ? 'show' : '' }}">
+          <a href="{{ route('admin.calendar') }}" class="dropdown-toggle no-arrow">
+            <span class="micon dw dw-calendar1"></span><span class="mtext">Calendar</span>
+          </a>
+        </li>
         <li class="dropdown {{ request()->routeIs('admin.projects*') ? 'show' : '' }}">
           <a href="javascript:;" class="dropdown-toggle">
             <span class="micon dw dw-city"></span><span class="mtext">Project</span>
           </a>
           <ul class="submenu"  style="display: {{ request()->routeIs('admin.projects*') ? 'block' : 'none' }}">
             <li><a class="{{ request()->routeIs('admin.projects.create') ? 'active' :'' }}" href="{{ route('admin.projects.create') }}">Tambah Project</a></li>
-            <li><a class="{{ request()->routeIs('admin.projects.onProcess') ? 'active' :'' }}" href="{{ route('admin.projects.onProcess') }}">Project On-Process</a></li>
-            <li><a class="{{ request()->routeIs('admin.projects.onProgress') ? 'active' :'' }}" href="{{ route('admin.projects.onProgress') }}">Project On-Progress</a></li>
-            <li><a class="{{ request()->routeIs('admin.projects.finished') ? 'active' :'' }}" href="{{ route('admin.projects.finished') }}">Project Finished</a></li>
+            <li><a class="{{ request()->routeIs('admin.projects.onProcess*') ? 'active' :'' }}" href="{{ route('admin.projects.onProcess') }}">Project On-Process</a></li>
+            <li><a class="{{ request()->routeIs('admin.projects.onProgress*') ? 'active' :'' }}" href="{{ route('admin.projects.onProgress') }}">Project On-Progress</a></li>
+            <li><a class="{{ request()->routeIs('admin.projects.finished*') ? 'active' :'' }}" href="{{ route('admin.projects.finished') }}">Project Finished</a></li>
           </ul>
         </li>
         <li class="dropdown {{ request()->routeIs('admin.clients*') ? 'show' : '' }}">
@@ -41,7 +46,7 @@
             <span class="micon dw dw-group"></span><span class="mtext">Tukang</span>
           </a>
           <ul class="submenu" style="display: {{ request()->routeIs('admin.workers*') ? 'block' : 'none' }}">
-            <li><a class="{{ request()->routeIs('admin.workers.index') ? 'active' :'' }}" href="{{ Route('admin.workers.index') }}">List Tukang</a></li>
+            <li><a class="{{ request()->routeIs('admin.workers.index') || request()->routeIs('admin.workers.show') || request()->routeIs('admin.workers.viewProjects') ? 'active' :'' }}" href="{{ Route('admin.workers.index') }}">List Tukang</a></li>
             <li><a class="{{ request()->routeIs('admin.workers.create') ? 'active' :'' }}" href="{{ Route('admin.workers.create') }}">Tambah Tukang</a></li>
           </ul>
         </li>
@@ -56,7 +61,7 @@
           </ul>
         </li>
         <li class="{{ request()->routeIs('admin.report') ? 'show' : '' }}">
-          <a href="{{ route('admin.report') }}" class="dropdown-toggle no-arrow">
+          <a href="{{ route('admin.report.index') }}" class="dropdown-toggle no-arrow">
             <span class="micon dw dw-analytics-10"></span><span class="mtext">Laporan</span>
           </a>
         </li>

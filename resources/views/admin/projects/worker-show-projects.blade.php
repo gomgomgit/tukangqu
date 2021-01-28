@@ -40,7 +40,7 @@
 								<td class="text-center">{{ $data->project_value ?? '---' }}</td>
 								<td class="text-center">{{ $data->profit ?? '---' }}</td>
 								<td>
-									<a class="btn btn-primary py-1 px-3" href="{{ Route('admin.workers.projectShow', [$data->id, Str::lower($data->kind)]) }}">View</a>
+									<a class="btn btn-primary py-1 px-3" href="{{ Route('admin.projects.finishedShow', [$data->id, Str::lower($data->kind)]) }}">View</a>
 									{{-- <div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 											<i class="dw dw-more"></i>
@@ -89,4 +89,5 @@
 				window.history.back()
 			}
 		</script>
+
 @endsection

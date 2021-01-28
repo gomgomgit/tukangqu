@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('link')
+		<link rel="stylesheet" href="{{ asset('css/c-modal.css') }}">
+@endsection
+
 @section('main-content')
 	<div class="card-box mb-30">
 
@@ -23,7 +27,7 @@
 							<a class="nav-link {{ $kind === 'harian' ? 'active' : ''}}"" data-toggle="tab" href="#harian" role="tab" aria-selected="{{ $kind == 'harian' ? 'true' : 'false'}}">Harian</a>
 						</li>
 					</ul>
-					<div class="tab-content">
+					<div class="tab-content" x-data="action()">
 						<div 
 						class="pt-4 tab-pane fade {{ $kind === 'borongan' ? 'show active' : ''}}" id="borongan" role="tabpanel">
 							<table class="data-table table table-striped">
@@ -37,6 +41,7 @@
 											<th scope="col" class="border-0">Pekerja</th>
 											<th scope="col" class="border-0">Nilai Proyek</th>
 											<th scope="col" class="border-0">Keuntungan</th>
+											<th scope="col" class="border-0">Refund</th>
 											<th scope="col" class="border-0">Status</th>
 											<th scope="col" class="border-0 datatable-nosort">Action</th>
 										</tr>
@@ -52,9 +57,16 @@
 												<td>{{ $data->address }}</td>
 												<td>{{ $data->kind_project }}</td>
 												<td>{{ $data->start_date }} - {{ $data->finish_date }}</td>
-												<td>{{ $data->worker->name ?? '---' }}</td>
+												<td>
+													@if ($data->worker)
+														{{ $data->worker->name }} <a href={{ Route('admin.projects.workerShow', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@else
+														<span>---</span> 
+													@endif 
+												</td>
 												<td>{{ $data->project_value }}</td>
 												<td>{{ $data->profit }}</td>
+												<td>{{ $data->refund ?? ' --- ' }}</td>
 												<td><span class="badge badge-{{ $data->process === 'finish' ? 'success' : 'danger' }}">
 													{{ Str::ucfirst($data->process) }}
 												</span></td>
@@ -64,6 +76,7 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<button class="dropdown-item" @click="cRefundId = {{$data->id}}"><i class="dw dw-money-2"></i> Refund</button>
 															<a class="dropdown-item" href="{{ Route('admin.projects.finishedShow', [$data->id, 'borongan']) }}"><i class="dw dw-eye"></i> View</a>
 															<a class="dropdown-item" href="{{ Route('admin.projects.edit', [$data->id, 'borongan']) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
@@ -81,6 +94,37 @@
 										@endforeach
 									</tbody>
 								</table>
+
+								<div x-show="cRefundId" class="" tabindex="-1"  style="display: none">
+									<div class="modal-background">
+
+										<div @click.away="cRefundId = null" class="modal-dialog modal-dialog-centered modal">
+											<div class="modal-content">
+												<form :action="'/admin/projects/finished/'+ cRefundId +'/refund/borongan'" method="POST">
+													@csrf
+													<div class="modal-header">
+														<h4 class="modal-title" id="myLargeModalLabel">Refund</h4>
+														<button @click="cRefundId = null" type="button" type="button" class="close">×</button>
+													</div>
+													<div class="modal-body">
+														<div class="form-group">
+															<label>Jumlah </label>
+															<input class="form-control" type="number" name="refund" required>
+														</div>
+														<div class="form-group">
+															<label>Ket </label>
+															<textarea class="form-control" type="number" name="description" height=150 ></textarea>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<span @click="cRefundId = null" type="button" class="btn btn-secondary">Close</span>
+														<button class="btn btn-info">Refund</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
 						</div>
 
 						<div
@@ -98,6 +142,7 @@
 											<th scope="col" class="border-0">Pekerja</th>
 											<th scope="col" class="border-0">Nilai Proyek</th>
 											<th scope="col" class="border-0">Keuntungan</th>
+											<th scope="col" class="border-0">Refund</th>
 											<th scope="col" class="border-0">Status</th>
 											<th scope="col" class="border-0 datatable-nosort">Action</th>
 										</tr>
@@ -117,9 +162,16 @@
 													<p>{{ $data->finish_date }}</p>
 												</td>
 												<td>{{ $data->daily_value }}</td>
-												<td>{{ $data->worker->name ?? '---' }}</td>
+												<td>
+													@if ($data->worker)
+														{{ $data->worker->name }} <a href={{ Route('admin.projects.workerShow', $data->worker_id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@else
+														<span>---</span> 
+													@endif 
+												</td>
 												<td>{{ $data->project_value }}</td>
 												<td>{{ $data->profit }}</td>
+												<td>{{ $data->refund ?? ' --- ' }}</td>
 												<td><span class="badge badge-{{ $data->process === 'finish' ? 'success' : 'danger' }}">
 													{{ $data->process === 'finish' ? 'Finish' : 'Failed' }}
 												</span></td>
@@ -129,6 +181,7 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<button class="dropdown-item" @click="dRefundId = {{$data->id}}"><i class="dw dw-money-2"></i> Refund</button>
 															<a class="dropdown-item" href="{{ Route('admin.projects.finishedShow', [$data->id, 'harian']) }}"><i class="dw dw-eye"></i> View</a>
 															<a class="dropdown-item" href="{{ Route('admin.projects.edit', [$data->id, 'harian']) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
@@ -146,6 +199,37 @@
 										@endforeach
 									</tbody>
 								</table>
+
+								<div x-show="dRefundId" class="" tabindex="-1"  style="display: none">
+									<div class="modal-background">
+
+										<div @click.away="dRefundId = null" class="modal-dialog modal-dialog-centered modal">
+											<div class="modal-content">
+												<form x-bind:action="'/admin/projects/on-process/'+ dRefundId +'/pricing/borongan'" method="POST">
+													@csrf
+													<div class="modal-header">
+														<h4 class="modal-title" id="myLargeModalLabel">Refund</h4>
+														<button @click="dRefundId = null" type="button" type="button" class="close">×</button>
+													</div>
+													<div class="modal-body">
+														<div class="form-group">
+															<label>Jumlah </label>
+															<input class="form-control" type="number" name="refund" required>
+														</div>
+														<div class="form-group">
+															<label>Ket </label>
+															<textarea class="form-control" type="number" name="description" height=150 ></textarea>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<span @click="dRefundId = null" type="button" class="btn btn-secondary">Close</span>
+														<button class="btn btn-info">Refund</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
 							{{-- </div> --}}
 						</div>
 					</div>
@@ -173,5 +257,16 @@
 		<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js') }}"></script>
 		<!-- Datatable Setting js -->
 		<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js') }}"></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+		<script>
+			function action() {
+				return {
+					cRefundId : null,
+					dRefundId : null,
+				}
+			}
+		</script>
 
 @endsection

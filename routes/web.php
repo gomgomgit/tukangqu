@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CashController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\SurveyNotificationController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,16 +52,25 @@ Route::prefix('/admin')->name('admin.')->group(function() {
     });
     
     Route::group(['middleware' => ['auth']], function () {
+        Route::get('/test', [TestController::class, 'log'])->name('testLog');
+        Route::get('/check', [TestController::class, 'checklog'])->name('checkLog');
+
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/schedules', [DashboardController::class, 'dashboardSchedules'])->name('dashboardSchedules');
 
-        Route::get('/report', [ReportController::class, 'index'])->name('report');
-        Route::get('/report/today-survey', [ReportController::class, 'todaySurvey'])->name('reportTodaySurvey');
+        Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+
+        Route::prefix('/report')->name('report.')->group( function() {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            // Route::get('/report/today-survey', [ReportController::class, 'todaySurvey'])->name('reportTodaySurvey');
+            Route::get('/view-projects/{id}', [ReportController::class, 'viewProjects'])->name('viewProjects');
+        });
 
         Route::resource('workers', WorkerController::class);
         Route::get('/workers/view-projects/{id}', [WorkerController::class, 'viewProjects'])->name('workers.viewProjects');
+        Route::get('/workers/project-show/{id}/{kind}', [WorkerController::class, 'projectShow'])->name('workers.projectShow');
         // Route::resource('projects', ProjectController::class);
 
         Route::resource('clients', ClientController::class);
@@ -72,6 +83,9 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             Route::post('/store', [ProjectController::class, 'store'])->name('store');
             Route::get('/edit/{id}/{kind}', [ProjectController::class, 'edit'])->name('edit');
             Route::post('/update/{id}/{kind}', [ProjectController::class, 'update'])->name('update');
+
+            Route::get('/worker-show/{id}', [ProjectController::class, 'workerShow'])->name('workerShow');
+            Route::get('/worker-show-projects/{id}', [ProjectController::class, 'workerShowProjects'])->name('workerShowProjects');
 
             Route::get('/on-process/{kind?}', [ProjectController::class, 'onProcess'])->name('onProcess');
             Route::get('/on-process/{id}/show/{kind?}', [ProjectController::class, 'onProcessShow'])->name('onProcessShow');
@@ -91,6 +105,7 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             
             Route::get('/finished/{kind?}', [ProjectController::class, 'finished'])->name('finished');
             Route::get('/finished/{id}/show/{kind?}', [ProjectController::class, 'finishedShow'])->name('finishedShow');
+            Route::post('/finished/{id}/refund/{kind?}', [ProjectController::class, 'finishedRefund'])->name('finishedRefund');
             
             Route::delete('/destroy/{id}/{kind?}', [ProjectController::class, 'destroy'])->name('destroy');
         });
@@ -111,6 +126,8 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             Route::put('/updateout/{id}', [CashController::class, 'updateout'])->name('updateout');
             Route::delete('/destroy/{id}', [CashController::class, 'destroy'])->name('destroy');
 
+            Route::get('/project-show/{id}/{kind}', [CashController::class, 'projectShow'])->name('projectShow');
+
             Route::get('/export/out/{month}', [CashController::class, 'exportOut'])->name('exportOut');
             Route::get('/export/in/{month}', [CashController::class, 'exportIn'])->name('exportIn');
             Route::get('/export/debt/{month}', [CashController::class, 'exportDebt'])->name('exportDebt');
@@ -118,6 +135,12 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             Route::get('/export-view/out/{month?}', [CashController::class, 'exportViewOut'])->name('exportViewOut');
             Route::get('/export-view/in/{month?}', [CashController::class, 'exportViewIn'])->name('exportViewIn');
             Route::get('/export-view/debt/{month?}', [CashController::class, 'exportViewDebt'])->name('exportViewDebt');
+
+            Route::get('/export-template/out', [CashController::class, 'exportTemplateOut'])->name('exportTemplateOut');
+            Route::get('/export-template/in', [CashController::class, 'exportTemplateIn'])->name('exportTemplateIn');
+            
+            Route::get('/export-template-view/out', [CashController::class, 'exportTemplateViewOut'])->name('exportTemplateViewOut');
+            Route::get('/export-template-view/in', [CashController::class, 'exportTemplateViewIn'])->name('exportTemplateViewIn');
 
             Route::get('/import', [CashController::class, 'import'])->name('import');
             Route::post('/import/in', [CashController::class, 'importIn'])->name('importIn');

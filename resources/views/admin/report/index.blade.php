@@ -13,7 +13,7 @@
 			$formatyear = Carbon\Carbon::now()->subMonths($i)->format('Y');
 			$listmonthProjects[] = (App\Models\ContractProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count()) + (App\Models\DailyProject::whereMonth('order_date', $formatmonth)->whereYear('order_date',$formatyear)->count());
 			$listmonthIncome[] = (App\Models\Cash::where('category', 'in')->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_in'));
-			$listmonthOutcome[] = (App\Models\Cash::whereIn('category', ['out', 'owe'])->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_out'));
+			$listmonthOutcome[] = (App\Models\Cash::whereIn('category', ['out', 'owe', 'refund'])->whereMonth('date', $formatmonth)->whereYear('date',$formatyear)->sum('money_out'));
 	};
 
 @endphp
@@ -23,7 +23,7 @@
 		<div class="col-12 mb-30">
 			<div class="card-box pd-20">
 				@if ($surveyCount > 0)
-					<p class="text-center mb-0"><span class="h3">Ada {{ $surveyCount }} Jadwal Survei Hari Ini! </span> <a class="text-primary text-sm" href="{{ route('admin.reportTodaySurvey') }}">cek jadwal survei</a></p>
+					<p class="text-center mb-0"><span class="h3">Ada {{ $surveyCount }} Jadwal Survei Hari Ini! </span> <a class="text-primary text-sm" href="{{ route('admin.report.indexTodaySurvey') }}">cek jadwal survei</a></p>
 				@else			
 					<h5 class="text-center">Tidak Ada Jadwal Survei Hari Ini!</h5>
 				@endif
@@ -153,6 +153,7 @@
 							<th scope="col">Nama</th>
 							<th scope="col">Banyak Project</th>
 							<th scope="col">Project Selesai</th>
+							<th scope="col">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -162,7 +163,9 @@
 						@foreach ($most_city as $city)
 							<tr>
 								<th scope="row">{{ $no++ }}</th>
-								<td>{{ $city->name }}, {{ $city->province->name }}</td>
+								<td>
+									{{ $city->name }}, {{ $city->province->name }}
+								</td>
 								<td>
 									<span class="badge badge-info" style="font-size: 14px">{{ Str::ucfirst($city->countprojects) }}</span>
 								</td>
@@ -170,6 +173,9 @@
 									<span class="badge badge-primary" style="font-size: 14px">
 										{{ Str::ucfirst($city->contractprojects()->where('status', 'Finished')->count() + $city->dailyprojects()->where('status', 'Finished')->count()) }}
 									</span>
+								</td>
+								<td>
+									<a class="btn btn-info btn-sm" href={{ Route('admin.report.viewProjects', $city->id) }}><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i> Detail</a>
 								</td>
 							</tr>
 						@endforeach

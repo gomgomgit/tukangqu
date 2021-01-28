@@ -91,6 +91,10 @@
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
 										<div class="modal-body">
+											<div class="form-group">
+												<p>Template</p>
+												<a href="{{route('admin.cashes.exportTemplateIn')}}" class="btn btn-sm btn-primary w-100"><i class="icon-copy dw dw-download text-white"></i> Download Template </a>
+											</div>
 											<form id="import-in" action="{{ route('admin.cashes.importIn') }}" method="POST" enctype="multipart/form-data">
 											@csrf
 												<div class="form-group">
@@ -115,7 +119,11 @@
 											<h4 class="modal-title" id="myLargeModalLabel">Import Pengeluaran</h4>
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										</div>
-										<div class="modal-body">
+										<div class="modal-body">	
+											<div class="form-group">
+												<p>Template</p>
+												<a href="{{route('admin.cashes.exportTemplateOut')}}" class="btn btn-sm btn-primary w-100"><i class="icon-copy dw dw-download text-white"></i> Download Template </a>
+											</div>
 												<form id="import-out" action="{{ route('admin.cashes.importOut') }}" method="POST" enctype="multipart/form-data">
 												@csrf
 													<div class="form-group">
@@ -239,10 +247,18 @@
 												<th scope="row">{{ $no++ }}</th>
 												<td>
 													{{ $data->name }}
-													<a href="{{ Route('admin.projects.finishedShow', [$data->project_id, Str::lower($data->description)]) }}"><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@if($data->project_id)
+														<a href="{{ Route('admin.cashes.projectShow', [$data->project_id, Str::lower($data->project_type)]) }}"><i class="icon-copy fa fa-info-circle" aria-hidden="true"></i></a>
+													@endif
 												</td>
 												<td>{{ date('l, d-M-Y', strtotime($data->date)) }}</td>
-												<td>Rp {{ $data->projectvalue }}</td>
+												<td>
+													@if($data->projectvalue)
+														Rp {{ $data->projectvalue }}
+													@else
+														---
+													@endif
+												</td>
 												<td>Rp {{ $data->money_in }}</td>
 												<td>
 													<div class="dropdown">
@@ -274,10 +290,10 @@
 										<tr>
 											<th scope="col" class="border-0">#</th>
 											<th scope="col" class="border-0">Nama</th>
+											<th scope="col" class="border-0">Kategori</th>
 											<th scope="col" class="border-0">Tanggal</th>
 											<th scope="col" class="border-0">User</th>
 											<th scope="col" class="border-0">Keluar</th>
-											<th scope="col" class="border-0">Pengeluaran</th>
 											<th scope="col" class="border-0">Action</th>
 										</tr>
 									</thead>
@@ -289,15 +305,17 @@
 											<tr>
 												<th scope="row">{{ $no++ }}</th>
 												<td>{{ $data->name }}</td>
+												<td>
+													{{ $data->category == 'out' ? 'Pengeluaran' : '' }}
+													{{ $data->category == 'owe' ? 'Hutang' : '' }}
+													{{ $data->category == 'pay' ? 'Cicil' : '' }}
+													{{ $data->category == 'refund' ? 'Refund' : '' }}
+												</td>
 												<td>{{ date('l, d-M-Y', strtotime($data->date)) }}</td>
 												<td>
 													{{ $data->user->name ?? '---' }}
 												</td>
 												<td>Rp {{ $data->money_out }}</td>
-												<td>
-													{{ $data->category == 'out' ? 'Kas' : '' }}
-													{{ $data->category == 'owe' ? 'Pribadi' : '' }}
-												</td>
 												<td>
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
