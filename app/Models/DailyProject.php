@@ -16,7 +16,8 @@ class DailyProject extends Model
     protected static $logAttributes =
     [
         'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'daily_value',
-        'worker_id', 'daily_salary', 'start_date', 'finish_date', 'project_value', 'description', 'profit', 'refund'
+        'worker_id', 'daily_salary', 'start_date', 'finish_date', 'project_value', 'description', 'profit', 'refund',
+        'status', 'process'
     ];
 
     protected static $logOnlyDirty = true;

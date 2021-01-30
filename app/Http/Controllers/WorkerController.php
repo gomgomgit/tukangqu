@@ -57,6 +57,8 @@ class WorkerController extends Controller
         $data['self_photo'] = $request->file('self_photo')->store('assets/images/worker', 'public');
         $data['id_card_photo'] = $request->file('id_card_photo')->store('assets/images/workeridcard', 'public');
 
+        dd($request->file('self_photo'));
+
         $worker_id = Worker::create($data);
         $worker_id->skills()->sync($request->skill);
         return redirect()->route('admin.workers.index');

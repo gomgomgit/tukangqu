@@ -15,7 +15,8 @@ class ContractProject extends Model
     protected static $logAttributes =
     [
         'client_id', 'order_date', 'address', 'province_id', 'city_id', 'kind_project', 'survey_date', 'survey_time',
-        'surveyer_id', 'approximate_value', 'project_value', 'worker_id', 'start_date', 'finish_date', 'profit', 'refund', 'description'
+        'surveyer_id', 'approximate_value', 'project_value', 'worker_id', 'start_date', 'finish_date', 'profit', 'refund', 'description',
+        'status', 'process'
     ];
 
     protected static $logOnlyDirty = true;

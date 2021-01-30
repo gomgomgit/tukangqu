@@ -108,6 +108,8 @@ Route::prefix('/admin')->name('admin.')->group(function() {
             Route::post('/finished/{id}/refund/{kind?}', [ProjectController::class, 'finishedRefund'])->name('finishedRefund');
             
             Route::delete('/destroy/{id}/{kind?}', [ProjectController::class, 'destroy'])->name('destroy');
+
+            Route::get('/project/{id}/show/{kind?}', [ProjectController::class, 'finishedShow'])->name('projectShow');
         });
 
         Route::prefix('/cashes')->name('cashes.')->group(function() {

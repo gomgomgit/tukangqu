@@ -27,6 +27,7 @@ class CreateDailyProjectsTable extends Migration
             $table->date('start_date')->nullable();
             $table->date('finish_date')->nullable();
             $table->integer('project_value')->nullable();
+            $table->integer('project_value_temp')->nullable();
             $table->integer('profit')->nullable();
             $table->integer('refund')->nullable();
             $table->text('description')->nullable();

@@ -10,6 +10,6 @@ class PaymentTerm extends Model
     use HasFactory;
 
     protected $fillable = [
-        'project_id', 'kind_project', 'date', 'amount'
+        'project_id', 'kind_project', 'date', 'amount', 'evidence'
     ];
 }

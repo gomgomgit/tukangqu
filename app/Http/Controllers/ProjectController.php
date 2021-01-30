@@ -229,6 +229,7 @@ class ProjectController extends Controller
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
             $data->profit = $data->totalprofit;
+            $data->project_value = $data->project_value_temp;
             $data->finish_date = Carbon::now()->format('y-m-d');
             $data->process = 'finish';
         }
@@ -394,6 +395,8 @@ class ProjectController extends Controller
             $data = DailyProject::find($id);
             $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
         }
+
+        // dd($activities);
         return view('admin.projects.finished-show', compact('data', 'kind', 'activities'));
     }
 

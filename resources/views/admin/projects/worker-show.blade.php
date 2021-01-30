@@ -142,7 +142,7 @@
 				<div class="row mb-2 mt-4 ml-2">
 					<div class="col my-3">
 						<button onclick="goBack()" class="btn btn-primary"><i class="icon-copy dw dw-left-arrow1"></i> Back</button>
-						<a class="btn btn-info px-4" href="{{ Route('admin.workers.edit', $data->id) }}">Edit</a>
+						{{-- <a class="btn btn-info px-4" href="{{ Route('admin.workers.edit', $data->id) }}">Edit</a> --}}
 					</div>
 				</div>
 			</div>

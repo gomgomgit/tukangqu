@@ -291,13 +291,13 @@
 													<div class="col-6">
 														<div class="form-group">
 															<label>Kas</label>
-															<input class="form-control" type="number" name="amount_cash" :max="maxCSharingCash" x-on:change="setMaxCSharingCash()" x-model="cSharingCash" required>
+															<input class="form-control" type="number" name="amount_cash" :max="maxCSharingCash" x-on:keyup="setMaxCSharingCash()" x-model="cSharingCash" required>
 														</div>
 													</div>
 													<div class="col-6">
 														<div class="form-group">
 															<label>Pekerja</label>
-															<input class="form-control" type="number" name="amount_worker" :max="maxCSharingWorker" x-on:change="setMaxCSharingWorker()" x-model="cSharingWorker" required>
+															<input class="form-control" type="number" name="amount_worker" :max="maxCSharingWorker" x-on:keyup="setMaxCSharingWorker()" x-model="cSharingWorker" required>
 														</div>
 													</div>
 												</div>
@@ -475,8 +475,9 @@
 																	<td x-text="termin.date"></td>
 																	<td x-text="termin.amount"></td>
 																	<td>
-																		<a href="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" data-fancybox="gallery" data-caption="Caption for single image">
-																			<img width="80" height="80" src="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" alt="" />
+																		<a :href="'/storage/' + termin.evidence" data-fancybox="gallery" data-caption="Caption for single image">
+																			{{-- <img width="80" height="80" src="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" alt="" /> --}}
+																			<img width="80" height="80" :src="'/storage/' + termin.evidence" alt="Not Found" />
 																		</a>
 																	</td>
 																</tr>
@@ -516,7 +517,7 @@
 							<div class="modal-background" tabindex="-1">
 								<div class="modal-dialog modal modal-dialog-centered modal">
 									<div class="modal-content">
-										<form>
+										<form @submit.prevent="storeCTermin" enctype="multipart/form-data">
 											<div class="modal-header">
 												<h4 class="modal-title" id="myLargeModalLabel">Tambah Termin</h4>
 												<button @click="addCTermin = !(addCTermin)" type="button" class="close">×</button>
@@ -533,10 +534,14 @@
 														<label>Jumlah</label>
 														<input class="form-control" x-model="amountCTermin" type="number" name="amount" :value="remainCTermin" :max="remainCTermin" required>
 													</div>
+													<div class="form-group">
+														<label>Bukti Transfer</label>
+														<input @change="addCTerminImage" class="form-control" type="file" name="evidence" accept="image/*" required>
+													</div>
 											</div>
 											<div class="modal-footer">
 												<span @click="addCTermin = !(addCTermin)" type="button" class="btn btn-secondary">Close</span>
-												<button @click="storeCTermin" x-on:click.prevent class="btn btn-info">Tambah</button>
+												<button class="btn btn-info">Tambah</button>
 											</div>
 										</form>
 										{{-- <form x-bind:action="'/admin/projects/on-progress/'+ cTerminId +'/add-payment-fee/borongan'" method="POST">
@@ -780,6 +785,7 @@
 														<th scope="col" class="border-0">#</th>
 														<th scope="col" class="border-0">Tanggal</th>
 														<th scope="col" class="border-0">Jumlah</th>
+														<th scope="col" class="border-0">Bukti Transfer</th>
 													</tr>
 												</thead>
 
@@ -790,6 +796,12 @@
 																	<th scope="row" x-text="index + 1">1</th>
 																	<td x-text="termin.date"></td>
 																	<td x-text="termin.amount"></td>
+																	<td>
+																		<a :href="'/storage/' + termin.evidence" data-fancybox="gallery" data-caption="Caption for single image">
+																			{{-- <img width="80" height="80" src="https://media.karousell.com/media/photos/products/2018/05/03/ni_tipu_tipu_bukti_transfer_1525313387_eb9b1701.jpg" alt="" /> --}}
+																			<img width="80" height="80" :src="'/storage/' + termin.evidence" alt="Not Found" />
+																		</a>
+																	</td>
 																</tr>
 															</template>
 													</tbody>
@@ -835,6 +847,10 @@
 													<div class="form-group">
 														<label>Jumlah</label>
 														<input class="form-control" x-model="amountDTermin" type="number" name="amount" required>
+													</div>
+													<div class="form-group">
+														<label>Bukti Transfer</label>
+														<input @change="addDTerminImage" class="form-control" type="file" name="evidence" accept="image/*" required>
 													</div>
 											</div>
 											<div class="modal-footer">
@@ -966,7 +982,7 @@
 													<div class="col-6">
 														<div class="form-group">
 															<label>Jumlah Hari Masuk</label>
-															<input class="form-control" x-model="dDayAmount" @change="setDDayAmount" type="number" name="day_amount" :max="maxDDayAmount" required>
+															<input class="form-control" x-model="dDayAmount" @change="setDDayAmount" @keyup="setDDayAmount" type="number" name="day_amount" :max="maxDDayAmount" required>
 														</div>
 													</div>
 												</div>
@@ -1068,6 +1084,7 @@
 					cTermins: [],
 					addCTermin: null,
 					remainCTermin:0,
+					cTerminImage: ' ',
 
 					dateCTermin: null,
 					amountCTermin: 0,
@@ -1102,6 +1119,7 @@
 					dTermins: [],
 					addDTermin: null,
 					remainDTermin:0,
+					cTerminImage: ' ',
 
 					dateDTermin: null,
 					amountDTermin: 0,
@@ -1236,20 +1254,36 @@
 						}) 
 					},
 
-					storeCTermin() {
-						const self = this;
-						let terminData = {
-							'project_id' : this.cProject.id,
-							'kind_project' : 'contract',
-							'date' : this.dateCTermin,
-							'amount' : this.amountCTermin,
-						};
+					addCTerminImage(e) {
+        		this.cTerminImage = e.target.files[0]
+					},
 
-						axios.post('{{ url("/api/store-termin") }}', terminData)
+					storeCTermin() {
+						console.log(this.cTerminImage);
+						const self = this;
+
+						let formData = new FormData();
+
+						formData.append("project_id", self.cProject.id);
+						formData.append("kind_project", 'contract');
+						formData.append("date", self.dateCTermin);
+						formData.append("amount", self.amountCTermin);
+						formData.append("image", self.cTerminImage);
+
+						console.log(formData);
+
+						axios.post('{{ url("/api/store-termin") }}', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                }
+            })
 						.then(function(){
 							self.setCTerminId(self.cProject.id);
 							self.addCTermin = !self.addCTermin;
 						})
+						.catch(err => {
+								console.log(err.message)
+						});
 					},
 
 					setCSharingId(id) {
@@ -1380,20 +1414,48 @@
 						}) 
 					},
 
+					addDTerminImage(e) {
+        		this.dTerminImage = e.target.files[0]
+					},
+
 					storeDTermin() {
 						const self = this;
-						let terminData = {
-							'project_id' : this.dProject.id,
-							'kind_project' : 'daily',
-							'date' : this.dateDTermin,
-							'amount' : this.amountDTermin,
-						};
 
-						axios.post('{{ url("/api/store-termin") }}', terminData)
+						let formData = new FormData();
+
+						formData.append("project_id", self.dProject.id);
+						formData.append("kind_project", 'daily');
+						formData.append("date", self.dateDTermin);
+						formData.append("amount", self.amountDTermin);
+						formData.append("image", self.dTerminImage);
+
+						console.log(formData);
+
+						axios.post('{{ url("/api/store-termin") }}', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                }
+            })
 						.then(function(){
 							self.setDTerminId(self.dProject.id);
 							self.addDTermin = !self.addDTermin;
 						})
+						.catch(err => {
+								console.log(err.message)
+						});
+
+						// let terminData = {
+						// 	'project_id' : this.dProject.id,
+						// 	'kind_project' : 'daily',
+						// 	'date' : this.dateDTermin,
+						// 	'amount' : this.amountDTermin,
+						// };
+
+						// axios.post('{{ url("/api/store-termin") }}', terminData)
+						// .then(function(){
+						// 	self.setDTerminId(self.dProject.id);
+						// 	self.addDTermin = !self.addDTermin;
+						// })
 					},
 
 					setDSharingId(id) {
@@ -1401,7 +1463,9 @@
 						this.getDataDProject(id);
 						this.getDataDSharing();
 						this.setDTotalSharing();
-						var myDatepicker = $('#dSharing').datepicker().data('datepicker');
+						var myDatepicker = $('#dSharing').datepicker({
+							autoClose: true
+						}).data('datepicker');
 						myDatepicker.clear();
 						this.dWeeklyBills = 0;
 					},
@@ -1508,6 +1572,7 @@
 			$('#dSharing').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onRenderCell: function (date, cellType) {
 							if (cellType == 'day') {
 									var day = date.getDay(),
@@ -1521,13 +1586,14 @@
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectDSharingDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
-						clear()
+						// clear()
 					},
 			});
 
 			$('#cTerminDate').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectCTerminDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
@@ -1537,6 +1603,7 @@
 			$('#cBillingDate').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectCBillingDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
@@ -1546,6 +1613,7 @@
 			$('#cSharingDate').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectCSharingDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
@@ -1555,6 +1623,7 @@
 			$('#dBillingDate').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectDBillingDate', { detail: formattedDate })
 						window.dispatchEvent(ev)
@@ -1564,6 +1633,7 @@
 			$('#dTerminDate').datepicker({
 					language: 'en',
 					dateFormat: 'yyyy-m-d',
+					autoClose: true,
 					onSelect(formattedDate, date, inst) {
 						const ev = new CustomEvent('selectDTerminDate', { detail: formattedDate })
 						window.dispatchEvent(ev)

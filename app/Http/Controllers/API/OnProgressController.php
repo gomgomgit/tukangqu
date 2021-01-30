@@ -55,7 +55,18 @@ class OnProgressController extends Controller
     }
 
     public function storeTermin(Request $request) {
-        PaymentTerm::create($request->all());
+
+        $data = $request->all();
+        
+        // $file = $request->file('evidence');
+        // $name = '/avatars/' . uniqid() . '.' . $file->extension();
+        // $file->storePubliclyAs('public', $name);
+        // $data['evidence'] = $name;
+
+        $data['evidence'] = $request->image->store('assets/images/termin', 'public');
+        // $data['evidence'] = 'not found';
+
+        PaymentTerm::create($data);
 
         return true;
     }
@@ -75,7 +86,8 @@ class OnProgressController extends Controller
         Profit::create($request->all());
         if($request->kind_project == 'daily') {
             $data = DailyProject::find($request->project_id);
-            $data->project_value = $request->total_all + $request->amount_total;
+            $data->project_value_temp = $request->total_all + $request->amount_total;
+            $data->disableLogging();
             $data->save();
         }
 

@@ -220,6 +220,7 @@
           <h2 class="h3 d-inline-block mb-4">Dokumen</h2>
         </div>
         
+        
         <div class="row">
           {{--  --}}
           <div class="col-md-6">
@@ -227,15 +228,16 @@
               <label>Upload Foto Diri</label>
               <p class="small">Berfoto dengan menampilkan diri anda sambil memperlihatkan KTP</p>
               <div>
-                <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail" style="width: 200px; height: 150px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto Anda">
+                <div class="fileinput fileinput-new w-100" data-provides="fileinput">
+                  <div class="fileinput-new img-thumbnail placeholder-id-photo" style="width: 50%; height: 400px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto KTP" class="font-weight-bold">
                   </div>
-                  <div class="fileinput-preview fileinput-exists img-thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                  <div class="fileinput-preview fileinput-exists img-thumbnail"
+                    style=" max-width: 200px; max-height: 150px;"></div>
                   <div>
                     <span class="btn btn-outline-secondary btn-file">
-                      <span class="fileinput-new">Select image</span>
-                      <span class="fileinput-exists">Change</span>
+                      <span class="fileinput-new">Pilih Foto</span>
+                      <span class="fileinput-exists">Ganti Foto</span>
                       <input type="file" name="self_photo" accept="image/*"></span>
                     <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
                   </div>
@@ -246,17 +248,17 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Upload Foto KTP</label>
-              <p class="small">Berfoto dengan menampilkan KTP keseluruhan</p>
+              <p class="small">Foto yang menampilkan KTP keseluruhan</p>
               <div>
-                <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail" style="width: 200px; height: 150px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto Anda">
+                <div class="fileinput fileinput-new w-100" data-provides="fileinput">
+                  <div class="fileinput-new img-thumbnail placeholder-self-photo" style="width: 100%; height: 300px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto Anda" class="text-white font-weight-bold">
                   </div>
                   <div class="fileinput-preview fileinput-exists img-thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                   <div>
                     <span class="btn btn-outline-secondary btn-file">
-                      <span class="fileinput-new">Select image</span>
-                      <span class="fileinput-exists">Change</span>
+                      <span class="fileinput-new">Pilih Foto</span>
+                      <span class="fileinput-exists">Ganti Foto</span>
                       <input type="file" name="id_card_photo" accept="image/*"></span>
                     <a href="#" class="btn btn-outline-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
                   </div>

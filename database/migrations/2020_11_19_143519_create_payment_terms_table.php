@@ -19,6 +19,7 @@ class CreatePaymentTermsTable extends Migration
             $table->enum('kind_project', ['contract', 'daily']);
             $table->date('date');
             $table->integer('amount');
+            $table->string('evidence');
             $table->timestamps();
         });
     }
