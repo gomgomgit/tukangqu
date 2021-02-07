@@ -482,6 +482,10 @@ class ProjectController extends Controller
      */
     public function destroy($id, $kind = 'borongan')
     {
+        if (auth()->user()->role == 'operator') {
+            abort(401);
+        }
+
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
         }

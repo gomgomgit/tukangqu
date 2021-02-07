@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:admin,operator')->only('index', 'show', 'edit', 'update');
+        $this->middleware('permission:admin')->only('create', 'delete' );
+    }
     /**
      * Display a listing of the resource.
      *
@@ -69,6 +74,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if (auth()->user()->role == 'operator' && $id != auth()->id()) {
+            abort(401);
+        }
+
         $data = User::find($id);
         
         return view('admin.users.edit', compact('data'));
@@ -83,6 +92,10 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->role == 'operator' && $id != auth()->id()) {
+            abort(401);
+        }
+
         $data = $request->all();
 
         $user = User::find($id);
@@ -101,6 +114,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        if (auth()->user()->role == 'operator' && $id != auth()->id()) {
+            abort(401);
+        }
+        
         User::find($id)->delete();
         return redirect()->back();
     }

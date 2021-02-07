@@ -49,4 +49,13 @@ class User extends Authenticatable
 
         return $owe - $pay;
     }
+    
+    public function hasRole($roles)
+    {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
+
+        return in_array(auth()->user()->role, $roles);
+    }
 }
