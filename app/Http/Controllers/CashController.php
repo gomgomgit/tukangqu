@@ -195,6 +195,10 @@ class CashController extends Controller
      */
     public function destroy($id)
     {
+        if (auth()->user()->role == 'operator') {
+            abort(401);
+        }
+        
         Cash::find($id)->delete();
         
         return redirect()->back();

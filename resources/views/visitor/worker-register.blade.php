@@ -33,6 +33,23 @@
 
 		gtag('config', 'UA-119386393-1');
 	</script>
+
+  <style>
+    .placeholder-self-photo {
+      background-image: url('https://www.kemenkumham.go.id/images/foto/2019/1_Januari_2019/ektp1.JPG') !important;
+      background-size: cover;
+      background-position: center;
+      width: 100%;
+      height: 200px;
+    }
+    .placeholder-id-photo {
+      background-image: url('https://i2.wp.com/help.tokotalk.com/wp-content/uploads/2020/08/identity_card_example.b686f703.jpg?resize=643%2C417&ssl=1') !important;
+      background-size: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -220,7 +237,6 @@
           <h2 class="h3 d-inline-block mb-4">Dokumen</h2>
         </div>
         
-        
         <div class="row">
           {{--  --}}
           <div class="col-md-6">
@@ -229,8 +245,8 @@
               <p class="small">Berfoto dengan menampilkan diri anda sambil memperlihatkan KTP</p>
               <div>
                 <div class="fileinput fileinput-new w-100" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail placeholder-id-photo" style="width: 50%; height: 400px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto KTP" class="font-weight-bold">
+                  <div class="fileinput-new img-thumbnail placeholder-self-photo" style="width: 50%; height: 400px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto selfie dengan KTP" class="font-weight-bold text-white">
                   </div>
                   <div class="fileinput-preview fileinput-exists img-thumbnail"
                     style=" max-width: 200px; max-height: 150px;"></div>
@@ -251,8 +267,8 @@
               <p class="small">Foto yang menampilkan KTP keseluruhan</p>
               <div>
                 <div class="fileinput fileinput-new w-100" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail placeholder-self-photo" style="width: 100%; height: 300px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto Anda" class="text-white font-weight-bold">
+                  <div class="fileinput-new img-thumbnail placeholder-id-photo" style="width: 100%; height: 300px;">
+                    <img data-src="holder.js/100%x100%"  alt="Foto KTP" class="text-white font-weight-bold">
                   </div>
                   <div class="fileinput-preview fileinput-exists img-thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                   <div>

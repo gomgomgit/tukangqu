@@ -17,11 +17,7 @@ use Spatie\Activitylog\Models\Activity;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function onProcess($kind = 'borongan')
     {
         // dd(date('D, d-m-y H-i'));
@@ -206,16 +202,23 @@ class ProjectController extends Controller
     }
 
     public function done(Request $request, $id, $kind = 'borongan') {
+        // dd($request);
         if ($kind ==='borongan') {
             $data = ContractProject::find($id);
+            $data->process = 'done';
         }
         if ($kind ==='harian') {
             $data = DailyProject::find($id);
         }
+        
         $data->finish_date = $request->finish_date;
-        $data->process = 'done';
+        $data->description = $request->description;
         // dd($data);
         $data->save();
+
+        if ($kind === 'harian') {
+            return $this->finish($id, $kind);
+        }
 
         return redirect()->route('admin.projects.onProgress', $kind);
     }
@@ -230,7 +233,7 @@ class ProjectController extends Controller
             $data = DailyProject::find($id);
             $data->profit = $data->totalprofit;
             $data->project_value = $data->project_value_temp;
-            $data->finish_date = Carbon::now()->format('y-m-d');
+            // $data->finish_date = Carbon::now()->format('y-m-d');
             $data->process = 'finish';
         }
         // dd($data);
@@ -389,15 +392,17 @@ class ProjectController extends Controller
         if ($kind === 'borongan') {
             $data = ContractProject::find($id);
             $activities = Activity::where('subject_type', 'App\Models\ContractProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            $termins = PaymentTerm::where('project_id', $id)->where('kind_project', 'contract')->get();
             // dd($activities);
         }
         if ($kind === 'harian') {
             $data = DailyProject::find($id);
             $activities = Activity::where('subject_type', 'App\Models\DailyProject')->where('subject_id', $id)->orderBy('created_at', 'desc')->get();
+            $termins = PaymentTerm::where('project_id', $id)->where('kind_project', 'daily')->get();
         }
 
         // dd($activities);
-        return view('admin.projects.finished-show', compact('data', 'kind', 'activities'));
+        return view('admin.projects.finished-show', compact('data', 'kind', 'activities', 'termins'));
     }
 
     /**

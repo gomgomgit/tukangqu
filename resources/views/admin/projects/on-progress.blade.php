@@ -126,6 +126,10 @@
 														<label>Tanggal Selesai</label>
 														<input class="form-control" type="date" name="finish_date" value="" required>
 													</div>
+													<div class="form-group">
+														<label>Keterangan Tambahan</label>
+														<textarea class="form-control" rows="5" name="description" value=""> </textarea>
+													</div>
 											</div>
 											<div class="modal-footer">
 												<span @click="cDoneId = !(cDoneId)" type="button" class="btn btn-secondary">Close</span>
@@ -628,7 +632,8 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="{{ route('admin.projects.finish', [$data->id, 'harian']) }}"><i class="dw dw-check"></i> Finish</a>
+															{{-- <a class="dropdown-item" href="{{ route('admin.projects.finish', [$data->id, 'harian']) }}"><i class="dw dw-check"></i> Finish</a> --}}
+															<a class="dropdown-item" x-on:click="dDoneId = {{ $data->id }}"><i class="dw dw-check"></i> Finish</a>
 															<a class="dropdown-item" href="{{ route('admin.projects.onProgressShow', [$data->id, 'harian']) }}"><i class="dw dw-eye"></i> View</a>
 															<a class="dropdown-item" href="{{ route('admin.projects.edit', [$data->id, 'harian']) }}"><i class="dw dw-edit2"></i> Edit</a>
 															{{-- <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a> --}}
@@ -647,6 +652,36 @@
 									</tbody>
 								</table>
 							{{-- </div> --}}
+						</div>
+						
+						<div x-show="dDoneId" style="display: none; z-index: 99999">	
+							<div class="modal-background" tabindex="-1">
+								<div @click.away="dDoneId = null" class="modal-dialog modal modal-dialog-centered modal">
+									<div class="modal-content">
+										<form x-bind:action="'/admin/projects/on-progress/'+ dDoneId +'/done/harian'" method="POST">
+											@csrf
+											<div class="modal-header">
+												<h4 class="modal-title" id="myLargeModalLabel">Selesai</h4>
+												<button @click="dDoneId = !(dDoneId)" type="button" class="close">×</button>
+											</div>
+											<div class="modal-body">
+													<div class="form-group">
+														<label>Tanggal Selesai</label>
+														<input class="form-control" type="date" name="finish_date" value="" required>
+													</div>
+													<div class="form-group">
+														<label>Keterangan Tambahan</label>
+														<textarea class="form-control" rows="5" name="description" value=""> </textarea>
+													</div>
+											</div>
+											<div class="modal-footer">
+												<span @click="dDoneId = !(dDoneId)" type="button" class="btn btn-secondary">Close</span>
+												<button class="btn btn-info">Selesai</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div x-show="dBillingId" style="display: none">
@@ -1123,6 +1158,8 @@
 
 					dateDTermin: null,
 					amountDTermin: 0,
+
+					dDoneId: 0,
 
 					dSharingId: null,
 					dSharings: [],

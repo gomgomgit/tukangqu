@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('link')
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"/>
+@endsection
+
 @section('main-content')
 	<div class="card-box mb-30">
 			<!-- Striped table start -->
@@ -168,6 +172,62 @@
 								</div>
 								<div class="col-6">
 									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
+									
+									<a class="btn btn-outline-primary btn-sm" href="#" role="button" data-toggle="modal" data-target="#modal-termin">
+										Show Termin
+									</a>
+									<div class="modal fade" id="modal-termin" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 700px">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title" id="myLargeModalLabel">Termin</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+												</div>
+												<div class="modal-body modal-body-scroll">
+													<table class="table table-striped">
+														<thead>
+															<tr>
+																<th scope="col" class="border-0">#</th>
+																<th scope="col" class="border-0">Tanggal</th>
+																<th scope="col" class="border-0">Jumlah</th>
+																<th scope="col" class="border-0">Bukti Transfer</th>
+															</tr>
+														</thead>
+
+														{{-- <template x-if="cTermins"> --}}
+															<tbody>
+																	@foreach ($termins as $termin)
+																		<tr>
+																			<th scope="row"></th>
+																			<td>{{$termin->date}}</td>
+																			<td>{{$termin->amount}}</td>
+																			<td>
+																				<a href="{{Storage::url($termin->evidence)}}" data-fancybox="gallery" data-caption="Caption for single image">
+																					<img width="80" height="80" src="{{Storage::url($termin->evidence)}}" alt="Not Found" />
+																				</a>
+																			</td>
+																		</tr>		
+																	@endforeach
+															</tbody>
+															<tfoot>
+																<tr>
+																	<td></td>
+																	<td>Total</td>
+																	<td x-text="cProject.totalpayment"></td>
+																	<td></td>
+																</tr>
+															</tfoot>
+														{{-- </template> --}}
+													</table>
+
+												</div>
+			
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						@elseif ($kind === 'harian')
@@ -213,6 +273,62 @@
 								</div>
 								<div class="col-6">
 									Rp. {{ number_format($data->project_value, 0, '.', '.') }}
+									
+									<a class="btn btn-outline-primary btn-sm" href="#" role="button" data-toggle="modal" data-target="#modal-termin">
+										Show Termin
+									</a>
+									<div class="modal fade" id="modal-termin" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 700px">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title" id="myLargeModalLabel">Termin</h4>
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+												</div>
+												<div class="modal-body modal-body-scroll">
+													<table class="table table-striped">
+														<thead>
+															<tr>
+																<th scope="col" class="border-0">#</th>
+																<th scope="col" class="border-0">Tanggal</th>
+																<th scope="col" class="border-0">Jumlah</th>
+																<th scope="col" class="border-0">Bukti Transfer</th>
+															</tr>
+														</thead>
+
+														{{-- <template x-if="cTermins"> --}}
+															<tbody>
+																	@foreach ($termins as $termin)
+																		<tr>
+																			<th scope="row"></th>
+																			<td>{{$termin->date}}</td>
+																			<td>{{$termin->amount}}</td>
+																			<td>
+																				<a href="{{Storage::url($termin->evidence)}}" data-fancybox="gallery" data-caption="Caption for single image">
+																					<img width="80" height="80" src="{{Storage::url($termin->evidence)}}" alt="Not Found" />
+																				</a>
+																			</td>
+																		</tr>		
+																	@endforeach
+															</tbody>
+															<tfoot>
+																<tr>
+																	<td></td>
+																	<td>Total</td>
+																	<td x-text="cProject.totalpayment"></td>
+																	<td></td>
+																</tr>
+															</tfoot>
+														{{-- </template> --}}
+													</table>
+
+												</div>
+			
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						@endif
@@ -320,6 +436,9 @@
 @endsection
 
 @section('script')
+	{{-- fancybox --}}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
 	<script>
 		function goBack() {
 			window.history.back()
