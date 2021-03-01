@@ -28,7 +28,7 @@ class WorkerRequest extends FormRequest
             'birth_place' => 'required',
             'birth_date' => 'required|date',
             'email' => 'required|email',
-            'phone_number' => 'required',
+            'phone_number' => 'required|unique:workers,phone_number,except,id',
             'address' => 'required',
             'rt' => 'required',
             'rw' => 'required',

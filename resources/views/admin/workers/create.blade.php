@@ -38,7 +38,20 @@
           <div class="mb-3">
             <ul class="p-3 bg-danger">
               @foreach ($errors->all() as $error)
-                <li class="">{{ $error }}</li>
+                @if ( $error == 'The phone number has already been taken.' )
+                  @push('custom-script')
+                    <script>
+                      swal(
+                          {
+                              type: 'error',
+                              title: 'Oops...',
+                              text: 'Nomor anda telah terdaftar!',
+                          }
+                      )
+                    </script>
+                  @endpush
+                @endif
+                <li class="text-white">{{ $error }}</li>
               @endforeach
             </ul>
           </div>  
@@ -280,9 +293,13 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- add sweet alert js & css in footer -->
+    <script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js') }}"></script>
+    <script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
     <script>
       $('.fileinput').fileinput()
     </script>
+    @stack('custom-script')
     <script>
       var locations = new Vue({
         el: '#locations',
