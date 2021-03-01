@@ -40,8 +40,8 @@ class WorkerRequest extends FormRequest
             'specialist_id' => 'required',
             'experience' => 'required',
             'skill' => 'required|array',
-            // 'self_photo' => 'required|image',
-            // 'id_card_photo' => 'required|image',
+            'self_photo' => 'required|image',
+            'id_card_photo' => 'required|image',
         ];
     }
 }
