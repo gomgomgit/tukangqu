@@ -18,7 +18,7 @@
         </li>
         <li class="{{ request()->routeIs('admin.calendar*') ? 'show' : '' }}">
           <a href="{{ route('admin.calendar') }}" class="dropdown-toggle no-arrow">
-            <span class="micon dw dw-calendar1"></span><span class="mtext">Calendar</span>
+            <span class="micon dw dw-calendar1"></span><span class="mtext">Kalender</span>
           </a>
         </li>
         <li class="dropdown {{ request()->routeIs('admin.projects*') ? 'show' : '' }}">
