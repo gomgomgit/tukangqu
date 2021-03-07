@@ -230,8 +230,10 @@
               <p class="small">Berfoto dengan menampilkan diri anda sambil memperlihatkan KTP</p>
               <div>
                 <div class="fileinput fileinput-new w-100" data-provides="fileinput">
-                  <div class="fileinput-new img-thumbnail placeholder-self-photo" style="width: 50%; height: 400px;">
-                    <img data-src="holder.js/100%x100%"  alt="Foto selfie dengan KTP" class="font-weight-bold text-white">
+                  <div class="row">
+                    <div class="fileinput-new img-thumbnail placeholder-self-photo col-xs-12 col-6" style="height: 400px;">
+                      <img data-src="holder.js/100%x100%"  alt="Foto selfie dengan KTP" class="font-weight-bold text-white">
+                    </div>
                   </div>
                   <div class="fileinput-preview fileinput-exists img-thumbnail"
                     style=" max-width: 200px; max-height: 150px;"></div>

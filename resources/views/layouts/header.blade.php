@@ -105,7 +105,7 @@
       <div class="dropdown">
         <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
           <span class="user-icon">
-            <img src="{{ asset('deskapp/vendors/images/photo1.jpg') }}" alt="">
+            <img src="{{ asset('image/tukangqu-logo.jpg') }}" alt="">
           </span>
           <span class="user-name">{{ auth()->user()->name }}</span>
         </a>

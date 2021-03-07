@@ -7,8 +7,8 @@
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/apple-touch-icon.png') }}">
-	<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('deskapp/vendors/images/favicon-32x32.png') }}">
-	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('deskapp/vendors/images/favicon-16x16.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('image/tukangqu-logo.jpg') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('image/tukangqu-logo.jpg') }}">
 
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -35,7 +35,7 @@
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
 				<a href="login.html">
-					<img src="{{ asset('deskapp/vendors/images/deskapp-logo.svg') }}" alt="">
+					<img src="{{ asset('image/Logo-w-name.png') }}" alt="">
 				</a>
 			</div>
 			<div class="login-menu">
@@ -53,8 +53,9 @@
 				</div>
 				<div class="col-md-6 col-lg-5">
 					<div class="login-box bg-white box-shadow border-radius-10">
-						<div class="login-title">
-							<h2 class="text-center text-primary">Login To TukangQu</h2>
+						<div class="login-title text-center">
+							<img width="50%" src="{{ asset('image/Logo-w-name.png') }}" alt="">
+							<h2 class="text-center text-primary mt-4">Login</h2>
 						</div>
             <form action="{{ Route('admin.loginProcess') }}" method="POST">
               @csrf
@@ -119,9 +120,9 @@
 								</div> --}}
 							</div>
 							<div>
-								<span>Name: Admin1 / Admin2 </span>
-								<p>Password: masukaja </p>
-								<p>Beri izin untuk notifikasi untuk notifikasi survei</p>
+								{{-- <span>Name: Admin1 / Admin2 </span>
+								<p>Password: masukaja </p> --}}
+								<p class="w-75">Beri izin notifikasi untuk mendapatkan notifikasi survei</p>
 							</div>
 							{{-- <div class="row mb-3">
 								<div class="col-12 text-center">
