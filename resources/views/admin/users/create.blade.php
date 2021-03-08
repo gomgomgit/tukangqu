@@ -38,6 +38,16 @@
           <input class="form-control" type="password" name="password" value="{{ old('password') }}" required>
         </div>
 
+        <label class="weight-600">Role</label>
+        <div class="custom-control custom-radio mb-5">
+          <input type="radio" id="customRadio1" name="role" class="custom-control-input" value="admin">
+          <label class="custom-control-label" for="customRadio1">Admin</label>
+        </div>
+        <div class="custom-control custom-radio mb-5">
+          <input type="radio" id="customRadio2" name="role" class="custom-control-input" value="operator">
+          <label class="custom-control-label" for="customRadio2">Operator</label>
+        </div>
+
         <br><br>
 
         <div class="form-group">

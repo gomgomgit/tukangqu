@@ -19,6 +19,7 @@
 							<th scope="col">#</th>
 							<th scope="col">Nama</th>
 							<th scope="col">Email</th>
+							<th scope="col">Role</th>
 							<th scope="col" class="datatable-nosort">Action</th>
 						</tr>
 					</thead>
@@ -31,6 +32,7 @@
 								<th scope="row">{{ $no++ }}</th>
 								<td>{{ $data->name }}</td>
 								<td>{{ $data->email }}</td>
+								<td>{{ $data->role }}</td>
 								<td>
 									<div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
