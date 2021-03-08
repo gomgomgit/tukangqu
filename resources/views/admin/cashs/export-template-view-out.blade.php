@@ -34,6 +34,7 @@
         <td>Tahun -</td>
         <td>Bulan -</td>
         <td>Hari</td>
+        <td>awali dengan kutip satu (') sebelum tahun</td>
       </tr>
       @foreach ($users as $index => $user)
         @if ($index == 0)

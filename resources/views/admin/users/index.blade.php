@@ -7,7 +7,7 @@
 			<div class="pd-20 card-box">
 				<div class="clearfix mb-20">
 					<div class="pull-left">
-						<h4 class="text-black h4">Data Klien</h4>
+						<h4 class="text-black h4">Data User</h4>
           </div>
           <div class="pull-right pr-3">
             <a href="{{ Route('admin.users.create') }}" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i> Tambah User</a>

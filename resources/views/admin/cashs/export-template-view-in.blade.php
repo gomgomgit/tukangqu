@@ -30,6 +30,7 @@
         <td>Tahun -</td>
         <td>Bulan -</td>
         <td>Hari</td>
+        <td>awali dengan kutip satu (') sebelum tahun</td>
       </tr>
       <tr>
         <td>2.</td>

@@ -205,7 +205,7 @@
 
 										<div @click.away="dRefundId = null" class="modal-dialog modal-dialog-centered modal">
 											<div class="modal-content">
-												<form x-bind:action="'/admin/projects/on-process/'+ dRefundId +'/pricing/borongan'" method="POST">
+												<form x-bind:action="'/admin/projects/finished/'+ dRefundId +'/refund/harian'" method="POST">
 													@csrf
 													<div class="modal-header">
 														<h4 class="modal-title" id="myLargeModalLabel">Refund</h4>

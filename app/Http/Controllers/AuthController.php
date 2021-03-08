@@ -18,10 +18,16 @@ class AuthController extends Controller
             'name' => 'required',
             'password' => 'required',
         ]);
+        
+        if($request->remember){
+            $remember = true;
+        } else {
+            $remember = false;
+        }
 
         $credentials = $request->only('name', 'password');
 
-        $isSuccess = Auth::attempt($credentials, $request->remember);
+        $isSuccess = Auth::attempt($credentials, $remember);
 
         if ($isSuccess) {
             return redirect()->intended('/admin/dashboard');

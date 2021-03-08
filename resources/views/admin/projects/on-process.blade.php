@@ -161,7 +161,7 @@
 														<div class="form-group">
 															<label>Surveyer</label>
 															<select class="custom-select2 form-control" id="select-worker" name="surveyer_id" style="width: 100%; height: 38px;">
-																<optgroup label="Alaskan/Hawaiian Time Zone">
+																<optgroup label="Surveyer">
 																	{{-- <template x-for="size in row.sizes" :key="size.id">
 																		<option x-text="size.name" x-model="size.id"></option>
 																	</template> --}}

@@ -57,7 +57,7 @@ class WorkerController extends Controller
         $data['self_photo'] = $request->file('self_photo')->store('assets/images/worker', 'public');
         $data['id_card_photo'] = $request->file('id_card_photo')->store('assets/images/workeridcard', 'public');
 
-        dd($request->file('self_photo'));
+        // dd($request->file('self_photo'));
 
         $worker_id = Worker::create($data);
         $worker_id->skills()->sync($request->skill);
@@ -127,8 +127,26 @@ class WorkerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(WorkerRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'birth_place' => 'required',
+            'birth_date' => 'required|date',
+            'email' => 'required|email',
+            'phone_number' => 'required|unique:workers,phone_number,'. $id,
+            'address' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
+            'province_id' => 'required',
+            'city_id' => 'required',
+            'district_id' => 'required',
+            'village_id' => 'required',
+            'worker_kind_id' => 'required',
+            'specialist_id' => 'required',
+            'experience' => 'required',
+            'skill' => 'required|array'
+        ]);
         $data = $request->all();
         if($data['self_photo']) {
             $data['self_photo'] = $request->file('self_photo')->store('assets/images/worker', 'public');
