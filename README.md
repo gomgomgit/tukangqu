@@ -1,6 +1,6 @@
 <p align="center"><img src="public/image/Logo-w-name.png" width="400"></p>
 
-Installation
+## Installation
 1. composer install
 2. make .env file
 3. key:generate
